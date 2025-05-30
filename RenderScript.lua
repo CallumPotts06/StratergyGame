@@ -6,6 +6,8 @@ TYPE : LIBRARY
 RenderScript will render everything in the game. As to simplify and neaten up main.lua
 ]]--
 
+
+--// RENDERS ALL CURRENT INTERFACE OBJECTS //--
 function renderer:RenderUI(objects,zoom)
     for i=1,#objects,1 do
         local object = objects[i]
