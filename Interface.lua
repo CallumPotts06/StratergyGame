@@ -1,5 +1,6 @@
 
 interface = {}
+interface.__index = interface
 
 --[[
 TYPE - CLASS
@@ -18,7 +19,8 @@ function interface.New(initName,initImg,initColour,initText,initTextColour,initB
     newGUI.Image = initImg
     newGUI.Colour = initColour
     
-    newGUI.Text = initText
+    font = love.graphics.newFont("Fonts/georgiab.ttf", size, hinting, dpiscale )
+    newGUI.Text = love.graphics.newText( font, textstring )
     newGUI.TextColour = initTextColour
 
     newGUI.BorderSize = initBorder
@@ -27,6 +29,9 @@ function interface.New(initName,initImg,initColour,initText,initTextColour,initB
     -- STATS --
     newGUI.Position = initPos
     newGUI.Size = initSize
+
+    setmetatable(newGUI, interface)
+    return newGUI
 end
 
 return interface

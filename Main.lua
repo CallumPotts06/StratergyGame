@@ -1,9 +1,9 @@
 
 --// IMPORT LIBRARIES //--
-Renderer = require("RenderScript.lua")
+Renderer = require("RenderScript")
 
 --// SET UP CLASSES //--
-Interface = require("Interface.lua")
+Interface = require("Interface")
 
 --// GAME VARIABLES //--
 uiObjects = {}
@@ -11,18 +11,26 @@ zoom = 1
 
 --// LOVE FUNCTIONS //--
 function love.load()
-    uiTest1 = Interface.New("UI1","img",{0.2,0.2,1,1},"txt","txtclr",5,{1,1,1,1},{25,25},{80,80})
-    table.insert(uiObjects,uiTest1)
 end
 
 function love.draw()
-    Renderer:RenderUI(uiObjects,zoom)
+    --print(#uiObjects)
+    Renderer.RenderUI(uiObjects,zoom)
 end
 
 
 oneSec = 0
 halfSec = 0
+local initUpdate = true
+
 function love.update(dt)
+    if initUpdate then 
+        initUpdate = false
+        uiTest1 = Interface.New("UI1","img",{0.2,0.2,1,1},"Test Text Box One",{1,0.2,0.2,1},5,{1,1,1,1},{25,25},{200,80})
+        table.insert(uiObjects,uiTest1)
+    end
+
+
     oneSec = oneSec + dt
     halfSec = halfSec + dt
 

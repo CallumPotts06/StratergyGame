@@ -8,7 +8,7 @@ RenderScript will render everything in the game. As to simplify and neaten up ma
 
 
 --// RENDERS ALL CURRENT INTERFACE OBJECTS //--
-function renderer:RenderUI(objects,zoom)
+function renderer.RenderUI(objects,zoom)
     for i=1,#objects,1 do
         local object = objects[i]
         local x = object.Position[1]
@@ -18,14 +18,15 @@ function renderer:RenderUI(objects,zoom)
         local border = object.BorderSize
         local z = zoom
 
-        local vertices = {x*z,y*z,(x+x_size)*z,y*z,x*z,(y+y_size)*z,(x+x_size)*z,(y+y_size)*z}
-        local borderVertices = {(x-border)*z,(y-border)*z,(x+x_size+border)*z,(y-border)*z,(x-border)*z,(y+y_size+border)*z,(x+x_size+border)*z,(y+y_size+border)*z}
-
-        love.graphics.setColor(object.Colour[1],object.Colour[2],object.Colour[3],object.Colour[4])
-        love.graphics.polygon("fill", vertices)
-
+        -- Draw Border
         love.graphics.setColor(object.BorderColour[1],object.BorderColour[2],object.BorderColour[3],object.BorderColour[4])
-        love.graphics.polygon("fill", borderVertices)
+        love.graphics.rectangle("fill",(x-border)*z,(y-border)*z,x_size+(2*border),y_size+(2*border))
+
+        -- Draw Background
+        love.graphics.setColor(object.Colour[1],object.Colour[2],object.Colour[3],object.Colour[4])
+        love.graphics.rectangle("fill",x*z,y*z,x_size,y_size)
+
+        
         
         --IMG
         --TXT
