@@ -8,13 +8,17 @@ local peer
 function Network.StartHost(IP)
     print("IP: "..IP)
     host = enet.host_create(IP..":1870")
-    return "sucess"
+    event = host:service(100)--ms
+    peer = event.peer
+    return "success"
 end
 
 function Network.ConnectToHost(IP)
     host = enet.host_create()
     server = host:connect(IP..":1870")
-    return "sucess"
+    event = host:service(100)--ms
+    peer = event.peer
+    return "success"
 end
 
 function Network.InboundEvents()
