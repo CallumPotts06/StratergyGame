@@ -18,7 +18,6 @@ function Network.ConnectToHost(IP)
     Network.Hosting=true
     host = enet.host_create()
     server = host:connect(IP..":6789")
-    Network.SendMessage("Initial Check In")
     return "success"
 end
 

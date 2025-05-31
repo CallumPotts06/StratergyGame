@@ -111,6 +111,9 @@ function love.update(dt)
     end
     if oneSec >= 1 then
         oneSec = oneSec - 1 
+        if Network.Hosting then
+            Network.SendMessage("Peer Check In")
+        end
     end
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
@@ -148,7 +151,6 @@ function love.update(dt)
                     uiObjects={ipPrompt,ipInput}
                     closeInput()
                     Network.ConnectToHost(lastTextInput)
-                    Network.SendMessage("Initial Check In")
                     break
                 end
             end
