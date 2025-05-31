@@ -19,10 +19,9 @@ function Network.ConnectToHost(IP)
 end
 
 function Network.InboundEvents()
-    local event = host:service(100)--ms
+    local event = host:service(1000)--ms
     
     if event.type == "receive" then
-        print("receive: "..event.data)
         return {"received",event.data}
     elseif event.type == "connect" then
         peer = event.peer
@@ -34,7 +33,7 @@ function Network.InboundEvents()
 end
 
 function Network.SendMessage(msg)
-    event = host:service(100)
+    event = host:service(1000)
     peer = event.peer
     peer:send(msg)
 end

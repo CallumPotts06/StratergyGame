@@ -82,6 +82,15 @@ function love.update(dt)
         initUpdate = false
     end
 
+    local events = Network.InboundEvents()
+    if events[1] == "connected" then
+        print("A Peer Has Connected!")
+    elseif event[1] == "disconnected" then
+        print("A Peer Has Disconnected")
+    elseif event[1] == "received" then
+        print("Recieved: "..event[2])
+    end
+
     if fourSecondTimer then fourSec = fourSec + dt end
     twoSec = twoSec + dt
     oneSec = oneSec + dt
