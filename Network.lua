@@ -4,8 +4,10 @@ Network = {}
 enet = require("enet")
 local host
 local peer
+local Network.Hosting = false
 
 function Network.StartHost(IP)
+    Network.Hosting=true
     print("IP: "..IP)
     --host = enet.host_create(IP..":6789")
     host = enet.host_create("localhost:6789")
@@ -13,6 +15,7 @@ function Network.StartHost(IP)
 end
 
 function Network.ConnectToHost(IP)
+    Network.Hosting=true
     host = enet.host_create()
     server = host:connect(IP..":6789")
     return "success"
