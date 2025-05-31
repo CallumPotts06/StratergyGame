@@ -9,8 +9,8 @@ Network.Hosting = false
 function Network.StartHost(IP)
     Network.Hosting=true
     print("IP: "..IP)
-    --host = enet.host_create(IP..":6789")
-    host = enet.host_create("localhost:6789")
+    host = enet.host_create("0.0.0.0"..":6789")
+    --host = enet.host_create("localhost:6789")
     return "success"
 end
 
@@ -18,9 +18,6 @@ function Network.ConnectToHost(IP)
     Network.Hosting=true
     host = enet.host_create()
     server = host:connect(IP..":6789")
-    repeat
-        event = host:service(100)
-    until(event)
     Network.SendMessage("Initial Check In")
     return "success"
 end
