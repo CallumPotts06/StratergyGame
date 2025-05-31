@@ -128,19 +128,20 @@ function love.update(dt)
         for i=1,#uiObjects,1 do
             if not (not uiObjects[i]:CheckClick(mousePos)) then
                 --Network UI--
-                if uiObjects[i]:CheckClick(mousePos)=="Start Host" then
+                --[[if uiObjects[i]:CheckClick(mousePos)=="Start Host" then
                     print("Starting Host Waiting For IP")
                     local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
                     local ipInput = interface.New("tempInp",{0.95,0.95,0.95,1},"",{0,0,0,1},6,{0.05,0.05,1,1},{25,150},{400,175},"IP Input Start Host")
                     uiObjects={ipPrompt,ipInput}
                     openInput(ipInput)
-                    break
-                elseif uiObjects[i]:CheckClick(mousePos)=="IP Input Start Host" then
+                    break]]
+                --[[elseif uiObjects[i]:CheckClick(mousePos)=="IP Input Start Host" then
                     uiObjects={ipPrompt,ipInput}
                     closeInput()
                     Network.StartHost(lastTextInput)
-                    break
+                    break]]
                 elseif uiObjects[i]:CheckClick(mousePos)=="Connect To Peer" then
+                    Network.StartHost()
                     print("Connecting To A Peer")
                     local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Friend's Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
                     local ipInput = interface.New("tempInp",{0.95,0.95,0.95,1},"",{0,0,0,1},6,{0.05,0.05,1,1},{25,150},{400,175},"IP Input Connect")
