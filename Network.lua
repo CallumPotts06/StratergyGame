@@ -17,6 +17,9 @@ function Network.ConnectToHost(IP)
     Network.Hosting=true
     host = enet.host_create()
     server = host:connect(IP..":6789")
+    love.timer.sleep(2)
+    event = host:service(500)
+    peer = event.peer
     return "success"
 end
 
@@ -38,9 +41,8 @@ end
 
 function Network.SendMessage(msg)
     event = host:service(500)
-    if event then
-        print("Event is True")
-        peer = event.peer
+    if peer then
+        print("Peer is true")
         peer:send(msg)
     end
 end
