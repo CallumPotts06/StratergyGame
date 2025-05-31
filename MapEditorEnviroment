@@ -1,0 +1,4 @@
+
+MapEditor = {}
+
+return MapEditor

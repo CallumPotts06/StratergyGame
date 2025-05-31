@@ -1,13 +1,19 @@
 
 --// IMPORT LIBRARIES //--
 Renderer = require("RenderScript")
-ConnectionMenu = require("Menus/CreateConnection")
 Network = require("Network")
+Assets = require("LoadAssets")
+
+--// GAME MENUS //--
+MainMenu = require("Menus/MainMenu")
+ConnectionMenu = require("Menus/CreateConnection")
 
 --// SET UP CLASSES //--
 Interface = require("Interface")
 
 --// GAME VARIABLES //--
+currentMap = {}
+
 uiObjects = {}
 zoom = 1
 
@@ -31,7 +37,14 @@ function closeInput()
     currentTextInput = ""
     textInputEnabled = false
 end
-
+function clearInterface()
+    uiObjects={}
+    closeInput()
+end
+function openMenu(menu)
+    local newUI = menu.OpenMenu()
+    for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
+end
 
 --// LOVE FUNCTIONS //--
 function love.load()
@@ -47,11 +60,6 @@ function love.keypressed(key)
             currentTextInput = currentTextInput..key
         elseif (key == "backspace") then
             currentTextInput=""
-        elseif (key == "return") then
-            --[[finishedTextInput = true
-            lastTextInput = currentTextInput
-            currentTextInput = ""
-            textInputEnabled = false]]
         elseif (key == "space") then
             currentTextInput=currentTextInput.." "
         end
@@ -69,19 +77,25 @@ end
 connectionEstablished = false
 
 mouseDeBounce = false
+
 fourSec = 0
 twoSec = 0
 oneSec = 0
 halfSec = 0
 local initUpdate = true
-
-fourSecondTimer = true
+fourSecondTimer = false
 
 local test = true
 
 function love.update(dt)
-    if initUpdate then 
+    if fourSecondTimer then fourSec = fourSec + dt end
+    twoSec = twoSec + dt
+    oneSec = oneSec + dt
+    halfSec = halfSec + dt
+
+    if (initUpdate) and (oneSec>=1) then 
         initUpdate = false
+        openMenu(MainMenu)
     end
 
     if Network.Hosting then
@@ -101,20 +115,14 @@ function love.update(dt)
         end
     end
 
-    if fourSecondTimer then fourSec = fourSec + dt end
-    twoSec = twoSec + dt
-    oneSec = oneSec + dt
-    halfSec = halfSec + dt
-
     --Timers--
     if (fourSecondTimer) and (fourSec >= 4) then
         print("Four Second Timer Elapsed!")
         fourSecondTimer = false
         fourSec = 0
-        
-        local newUI = ConnectionMenu.OpenMenu()
-        for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
     end
+
+    --Clocks--
     if oneSec >= 1 then
         oneSec = oneSec - 1 
         if Network.Hosting then
@@ -133,7 +141,15 @@ function love.update(dt)
 
         for i=1,#uiObjects,1 do
             if not (not uiObjects[i]:CheckClick(mousePos)) then
-                if uiObjects[i]:CheckClick(mousePos)=="Connect To Peer" then
+                local check = uiObjects[i]:CheckClick(mousePos)
+
+                if check=="Open Map Editor" then
+
+                elseif check=="Open Network Connector" then
+                    clearInterface()
+                    openMenu(CreateConnection)
+
+                elseif check=="Connect To Peer" then
                     Network.StartHost()
                     print("Connecting To A Peer")
                     local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Friend's Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
@@ -141,7 +157,7 @@ function love.update(dt)
                     uiObjects={ipPrompt,ipInput}
                     openInput(ipInput)
                     break
-                elseif uiObjects[i]:CheckClick(mousePos)=="IP Input Connect" then
+                elseif check=="IP Input Connect" then
                     uiObjects={}
                     closeInput()
                     --Network.ConnectToHost(lastTextInput)
