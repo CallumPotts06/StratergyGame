@@ -25,7 +25,7 @@ function Network.ConnectToHost(IP)
 end
 
 function Network.InboundEvents()
-    local event = host:service(0)--ms
+    local event = host:service()--ms
     
     if event then
         if event.type == "receive" then
