@@ -9,7 +9,7 @@ An interface object could be a text box or an image, and is specified on
 instantiation of the object.
 ]]--
 
-function interface.New(initName,initImg,initColour,initText,initTextColour,initBorder,initBorderColour,initPos,initSize)
+function interface.New(initName,initColour,initText,initTextColour,initBorder,initBorderColour,initPos,initSize)
     local newGUI = {}
 
     -- ADMIN --
@@ -19,9 +19,10 @@ function interface.New(initName,initImg,initColour,initText,initTextColour,initB
     newGUI.Image = initImg
     newGUI.Colour = initColour
     
-    font = love.graphics.newFont("Fonts/georgiab.ttf", size, hinting, dpiscale )
-    newGUI.Text = love.graphics.newText( font, textstring )
+    newGUI.Font = love.graphics.newFont("Fonts/georgiab.ttf",(math.floor(initSize[1]/(string.len(initText)+6))*1.8)+1)
+    newGUI.Text = initText
     newGUI.TextColour = initTextColour
+    newGUI.TextChange = false
 
     newGUI.BorderSize = initBorder
     newGUI.BorderColour = initBorderColour

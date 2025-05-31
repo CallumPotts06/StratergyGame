@@ -25,11 +25,16 @@ function renderer.RenderUI(objects,zoom)
         -- Draw Background
         love.graphics.setColor(object.Colour[1],object.Colour[2],object.Colour[3],object.Colour[4])
         love.graphics.rectangle("fill",x*z,y*z,x_size,y_size)
-
-        
-        
         --IMG
+
         --TXT
+        if object.TextChange then 
+            object.TextChange = false
+            object.Font = love.graphics.newFont("Fonts/georgiab.ttf",(math.floor(x_size/(string.len(object.Text)+6))*1.8)+1)
+        end
+        love.graphics.setFont(object.Font)
+        love.graphics.setColor(object.TextColour[1],object.TextColour[2],object.TextColour[3],object.TextColour[4])
+        love.graphics.print(object.Text, object.Position[1]+6, object.Position[2]+6)
 
         love.graphics.setColor(1,1,1,1)
     end
