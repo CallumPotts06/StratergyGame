@@ -10,7 +10,6 @@ function Network.StartHost(IP)
     Network.Hosting=true
     print("IP: "..IP)
     host = enet.host_create("0.0.0.0"..":6789")
-    --host = enet.host_create("localhost:6789")
     return "success"
 end
 
@@ -22,7 +21,7 @@ function Network.ConnectToHost(IP)
 end
 
 function Network.InboundEvents()
-    local event = host:service(1000)--ms
+    local event = host:service(100)--ms
     
     if event then
         if event.type == "receive" then
@@ -38,7 +37,7 @@ function Network.InboundEvents()
 end
 
 function Network.SendMessage(msg)
-    event = host:service(1000)
+    event = host:service(100)
     if event then
         peer = event.peer
         peer:send(msg)
