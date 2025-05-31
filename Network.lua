@@ -43,7 +43,6 @@ end
 function Network.SendMessage(msg)
     event = host:service(100)
     if peer then
-        print("Peer is true")
         peer:send(msg)
     end
 end
