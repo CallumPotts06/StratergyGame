@@ -7,6 +7,7 @@ Assets = require("LoadAssets")
 --// GAME MENUS //--
 MainMenu = require("Menus/MainMenu")
 ConnectionMenu = require("Menus/CreateConnection")
+MapEditor = require("Menus/MapEditorEnviroment")
 
 --// SET UP CLASSES //--
 Interface = require("Interface")
@@ -139,29 +140,54 @@ function love.update(dt)
         local x,y = love.mouse.getPosition()
         local mousePos = {x,y}
 
-        for i=1,#uiObjects,1 do
-            if not (not uiObjects[i]:CheckClick(mousePos)) then
-                local check = uiObjects[i]:CheckClick(mousePos)
+        if not (#uiObjects==0) then
+            for i=1,#uiObjects,1 do
+                if not (not uiObjects[i]:CheckClick(mousePos)) then
+                    local check = uiObjects[i]:CheckClick(mousePos)
 
-                if check=="Open Map Editor" then
+                    if check=="Open Map Editor" then
+                        clearInterface()
+                        openMenu(MapEditor)
+                        break
 
-                elseif check=="Open Network Connector" then
-                    clearInterface()
-                    openMenu(CreateConnection)
+                    elseif check=="Open Network Connector" then
+                        clearInterface()
+                        openMenu(ConnectionMenu)
+                        break
 
-                elseif check=="Connect To Peer" then
-                    Network.StartHost()
-                    print("Connecting To A Peer")
-                    local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Friend's Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
-                    local ipInput = interface.New("tempInp",{0.95,0.95,0.95,1},"",{0,0,0,1},6,{0.05,0.05,1,1},{25,150},{400,175},"IP Input Connect")
-                    uiObjects={ipPrompt,ipInput}
-                    openInput(ipInput)
-                    break
-                elseif check=="IP Input Connect" then
-                    uiObjects={}
-                    closeInput()
-                    --Network.ConnectToHost(lastTextInput)
-                    break
+                    elseif check=="Connect To Peer" then
+                        Network.StartHost()
+                        print("Connecting To A Peer")
+                        local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Friend's Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
+                        local ipInput = interface.New("tempInp",{0.95,0.95,0.95,1},"",{0,0,0,1},6,{0.05,0.05,1,1},{25,150},{400,175},"IP Input Connect")
+                        uiObjects={ipPrompt,ipInput}
+                        openInput(ipInput)
+                        break
+                    elseif check=="IP Input Connect" then
+                        uiObjects={}
+                        closeInput()
+                        --Network.ConnectToHost(lastTextInput)
+                        break
+                    end
+
+                    if check=="Change Brush" then
+                        print("Changed Brush")
+                        local index = 1
+                        for x=1,#Assets.Map_Editor_ID,1 do
+                            print("x: "..tostring(x))
+                            print(Assets.Map_Editor_ID[x][1])
+                            print(string.sub(uiObjects[i].Text,8,#uiObjects[i].Text))
+                            if Assets.Map_Editor_ID[x][1]==string.sub(uiObjects[i].Text,8,#uiObjects[i].Text) then
+                                index = x+1
+                                break
+                            end
+                        end
+                        if index>#Assets.Map_Editor_ID then index=1 end 
+                        local newBrush = "Brush: "..Assets.Map_Editor_ID[index][1]
+                        local newImg = Assets.Map_Editor[index][2]
+                        uiObjects[i].Text=newBrush
+                        uiObjects[i].Image=newImg
+                    end
                 end
             end
         end
