@@ -66,6 +66,8 @@ function love.keypressed(key)
 end
 
 
+connectionEstablished = false
+
 mouseDeBounce = false
 fourSec = 0
 twoSec = 0
@@ -87,8 +89,12 @@ function love.update(dt)
         if events then
             if events[1] == "connected" then
                 print("A Peer Has Connected!")
+                connectionEstablished = true
+                uiObjects={}
+                closeInput()
             elseif events[1] == "disconnected" then
                 print("A Peer Has Disconnected")
+                connectionEstablished = false
             elseif events[1] == "received" then
                 print("Recieved: "..events[2])
             end
@@ -127,19 +133,6 @@ function love.update(dt)
 
         for i=1,#uiObjects,1 do
             if not (not uiObjects[i]:CheckClick(mousePos)) then
-                --Network UI--
-                --[[if uiObjects[i]:CheckClick(mousePos)=="Start Host" then
-                    print("Starting Host Waiting For IP")
-                    local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
-                    local ipInput = interface.New("tempInp",{0.95,0.95,0.95,1},"",{0,0,0,1},6,{0.05,0.05,1,1},{25,150},{400,175},"IP Input Start Host")
-                    uiObjects={ipPrompt,ipInput}
-                    openInput(ipInput)
-                    break]]
-                --[[elseif uiObjects[i]:CheckClick(mousePos)=="IP Input Start Host" then
-                    uiObjects={ipPrompt,ipInput}
-                    closeInput()
-                    Network.StartHost(lastTextInput)
-                    break]]
                 if uiObjects[i]:CheckClick(mousePos)=="Connect To Peer" then
                     Network.StartHost()
                     print("Connecting To A Peer")
@@ -149,9 +142,9 @@ function love.update(dt)
                     openInput(ipInput)
                     break
                 elseif uiObjects[i]:CheckClick(mousePos)=="IP Input Connect" then
-                    uiObjects={ipPrompt,ipInput}
+                    uiObjects={}
                     closeInput()
-                    Network.ConnectToHost(lastTextInput)
+                    --Network.ConnectToHost(lastTextInput)
                     break
                 end
             end
