@@ -4,7 +4,7 @@ Network = {}
 enet = require("enet")
 local host
 local peer
-local Network.Hosting = false
+Network.Hosting = false
 
 function Network.StartHost(IP)
     Network.Hosting=true
