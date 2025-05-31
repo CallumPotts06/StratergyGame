@@ -37,12 +37,13 @@ function Network.InboundEvents()
 end
 
 function Network.SendMessage(msg)
-    event = host:service(100)
+    --[[event = host:service(100)
     if event then
         print("Event is True")
         peer = event.peer
         peer:send(msg)
-    end
+    end]]
+    peer:send(msg)
 end
 
 return Network
