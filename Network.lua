@@ -32,7 +32,7 @@ function Network.InboundEvents()
 end
 
 function Network.SendMessage(msg)
-    host:service(100)
+    event = host:service(100)
     event.peer:send(msg)
 end
 
