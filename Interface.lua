@@ -9,7 +9,7 @@ An interface object could be a text box or an image, and is specified on
 instantiation of the object.
 ]]--
 
-function interface.New(initName,initColour,initText,initTextColour,initBorder,initBorderColour,initPos,initSize)
+function interface.New(initName,initColour,initText,initTextColour,initBorder,initBorderColour,initPos,initSize,initOnClick)
     local newGUI = {}
 
     -- ADMIN --
@@ -30,9 +30,19 @@ function interface.New(initName,initColour,initText,initTextColour,initBorder,in
     -- STATS --
     newGUI.Position = initPos
     newGUI.Size = initSize
+    newGUI.OnClick = initOnClick
 
     setmetatable(newGUI, interface)
     return newGUI
+end
+
+function interface:CheckClick(mousePos)
+    if (mousePos[1]>=self.Position[1]) and (mousePos[1]<=(self.Position[1]+self.Size[1])) then
+        if (mousePos[2]>=self.Position[2]) and (mousePos[2]<=(self.Position[2]+self.Size[2])) then
+            return self.OnClick
+        end
+    end
+    return false
 end
 
 return interface
