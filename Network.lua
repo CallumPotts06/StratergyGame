@@ -24,21 +24,25 @@ end
 function Network.InboundEvents()
     local event = host:service(1000)--ms
     
-    if event.type == "receive" then
-        return {"received",event.data}
-    elseif event.type == "connect" then
-        peer = event.peer
-        return {"connected",event.peer}
-    elseif event.type == "disconnect" then
-        peer = nil
-        return {"disconnected",event.peer}
+    if event then
+        if event.type == "receive" then
+            return {"received",event.data}
+        elseif event.type == "connect" then
+            peer = event.peer
+            return {"connected",event.peer}
+        elseif event.type == "disconnect" then
+            peer = nil
+            return {"disconnected",event.peer}
+        end
     end
 end
 
 function Network.SendMessage(msg)
     event = host:service(1000)
-    peer = event.peer
-    peer:send(msg)
+    if event then
+        peer = event.peer
+        peer:send(msg)
+    end
 end
 
 return Network
