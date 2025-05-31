@@ -7,14 +7,14 @@ local peer
 
 function Network.StartHost(IP)
     print("IP: "..IP)
-    --host = enet.host_create(IP..":1870")
-    host = enet.host_create("localhost:1870")
+    --host = enet.host_create(IP..":6789")
+    host = enet.host_create("localhost:6789")
     return "success"
 end
 
 function Network.ConnectToHost(IP)
-    host = enet.host_create("localhost:1870")
-    server = host:connect(IP..":1870")
+    host = enet.host_create()
+    server = host:connect(IP..":6789")
     return "success"
 end
 
