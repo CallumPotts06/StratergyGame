@@ -18,6 +18,9 @@ currentMap = {}
 uiObjects = {}
 zoom = 1
 
+inGame = false
+inMapEdit = false
+
 --// OTHER VARIABLES //--
 textInputEnabled = false
 currentTextInputBox = false
@@ -53,6 +56,10 @@ end
 
 function love.draw()
     Renderer.RenderUI(uiObjects,zoom)
+
+    if inMapEdit then
+        Renderer.RenderMap(currentMap,"Editor",zoom)
+    end
 end
 
 function love.keypressed(key)
@@ -148,6 +155,7 @@ function love.update(dt)
                     if check=="Open Map Editor" then
                         clearInterface()
                         openMenu(MapEditor)
+                        inMapEdit = true
                         break
 
                     elseif check=="Open Network Connector" then
@@ -171,12 +179,8 @@ function love.update(dt)
                     end
 
                     if check=="Change Brush" then
-                        print("Changed Brush")
                         local index = 1
                         for x=1,#Assets.Map_Editor_ID,1 do
-                            print("x: "..tostring(x))
-                            print(Assets.Map_Editor_ID[x][1])
-                            print(string.sub(uiObjects[i].Text,8,#uiObjects[i].Text))
                             if Assets.Map_Editor_ID[x][1]==string.sub(uiObjects[i].Text,8,#uiObjects[i].Text) then
                                 index = x+1
                                 break

@@ -1,6 +1,8 @@
 
 renderer = {}
 
+Assets = require("LoadAssets")
+
 --[[
 TYPE : LIBRARY
 RenderScript will render everything in the game. As to simplify and neaten up main.lua
@@ -25,7 +27,12 @@ function renderer.RenderUI(objects,zoom)
         -- Draw Background
         love.graphics.setColor(object.Colour[1],object.Colour[2],object.Colour[3],object.Colour[4])
         love.graphics.rectangle("fill",x*z,y*z,x_size,y_size)
+        
         --IMG
+        if not (object.Image==nil) then
+            love.graphics.setColor(1,1,1,1)
+            love.graphics.draw(object.Image,object.Position[1],object.Position[2])
+        end
 
         --TXT
         if object.TextChange then 
@@ -38,6 +45,28 @@ function renderer.RenderUI(objects,zoom)
 
         love.graphics.setColor(1,1,1,1)
     end
+end
+
+function renderer.RenderMap(map,mode,zoom)
+    love.graphics.setBackgroundColor(0,0,0,0)
+    if mode=="Editor" then
+        for y=1,#map,1 do
+            for x=1,#map[y],1 do
+                local tile = map[y][x]
+                local currentImg = false
+                for i=1,#Assets.Map_Editor,1 do
+                    if Assets.Map_Editor[i][1]==tile then 
+                        currentImg=Assets.Map_Editor[i][2] 
+                        love.graphics.draw(currentImg,(x*100)*zoom,(y*100)*zoom)
+                        print("changed image")
+                    end
+                end
+                print("draw tile")
+            end
+        end
+    else
+
+    end 
 end
 
 return renderer
