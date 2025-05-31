@@ -140,7 +140,7 @@ function love.update(dt)
                     closeInput()
                     Network.StartHost(lastTextInput)
                     break]]
-                elseif uiObjects[i]:CheckClick(mousePos)=="Connect To Peer" then
+                if uiObjects[i]:CheckClick(mousePos)=="Connect To Peer" then
                     Network.StartHost()
                     print("Connecting To A Peer")
                     local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Friend's Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
