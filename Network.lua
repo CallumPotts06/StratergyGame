@@ -8,17 +8,17 @@ Network.Hosting = false
 
 function Network.StartHost()
     Network.Hosting=true
-    host = enet.host_create("0.0.0.0"..":6789")
+    host = enet.host_create("0.0.0.0"..":1870")
     return "success"
 end
 
 function Network.ConnectToHost(IP)
     Network.Hosting=true
     host = enet.host_create()
-    server = host:connect(IP..":6789")
+    server = host:connect(IP..":1870")
     event = false
     while not event do
-        event = host:service(2000)
+        event = host:service(100)
     end
     peer = event.peer
     return "success"
