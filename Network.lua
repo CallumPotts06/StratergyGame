@@ -33,7 +33,7 @@ end
 
 function Network.SendMessage(msg)
     event = host:service(100)
-    event.peer:send(msg)
+    peer:send(msg)
 end
 
 return Network
