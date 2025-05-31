@@ -2,6 +2,7 @@
 --// IMPORT LIBRARIES //--
 Renderer = require("RenderScript")
 ConnectionMenu = require("Menus/CreateConnection")
+Network = require("Network")
 
 --// SET UP CLASSES //--
 Interface = require("Interface")
@@ -16,6 +17,21 @@ currentTextInputBox = false
 currentTextInput = ""
 finishedTextInput = false
 lastTextInput = ""
+
+--// FUNCTIONS //--
+function openInput(inputBox)
+    currentTextInputBox=inputBox.Name
+    finishedTextInput = false
+    currentTextInput = ""
+    textInputEnabled = true
+end
+function closeInput()
+    finishedTextInput = true
+    lastTextInput = currentTextInput
+    currentTextInput = ""
+    textInputEnabled = false
+end
+
 
 --// LOVE FUNCTIONS //--
 function love.load()
@@ -32,10 +48,10 @@ function love.keypressed(key)
         elseif (key == "backspace") then
             currentTextInput=""
         elseif (key == "return") then
-            finishedTextInput = true
+            --[[finishedTextInput = true
             lastTextInput = currentTextInput
             currentTextInput = ""
-            textInputEnabled = false
+            textInputEnabled = false]]
         elseif (key == "space") then
             currentTextInput=currentTextInput.." "
         end
@@ -97,10 +113,29 @@ function love.update(dt)
             if not (not uiObjects[i]:CheckClick(mousePos)) then
                 --Network UI--
                 if uiObjects[i]:CheckClick(mousePos)=="Start Host" then
-                    print("Starting Host")
+                    print("Starting Host Waiting For IP")
+                    local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
+                    local ipInput = interface.New("tempInp",{0.95,0.95,0.95,1},"",{0,0,0,1},6,{0.05,0.05,1,1},{25,150},{400,175},"IP Input Start Host")
+                    uiObjects={ipPrompt,ipInput}
+                    openInput(ipInput)
+                    break
+                elseif uiObjects[i]:CheckClick(mousePos)=="IP Input Start Host" then
+                    uiObjects={ipPrompt,ipInput}
+                    closeInput()
+                    Network.StartHost(lastTextInput)
                     break
                 elseif uiObjects[i]:CheckClick(mousePos)=="Connect To Peer" then
                     print("Connecting To A Peer")
+                    local ipPrompt = interface.New("tempMsg",{1,1,1,0},"Enter Your Friend's Ip Then Click The Box",{1,1,1,1},0,{1,1,1,0},{25,25},{400,175},"")
+                    local ipInput = interface.New("tempInp",{0.95,0.95,0.95,1},"",{0,0,0,1},6,{0.05,0.05,1,1},{25,150},{400,175},"IP Input Connect")
+                    uiObjects={ipPrompt,ipInput}
+                    openInput(ipInput)
+                    break
+                elseif uiObjects[i]:CheckClick(mousePos)=="IP Input Connect" then
+                    uiObjects={ipPrompt,ipInput}
+                    closeInput()
+                    Network.ConnectToHost(lastTextInput)
+                    Network.SendMessage("Initial Check In")
                     break
                 end
             end
