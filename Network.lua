@@ -7,7 +7,8 @@ local peer
 
 function Network.StartHost(IP)
     print("IP: "..IP)
-    host = enet.host_create(IP..":1870")
+    --host = enet.host_create(IP..":1870")
+    host = enet.host_create("localhost:1870")
     event = host:service(100)--ms
     peer = event.peer
     return "success"
