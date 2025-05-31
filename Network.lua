@@ -22,6 +22,7 @@ function Network.InboundEvents()
     local event = host:service(100)--ms
     
     if event.type == "receive" then
+        print("receive: "..event.data)
         return {"received",event.data}
     elseif event.type == "connect" then
         peer = event.peer
