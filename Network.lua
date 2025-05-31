@@ -13,10 +13,8 @@ function Network.StartHost(IP)
 end
 
 function Network.ConnectToHost(IP)
-    host = enet.host_create()
+    host = enet.host_create("localhost:1870")
     server = host:connect(IP..":1870")
-    event = host:service(100)--ms
-    peer = event.peer
     return "success"
 end
 
@@ -36,6 +34,7 @@ end
 
 function Network.SendMessage(msg)
     event = host:service(100)
+    peer = event.peer
     peer:send(msg)
 end
 
