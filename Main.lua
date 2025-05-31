@@ -84,12 +84,14 @@ function love.update(dt)
 
     if Network.Hosting then
         local events = Network.InboundEvents()
-        if events[1] == "connected" then
-            print("A Peer Has Connected!")
-        elseif event[1] == "disconnected" then
-            print("A Peer Has Disconnected")
-        elseif event[1] == "received" then
-            print("Recieved: "..event[2])
+        if events then
+            if events[1] == "connected" then
+                print("A Peer Has Connected!")
+            elseif event[1] == "disconnected" then
+                print("A Peer Has Disconnected")
+            elseif event[1] == "received" then
+                print("Recieved: "..event[2])
+            end
         end
     end
 
