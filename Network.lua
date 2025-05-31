@@ -21,7 +21,7 @@ function Network.ConnectToHost(IP)
 end
 
 function Network.InboundEvents()
-    local event = host:service(1000)--ms
+    local event = host:service(500)--ms
     
     if event then
         if event.type == "receive" then
@@ -37,7 +37,7 @@ function Network.InboundEvents()
 end
 
 function Network.SendMessage(msg)
-    event = host:service(1000)
+    event = host:service(500)
     if event then
         print("Event is True")
         peer = event.peer
