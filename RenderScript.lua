@@ -50,7 +50,6 @@ end
 function renderer.RenderMap(map,mode,zoom)
     love.graphics.setBackgroundColor(0,0,0,0)
     if mode=="Editor" then
-        zoom=zoom*2
         for y=1,#map,1 do
             for x=1,#map[1],1 do
                 local tile = map[y][x]
@@ -58,7 +57,7 @@ function renderer.RenderMap(map,mode,zoom)
                 for i=1,#Assets.Map_Editor,1 do
                     if Assets.Map_Editor[i][1]==tile then 
                         currentImg=Assets.Map_Editor[i][2] 
-                        love.graphics.draw(currentImg,(((x-1)*100)-camPos[1])*zoom,(((y-1)*100)-camPos[2])*zoom,0,zoom,zoom)
+                        love.graphics.draw(currentImg,(((x-1)*100)-camPos[1])*zoom,(((y-1)*100)-camPos[2])*zoom,0,zoom*2,zoom*2)
                         currentImg=false
                         break
                     end
@@ -74,7 +73,7 @@ function renderer.RenderMap(map,mode,zoom)
                     for i=1,#Assets.MapTemperateGrass,1 do
                         if Assets.MapTemperateGrass[i][1]==tile then 
                             currentImg=Assets.MapTemperateGrass[i][2] 
-                            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom)
+                            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom,zoom)
                             currentImg=false
                             break
                         end

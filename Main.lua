@@ -280,15 +280,15 @@ function love.update(dt)
             end
         end
         if love.keyboard.isDown("s") then
-            if camPos[2]+gameResolution[2]+(100/zoom)<(#currentMap)*100 then
+            if camPos[2]+gameResolution[2]+(100/zoom)<(#currentMap)*100*zoom then
                 camPos[2]=camPos[2]+(5*camSpeed)
             end
         end
         if love.keyboard.isDown("d") then
-            print((#currentMap[1])*100)
-            print(camPos[1])
+            print((#currentMap[1])*100*zoom)
+            print(camPos[1]+gameResolution[1]+(100/zoom))
             print("\n\n")
-            if camPos[1]+gameResolution[1]+(100/zoom)<(#currentMap[1])*100 then
+            if camPos[1]+gameResolution[1]+(100/zoom)<(#currentMap[1])*100*zoom then
                 camPos[1]=camPos[1]+(5*camSpeed)
             end
         end
