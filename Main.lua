@@ -257,9 +257,10 @@ function love.update(dt)
         end
         if inMapEdit and (not clickedUI)then
             if enbaledPaintBrush then
-                local mouseGridPosX = math.floor((mousePos[1]/zoom)/200)+1+math.floor(camPos[1]/200)
-                local mouseGridPosY = math.floor((mousePos[2]/zoom)/200)+1+math.floor(camPos[2]/200)
-                print(tostring(mouseGridPosX)..","..tostring(mouseGridPosY))
+                local mouseGridPosX = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
+                local mouseGridPosY = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
+                print("X:"..tostring(mouseGridPosX).." , ".."Y:"..tostring(mouseGridPosY))
+
                 currentMap[mouseGridPosY][mouseGridPosX]=MapEditor.CurrentBrush     
             end
         end 

@@ -35,6 +35,33 @@ Assets.MapTemperateForest = {
     {"FST_ANW",love.graphics.newImage("Images/Maps/Temperate/Forest_ANW.png")},
     {"FST_ASW",love.graphics.newImage("Images/Maps/Temperate/Forest_ASW.png")},
 }
+Assets.MapTemperateSwamp = {
+    {"SWP_ALL",love.graphics.newImage("Images/Maps/Temperate/Swamp_All.png")},
+
+    {"SWP_N__",love.graphics.newImage("Images/Maps/Temperate/Swamp_N.png")},
+    {"SWP_S__",love.graphics.newImage("Images/Maps/Temperate/Swamp_S.png")},
+    {"SWP_E__",love.graphics.newImage("Images/Maps/Temperate/Swamp_E.png")},
+    {"SWP_W__",love.graphics.newImage("Images/Maps/Temperate/Swamp_W.png")},
+
+    {"SWP_NE_",love.graphics.newImage("Images/Maps/Temperate/Swamp_NE.png")},
+    {"SWP_SE_",love.graphics.newImage("Images/Maps/Temperate/Swamp_SE.png")},
+    {"SWP_NW_",love.graphics.newImage("Images/Maps/Temperate/Swamp_NW.png")},
+    {"SWP_SW_",love.graphics.newImage("Images/Maps/Temperate/Swamp_SW.png")},
+
+    {"SWP_ANE",love.graphics.newImage("Images/Maps/Temperate/Swamp_ANE.png")},
+    {"SWP_ASE",love.graphics.newImage("Images/Maps/Temperate/Swamp_ASE.png")},
+    {"SWP_ANW",love.graphics.newImage("Images/Maps/Temperate/Swamp_ANW.png")},
+    {"SWP_ASW",love.graphics.newImage("Images/Maps/Temperate/Swamp_ASW.png")},
+}
+Assets.MapTemperateTurnpike = {
+    {"TRP_S__",love.graphics.newImage("Images/Maps/Temperate/Turnpike_S.png")},
+    {"TRP_E__",love.graphics.newImage("Images/Maps/Temperate/Turnpike_E.png")},
+
+    {"TRP_NE_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_NE.png")},
+    {"TRP_SE_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_SE.png")},
+    {"TRP_NW_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_NW.png")},
+    {"TRP_SW_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_SW.png")},
+}
 
 Assets.Map_Editor_ID = {
     {"Grass","GRS"},

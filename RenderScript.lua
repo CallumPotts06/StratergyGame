@@ -47,6 +47,17 @@ function renderer.RenderUI(objects,zoom)
     end
 end
 
+function DrawTileIMG(terrain,tile,x,y,zoom)
+    for i=1,#terrain,1 do
+        if terrain[i][1]==tile then 
+            currentImg=terrain[i][2] 
+            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom,zoom)
+            currentImg=false
+            break
+        end
+    end
+end
+
 function renderer.RenderMap(map,mode,zoom)
     love.graphics.setBackgroundColor(0,0,0,0)
     if mode=="Editor" then
@@ -70,23 +81,13 @@ function renderer.RenderMap(map,mode,zoom)
                 local tile = map[y][x]
                 local currentImg = false
                 if string.sub(tile,1,3)=="GRS" then
-                    for i=1,#Assets.MapTemperateGrass,1 do
-                        if Assets.MapTemperateGrass[i][1]==tile then 
-                            currentImg=Assets.MapTemperateGrass[i][2] 
-                            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom,zoom)
-                            currentImg=false
-                            break
-                        end
-                    end
+                    DrawTileIMG(Assets.MapTemperateGrass,tile,x,y,zoom)
                 elseif string.sub(tile,1,3)=="FST" then
-                    for i=1,#Assets.MapTemperateForest,1 do
-                        if Assets.MapTemperateForest[i][1]==tile then 
-                            currentImg=Assets.MapTemperateForest[i][2] 
-                            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom,zoom)
-                            currentImg=false
-                            break
-                        end
-                    end
+                    DrawTileIMG(Assets.MapTemperateForest,tile,x,y,zoom)
+                elseif string.sub(tile,1,3)=="SWP" then
+                    DrawTileIMG(Assets.MapTemperateSwamp,tile,x,y,zoom)
+                elseif string.sub(tile,1,3)=="TRP" then
+                    DrawTileIMG(Assets.MapTemperateTurnpike,tile,x,y,zoom)
                 end
             end
         end

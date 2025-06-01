@@ -26,7 +26,7 @@ function MapEditor.OpenMenu()
     return {newUI,MapEditor.CurrentMap}
 end
 
-function MapEditor.CheckAdjacentTiles(map,tilePos,tiletype)
+function MapEditor.CheckAdjacentTiles_Terrain(map,tilePos,tiletype)
     local n=true
     local s=true
     local e=true
@@ -37,17 +37,6 @@ function MapEditor.CheckAdjacentTiles(map,tilePos,tiletype)
     local sw=true
 
     local newType = "_ALL"
-    
-    --if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) and ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
-        --if not (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)==tiletype) then n = false end
-        --if not (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)==tiletype) then s = false end
-        --if not (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)==tiletype) then w = false end
-        --if not (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)==tiletype) then e = false end
-        --if not (string.sub(map[tilePos[2]-1][tilePos[1]-1],1,3)==tiletype) then nw = false end
-        --if not (string.sub(map[tilePos[2]+1][tilePos[1]+1],1,3)==tiletype) then se = false end
-        --if not (string.sub(map[tilePos[2]-1][tilePos[1]+1],1,3)==tiletype) then ne = false end
-        --if not (string.sub(map[tilePos[2]+1][tilePos[1]-1],1,3)==tiletype) then sw = false end
-    --end
 
     if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
         if not (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)==tiletype) then n = false end
@@ -82,6 +71,34 @@ function MapEditor.CheckAdjacentTiles(map,tilePos,tiletype)
     return newType
 end
 
+function MapEditor.CheckAdjacentTiles_Road(map,tilePos,tiletype)
+    local n=true
+    local s=true
+    local e=true
+    local w=true
+
+    local newType = "_ALL"
+
+    if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
+        if not (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)==tiletype) then n = false end
+        if not (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)==tiletype) then s = false end
+    end
+    if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
+        if not (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)==tiletype) then w = false end
+        if not (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)==tiletype) then e = false end
+    end
+
+
+    if (n) and (s) and (not e) and (not w) then newType="_S__" end
+    if (not n) and (not s) and (e) and (w) then newType="_E__" end
+    
+    if (n) and (not s) and (e) and (not w) then newType="_NE_" end
+    if (not n) and (s) and (e) and (not w) then newType="_SE_" end
+    if (not n) and (s) and (not e) and (w) then newType="_SW_" end
+    if (n) and (not s) and (not e) and (w) then newType="_NW_" end
+    return newType
+end
+
 function MapEditor.ConvertMap(convertTo)
     local newMap=MapEditor.CurrentMap
     if convertTo=="Game" then
@@ -89,8 +106,11 @@ function MapEditor.ConvertMap(convertTo)
             for x=1,#newMap[1],1 do
                 if string.sub(newMap[y][x],1,3)=="GRS" then --GRASS--
                     newMap[y][x]="GRS_ALL"
-                elseif string.sub(newMap[y][x],1,3)=="FST" then--FOREST--
-                    suffix = MapEditor.CheckAdjacentTiles(MapEditor.CurrentMap,{x,y},newMap[y][x])
+                elseif (string.sub(newMap[y][x],1,3)=="FST")or(string.sub(newMap[y][x],1,3)=="SWP") then--FOREST AND SWAMP--
+                    suffix = MapEditor.CheckAdjacentTiles_Terrain(MapEditor.CurrentMap,{x,y},newMap[y][x])
+                    newMap[y][x]=newMap[y][x]..suffix
+                elseif  (string.sub(newMap[y][x],1,3)=="TRP") then--TURNPIKE--
+                    suffix = MapEditor.CheckAdjacentTiles_Road(MapEditor.CurrentMap,{x,y},newMap[y][x])
                     newMap[y][x]=newMap[y][x]..suffix
                 end
             end
