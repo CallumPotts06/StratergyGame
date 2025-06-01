@@ -20,6 +20,7 @@ uiObjects = {}
 inGame = false
 inMapEdit = false
 enbaledPaintBrush = false
+currentEditRender = "Edit"
 
 camPos = {0,0}
 zoom = 1
@@ -68,8 +69,10 @@ function love.load()
 end
 
 function love.draw()
-    if inMapEdit then
+    if inMapEdit and (currentEditRender == "Edit") then
         Renderer.RenderMap(currentMap,"Editor",zoom)
+    else
+        Renderer.RenderMap(currentMap,"Temperate",zoom)
     end
 
     Renderer.RenderUI(uiObjects,zoom)
@@ -89,6 +92,19 @@ function love.keypressed(key)
                 uiObjects[i].Text = currentTextInput
                 uiObjects[i].TextChange = true
                 break
+            end
+        end
+    end
+
+    if inMapEdit or inGame then
+        if key=="up" then
+            if zoom<1.5 then
+                zoom=zoom*1.4
+            end
+        end
+        if key=="down" then
+            if zoom>0.25 then
+                zoom=zoom/1.4
             end
         end
     end
@@ -199,24 +215,37 @@ function love.update(dt)
                         for x=1,#Assets.Map_Editor_ID,1 do
                             if Assets.Map_Editor_ID[x][1]==string.sub(uiObjects[i].Text,8,#uiObjects[i].Text) then
                                 index = x+1
-                                
                                 break
                             end
                         end
                         if index>#Assets.Map_Editor_ID then index=1 end 
+                        MapEditor.CurrentBrush=Assets.Map_Editor_ID[index][2]
                         local newBrush = "Brush: "..Assets.Map_Editor_ID[index][1]
                         local newImg = Assets.Map_Editor[index][2]
                         uiObjects[i].Text=newBrush
                         uiObjects[i].Image=newImg
                     end
 
+                    if check=="Change Render" then
+                        if currentEditRender == "Edit" then
+                            currentEditRender = "Normal"
+                            currentMap = MapEditor.ConvertMap("Game")
+                            clickedUI = true
+                            enbaledPaintBrush = true
+                            break
+                        else
+                            currentEditRender = "Edit"
+                            currentMap = MapEditor.ConvertMap("Edit")
+                            break
+                        end
+                    end
                     if check=="Enable Brush" then
                         clickedUI = true
                         enbaledPaintBrush = false
                         uiObjects[i].Text = "Brush Disabled"
                         uiObjects[i].OnClick = "Disable Brush"
                         break
-                    elseif  check=="Disable Brush" then
+                    elseif check=="Disable Brush" then
                         clickedUI = true
                         enbaledPaintBrush = true
                         uiObjects[i].Text = "Brush Enabled"
@@ -230,8 +259,8 @@ function love.update(dt)
             if enbaledPaintBrush then
                 local mouseGridPosX = math.floor(mousePos[1]/100)+1
                 local mouseGridPosY = math.floor(mousePos[2]/100)+1
-                print(mouseGridPosY)
-                currentMap[mouseGridPosY][mouseGridPosX]=MapEditor.CurrentBrush
+                print(tostring(mouseGridPosX)..","..tostring(mouseGridPosY))
+                currentMap[mouseGridPosY][mouseGridPosX]=MapEditor.CurrentBrush     
             end
         end 
 
@@ -242,22 +271,22 @@ function love.update(dt)
     if inMapEdit or inGame then
         if love.keyboard.isDown("w") then
             if camPos[2]>0 then
-                camPos[2]=camPos[2]-(5*camSpeed)
+                camPos[2]=camPos[2]-((5*camSpeed))
             end
         end
         if love.keyboard.isDown("a") then
             if camPos[1]>0 then
-                camPos[1]=camPos[1]-(5*camSpeed)
+                camPos[1]=camPos[1]-((5*camSpeed))
             end
         end
         if love.keyboard.isDown("s") then
-            if camPos[2]<((#currentMap)*100)-gameResolution[2] then
-                camPos[2]=camPos[2]+(5*camSpeed)
+            if camPos[2]/zoom<(((#currentMap)*200))-(gameResolution[2]+(200)) then
+                camPos[2]=camPos[2]+((5*camSpeed))
             end
         end
         if love.keyboard.isDown("d") then
-            if camPos[1]<((#currentMap[1])*100)-gameResolution[1] then
-                camPos[1]=camPos[1]+(5*camSpeed)
+            if camPos[1]/zoom<(((#currentMap[1])*200))-(gameResolution[1]+(200)) then
+                camPos[1]=camPos[1]+((5*camSpeed))
             end
         end
         if love.keyboard.isDown("lshift") then

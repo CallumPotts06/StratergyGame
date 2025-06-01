@@ -13,6 +13,29 @@ Assets.Map_Editor = {
     {"URB",love.graphics.newImage("Images/Maps/Editor/Urban.png")},
 }
 
+--TEMPERATE MAP TILES--
+Assets.MapTemperateGrass = {
+    {"GRS_ALL",love.graphics.newImage("Images/Maps/Temperate/Grass.png")},
+}
+Assets.MapTemperateForest = {
+    {"FST_ALL",love.graphics.newImage("Images/Maps/Temperate/Forest_All.png")},
+
+    {"FST_N__",love.graphics.newImage("Images/Maps/Temperate/Forest_N.png")},
+    {"FST_S__",love.graphics.newImage("Images/Maps/Temperate/Forest_S.png")},
+    {"FST_E__",love.graphics.newImage("Images/Maps/Temperate/Forest_E.png")},
+    {"FST_W__",love.graphics.newImage("Images/Maps/Temperate/Forest_W.png")},
+
+    {"FST_NE_",love.graphics.newImage("Images/Maps/Temperate/Forest_NE.png")},
+    {"FST_SE_",love.graphics.newImage("Images/Maps/Temperate/Forest_SE.png")},
+    {"FST_NW_",love.graphics.newImage("Images/Maps/Temperate/Forest_NW.png")},
+    {"FST_SW_",love.graphics.newImage("Images/Maps/Temperate/Forest_SW.png")},
+
+    {"FST_ANE",love.graphics.newImage("Images/Maps/Temperate/Forest_ANE.png")},
+    {"FST_ASE",love.graphics.newImage("Images/Maps/Temperate/Forest_ASE.png")},
+    {"FST_ANW",love.graphics.newImage("Images/Maps/Temperate/Forest_ANW.png")},
+    {"FST_ASW",love.graphics.newImage("Images/Maps/Temperate/Forest_ASW.png")},
+}
+
 Assets.Map_Editor_ID = {
     {"Grass","GRS"},
     {"Ford","FRD"},

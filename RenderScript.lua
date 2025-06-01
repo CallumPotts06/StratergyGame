@@ -18,7 +18,7 @@ function renderer.RenderUI(objects,zoom)
         local x_size = object.Size[1]
         local y_size = object.Size[2]
         local border = object.BorderSize
-        local z = zoom
+        local z = 1
 
         -- Draw Border
         love.graphics.setColor(object.BorderColour[1],object.BorderColour[2],object.BorderColour[3],object.BorderColour[4])
@@ -50,20 +50,47 @@ end
 function renderer.RenderMap(map,mode,zoom)
     love.graphics.setBackgroundColor(0,0,0,0)
     if mode=="Editor" then
+        zoom=zoom*2
         for y=1,#map,1 do
-            for x=1,#map[y],1 do
+            for x=1,#map[1],1 do
                 local tile = map[y][x]
                 local currentImg = false
                 for i=1,#Assets.Map_Editor,1 do
                     if Assets.Map_Editor[i][1]==tile then 
                         currentImg=Assets.Map_Editor[i][2] 
-                        love.graphics.draw(currentImg,(((x-1)*100)-camPos[1])*zoom,(((y-1)*100)-camPos[2])*zoom)
+                        love.graphics.draw(currentImg,(((x-1)*100)-camPos[1])*zoom,(((y-1)*100)-camPos[2])*zoom,0,zoom,zoom)
+                        currentImg=false
+                        break
                     end
                 end
             end
         end
-    else
-
+    elseif  mode=="Temperate" then
+         for y=1,#map,1 do
+            for x=1,#map[1],1 do
+                local tile = map[y][x]
+                local currentImg = false
+                if string.sub(tile,1,3)=="GRS" then
+                    for i=1,#Assets.MapTemperateGrass,1 do
+                        if Assets.MapTemperateGrass[i][1]==tile then 
+                            currentImg=Assets.MapTemperateGrass[i][2] 
+                            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom,zoom)
+                            currentImg=false
+                            break
+                        end
+                    end
+                elseif string.sub(tile,1,3)=="FST" then
+                    for i=1,#Assets.MapTemperateForest,1 do
+                        if Assets.MapTemperateForest[i][1]==tile then 
+                            currentImg=Assets.MapTemperateForest[i][2] 
+                            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom,zoom)
+                            currentImg=false
+                            break
+                        end
+                    end
+                end
+            end
+        end
     end 
 end
 
