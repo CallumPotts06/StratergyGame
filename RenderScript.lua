@@ -74,7 +74,7 @@ function renderer.RenderMap(map,mode,zoom)
                     for i=1,#Assets.MapTemperateGrass,1 do
                         if Assets.MapTemperateGrass[i][1]==tile then 
                             currentImg=Assets.MapTemperateGrass[i][2] 
-                            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom,zoom)
+                            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom)
                             currentImg=false
                             break
                         end
