@@ -57,11 +57,9 @@ function renderer.RenderMap(map,mode,zoom)
                 for i=1,#Assets.Map_Editor,1 do
                     if Assets.Map_Editor[i][1]==tile then 
                         currentImg=Assets.Map_Editor[i][2] 
-                        love.graphics.draw(currentImg,(x*100)*zoom,(y*100)*zoom)
-                        print("changed image")
+                        love.graphics.draw(currentImg,(((x-1)*100)-camPos[1])*zoom,(((y-1)*100)-camPos[2])*zoom)
                     end
                 end
-                print("draw tile")
             end
         end
     else

@@ -16,10 +16,16 @@ Interface = require("Interface")
 currentMap = {}
 
 uiObjects = {}
-zoom = 1
 
 inGame = false
 inMapEdit = false
+enbaledPaintBrush = false
+
+camPos = {0,0}
+zoom = 1
+camSpeed = 1
+
+gameResolution = {1024,768}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
@@ -46,8 +52,15 @@ function clearInterface()
     closeInput()
 end
 function openMenu(menu)
-    local newUI = menu.OpenMenu()
-    for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
+    if not (menu==MapEditor) then
+        local newUI = menu.OpenMenu()
+        for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
+    else
+        local openedMenu = menu.OpenMenu()
+        local newUI = openedMenu[1]
+        currentMap = openedMenu[2]
+        for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
+    end
 end
 
 --// LOVE FUNCTIONS //--
@@ -55,11 +68,11 @@ function love.load()
 end
 
 function love.draw()
-    Renderer.RenderUI(uiObjects,zoom)
-
     if inMapEdit then
         Renderer.RenderMap(currentMap,"Editor",zoom)
     end
+
+    Renderer.RenderUI(uiObjects,zoom)
 end
 
 function love.keypressed(key)
@@ -147,6 +160,8 @@ function love.update(dt)
         local x,y = love.mouse.getPosition()
         local mousePos = {x,y}
 
+        local clickedUI = false
+
         if not (#uiObjects==0) then
             for i=1,#uiObjects,1 do
                 if not (not uiObjects[i]:CheckClick(mousePos)) then
@@ -179,10 +194,12 @@ function love.update(dt)
                     end
 
                     if check=="Change Brush" then
+                        clickedUI = true
                         local index = 1
                         for x=1,#Assets.Map_Editor_ID,1 do
                             if Assets.Map_Editor_ID[x][1]==string.sub(uiObjects[i].Text,8,#uiObjects[i].Text) then
                                 index = x+1
+                                
                                 break
                             end
                         end
@@ -192,10 +209,61 @@ function love.update(dt)
                         uiObjects[i].Text=newBrush
                         uiObjects[i].Image=newImg
                     end
+
+                    if check=="Enable Brush" then
+                        clickedUI = true
+                        enbaledPaintBrush = false
+                        uiObjects[i].Text = "Brush Disabled"
+                        uiObjects[i].OnClick = "Disable Brush"
+                        break
+                    elseif  check=="Disable Brush" then
+                        clickedUI = true
+                        enbaledPaintBrush = true
+                        uiObjects[i].Text = "Brush Enabled"
+                        uiObjects[i].OnClick = "Enable Brush"
+                        break
+                    end 
                 end
             end
         end
+        if inMapEdit and (not clickedUI)then
+            if enbaledPaintBrush then
+                local mouseGridPosX = math.floor(mousePos[1]/100)+1
+                local mouseGridPosY = math.floor(mousePos[2]/100)+1
+                print(mouseGridPosY)
+                currentMap[mouseGridPosY][mouseGridPosX]=MapEditor.CurrentBrush
+            end
+        end 
+
     elseif not (love.mouse.isDown(1)) then
         mouseDeBounce = false
+    end
+
+    if inMapEdit or inGame then
+        if love.keyboard.isDown("w") then
+            if camPos[2]>0 then
+                camPos[2]=camPos[2]-(5*camSpeed)
+            end
+        end
+        if love.keyboard.isDown("a") then
+            if camPos[1]>0 then
+                camPos[1]=camPos[1]-(5*camSpeed)
+            end
+        end
+        if love.keyboard.isDown("s") then
+            if camPos[2]<((#currentMap)*100)-gameResolution[2] then
+                camPos[2]=camPos[2]+(5*camSpeed)
+            end
+        end
+        if love.keyboard.isDown("d") then
+            if camPos[1]<((#currentMap[1])*100)-gameResolution[1] then
+                camPos[1]=camPos[1]+(5*camSpeed)
+            end
+        end
+        if love.keyboard.isDown("lshift") then
+            camSpeed=4
+        else
+            camSpeed=1
+        end
     end
 end
