@@ -26,7 +26,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-gameResolution = {1024,768}
+gameResolution = {800,600}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
@@ -98,13 +98,13 @@ function love.keypressed(key)
 
     if inMapEdit or inGame then
         if key=="up" then
-            if zoom<1.5 then
-                zoom=zoom*1.4
+            if zoom<1.3 then
+                zoom=zoom*1.5
             end
         end
         if key=="down" then
-            if zoom>0.25 then
-                zoom=zoom/1.4
+            if zoom>0.3 then
+                zoom=zoom/1.5
             end
         end
     end
@@ -257,8 +257,8 @@ function love.update(dt)
         end
         if inMapEdit and (not clickedUI)then
             if enbaledPaintBrush then
-                local mouseGridPosX = math.floor(mousePos[1]/100)+1
-                local mouseGridPosY = math.floor(mousePos[2]/100)+1
+                local mouseGridPosX = math.floor((mousePos[1]/zoom)/200)+1+math.floor(camPos[1]/200)
+                local mouseGridPosY = math.floor((mousePos[2]/zoom)/200)+1+math.floor(camPos[2]/200)
                 print(tostring(mouseGridPosX)..","..tostring(mouseGridPosY))
                 currentMap[mouseGridPosY][mouseGridPosX]=MapEditor.CurrentBrush     
             end
@@ -271,22 +271,25 @@ function love.update(dt)
     if inMapEdit or inGame then
         if love.keyboard.isDown("w") then
             if camPos[2]>0 then
-                camPos[2]=camPos[2]-((5*camSpeed))
+                camPos[2]=camPos[2]-(5*camSpeed)
             end
         end
         if love.keyboard.isDown("a") then
             if camPos[1]>0 then
-                camPos[1]=camPos[1]-((5*camSpeed))
+                camPos[1]=camPos[1]-(5*camSpeed)
             end
         end
         if love.keyboard.isDown("s") then
-            if camPos[2]/zoom<(((#currentMap)*200))-(gameResolution[2]+(200)) then
-                camPos[2]=camPos[2]+((5*camSpeed))
+            if camPos[2]+gameResolution[2]+(100/zoom)<(#currentMap)*100 then
+                camPos[2]=camPos[2]+(5*camSpeed)
             end
         end
         if love.keyboard.isDown("d") then
-            if camPos[1]/zoom<(((#currentMap[1])*200))-(gameResolution[1]+(200)) then
-                camPos[1]=camPos[1]+((5*camSpeed))
+            print((#currentMap[1])*100)
+            print(camPos[1])
+            print("\n\n")
+            if camPos[1]+gameResolution[1]+(100/zoom)<(#currentMap[1])*100 then
+                camPos[1]=camPos[1]+(5*camSpeed)
             end
         end
         if love.keyboard.isDown("lshift") then
