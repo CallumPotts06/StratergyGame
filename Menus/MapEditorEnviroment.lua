@@ -28,10 +28,11 @@ function MapEditor.OpenMenu()
         end
         table.insert(MapEditor.currentMapDetails, row)
     end
-    brushUI = uiClass.New("BrushImage",{0,0,0,1},"Brush: Road",{1,1,1,1},6,{1,1,1,1},{25,25},{100,100},"Change Brush",Assets.Map_Editor[5][2])
+    brushUI = uiClass.New("BrushImage",{0,0,0,1},"Brush: Road",{1,1,1,1},6,{1,1,1,1},{25,25},{100,100},"Change Brush",Assets.Map_Editor[5][2],1)
     enableBrushUI = uiClass.New("BrushEnable",{0,0,0,1},"Enable Brush",{1,1,1,1},6,{1,1,1,1},{150,25},{100,100},"Enable Brush")
     changeRenderUI = uiClass.New("ChangeRender",{0,0,0,1},"Change Render",{1,1,1,1},6,{1,1,1,1},{275,25},{100,100},"Change Render")
-    newUI={brushUI,enableBrushUI,changeRenderUI}
+    finishTilesUI = uiClass.New("FinishTiles",{0,0,0,1},"Finish Tiles",{1,1,1,1},6,{1,1,1,1},{400,25},{100,100},"Finish Tiles")
+    newUI={brushUI,enableBrushUI,changeRenderUI,finishTilesUI}
     return {newUI,MapEditor.CurrentMap}
 end
 
@@ -77,6 +78,7 @@ function MapEditor.CheckAdjacentTiles_Terrain(map,tilePos,tiletype)
     if (n) and (s) and (e) and (w) and (not nw) then newType="_ANW" end
     if (n) and (s) and (e) and (w) and (not se) then newType="_ASE" end
     if (n) and (s) and (e) and (w) and (not sw) then newType="_ASW" end
+
     return newType
 end
 
@@ -248,26 +250,38 @@ function MapEditor.ConvertMap(convertTo)
     local newMap=MapEditor.CurrentMap
     local newMapDetails=MapEditor.currentMapDetails
 
+    
     if convertTo=="Game" then
-        for y=1,#newMap,1 do
-            for x=1,#newMap[1],1 do
-                local code=string.sub(newMap[y][x],1,3)
-                if code=="GRS" then --GRASS--
-                    newMap[y][x]="GRS_ALL"
-                elseif (code=="FST")or(code=="SWP") then--FOREST AND SWAMP--
-                    suffix = MapEditor.CheckAdjacentTiles_Terrain(MapEditor.CurrentMap,{x,y},newMap[y][x])
-                    newMap[y][x]=newMap[y][x]..suffix
-                    if code=="FST" then
-                        newMapDetails[y][x]="Forest"..suffix
-                    else
-                        print("")--!
+        if not (string.len(newMap[1][1])>3) then
+            for y=1,#newMap,1 do
+                for x=1,#newMap[1],1 do
+                    local code=string.sub(newMap[y][x],1,3)
+                    if (code=="GRS") then --GRASS--
+                        newMap[y][x]="GRS_ALL"
+                    elseif (code=="URB") then --URBAN--
+                        newMap[y][x]="URB_ALL"
+                    elseif (code=="FST")or(code=="SWP") then--FOREST AND SWAMP--
+                        suffix = MapEditor.CheckAdjacentTiles_Terrain(MapEditor.CurrentMap,{x,y},newMap[y][x])
+                        newMap[y][x]=newMap[y][x]..suffix
+                        if code=="FST" then
+                            newMapDetails[y][x]="Forest"..suffix
+                        else
+                            newMapDetails[y][x]="Swamp"..suffix
+                        end
+                    elseif  (code=="TRP")or(code=="ROD") then--TURNPIKE AND ROAD--
+                        suffix = MapEditor.CheckAdjacentTiles_Road(MapEditor.CurrentMap,{x,y},newMap[y][x])
+                        newMap[y][x]=newMap[y][x]..suffix
+                    elseif  (code=="STR")or(code=="FRD")or(code=="BRD") then--STREAM, BRIDGE AND FORD--
+                        suffix = MapEditor.CheckAdjacentTiles_Stream(MapEditor.CurrentMap,{x,y},newMap[y][x])
+                        newMap[y][x]=newMap[y][x]..suffix
+                    elseif  (code=="CRN")or(code=="WHE") then--CORN AND WHEAT--
+                        newMap[y][x]=newMap[y][x].."_ALL"
+                        if code=="CRN" then
+                            newMapDetails[y][x]="Corn_ALL"
+                        else
+                            newMapDetails[y][x]="Wheat_ALL"
+                        end
                     end
-                elseif  (code=="TRP")or(code=="ROD") then--TURNPIKE AND ROAD--
-                    suffix = MapEditor.CheckAdjacentTiles_Road(MapEditor.CurrentMap,{x,y},newMap[y][x])
-                    newMap[y][x]=newMap[y][x]..suffix
-                elseif  (code=="STR")or(code=="FRD")or(code=="BRD") then--STREAM, BRIDGE AND FORD--
-                    suffix = MapEditor.CheckAdjacentTiles_Stream(MapEditor.CurrentMap,{x,y},newMap[y][x])
-                    newMap[y][x]=newMap[y][x]..suffix
                 end
             end
         end
@@ -280,6 +294,14 @@ function MapEditor.ConvertMap(convertTo)
         end
     end
     return {newMap,newMapDetails}
+end
+
+function MapEditor.FinishTiles()
+    detailUI = uiClass.New("DetailImage",{0,0,0,1},"Detail: House1",{1,1,1,1},6,{1,1,1,1},{25,25},{100,100},"Change Detail",Assets.Map_Details_Editor[1][2],0.25)
+    enableDetailUI = uiClass.New("BrushDetail",{0,0,0,1},"Enable Brush",{1,1,1,1},6,{1,1,1,1},{150,25},{100,100},"Enable Detail")
+    finishMapUI = uiClass.New("FinishMap",{0,0,0,1},"Finish Map",{1,1,1,1},6,{1,1,1,1},{400,25},{100,100},"Finish Map")
+    newUI={detailUI,enableDetailUI,finishMapUI}
+    return newUI
 end
 
 return MapEditor

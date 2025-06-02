@@ -11,13 +11,22 @@ Assets.Map_Editor = {
     {"SWP",love.graphics.newImage("Images/Maps/Editor/Swamp.png")},
     {"TRP",love.graphics.newImage("Images/Maps/Editor/Turnpike.png")},
     {"URB",love.graphics.newImage("Images/Maps/Editor/Urban.png")},
-    {"FRM",love.graphics.newImage("Images/Maps/Editor/Farm.png")},
+    {"CRN",love.graphics.newImage("Images/Maps/Editor/Farm.png")},
+    {"WHE",love.graphics.newImage("Images/Maps/Editor/Farm.png")},
 }
+Assets.Map_Details_Editor = {
+    {"TY01",love.graphics.newImage("Images/Maps/Details/Ty01.png")},
+    {"TY02",love.graphics.newImage("Images/Maps/Details/Ty02.png")},
+    {"SPNA",love.graphics.newImage("Images/Maps/Details/SpawnA.png")},
+    {"SPNB",love.graphics.newImage("Images/Maps/Details/SpawnB.png")},
+}
+
 
 --TEMPERATE MAP TILES--
 Assets.MapTemperateOther = {
     {"GRS_ALL",love.graphics.newImage("Images/Maps/Temperate/Grass.png")},
-    {"FRM_ALL",love.graphics.newImage("Images/Maps/Temperate/Farm.png")},
+    {"CRN_ALL",love.graphics.newImage("Images/Maps/Temperate/Farm.png")},
+    {"WHE_ALL",love.graphics.newImage("Images/Maps/Temperate/Farm.png")},
     {"URB_ALL",love.graphics.newImage("Images/Maps/Temperate/Urban.png")},
 }
 Assets.MapTemperateForest = {
@@ -104,17 +113,54 @@ Assets.MapTemperateBridges = {
     {"BRD_S__",love.graphics.newImage("Images/Maps/Temperate/Bridge_S.png")},
     {"BRD_E__",love.graphics.newImage("Images/Maps/Temperate/Bridge_E.png")},
 }
-Assets.MapTemperateDetails = {
+
+--TEMPERATE MAP DETAILS--
+Assets.MapTemperateForestDetails = {
     {"Tree1",love.graphics.newImage("Images/Maps/Details/Tree1.png")},
-    {"Forest_All",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
-    {"Forest_ANE",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
-    {"Forest_ANW",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
-    {"Forest_ASE",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
-    {"Forest_ASW",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
+    {"Forest_ALL",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+
+    {"Forest_N__",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+    {"Forest_S__",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+    {"Forest_E__",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+    {"Forest_W__",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+
+    {"Forest_ANE",love.graphics.newImage("Images/Maps/Details/Forest_ANE.png")},
+    {"Forest_ANW",love.graphics.newImage("Images/Maps/Details/Forest_ANW.png")},
+    {"Forest_ASE",love.graphics.newImage("Images/Maps/Details/Forest_ASE.png")},
+    {"Forest_ASW",love.graphics.newImage("Images/Maps/Details/Forest_ASW.png")},
+
     {"Forest_NE_",love.graphics.newImage("Images/Maps/Details/Forest_NE.png")},
     {"Forest_NW_",love.graphics.newImage("Images/Maps/Details/Forest_NW.png")},
     {"Forest_SE_",love.graphics.newImage("Images/Maps/Details/Forest_SE.png")},
     {"Forest_SW_",love.graphics.newImage("Images/Maps/Details/Forest_SW.png")},
+}
+Assets.MapTemperateSwampDetails = {
+    {"Swamp_ALL",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+
+    {"Swamp_N__",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+    {"Swamp_S__",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+    {"Swamp_E__",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+    {"Swamp_W__",love.graphics.newImage("Images/Maps/Details/Forest_ALL.png")},
+
+    {"Swamp_ANE",love.graphics.newImage("Images/Maps/Details/Forest_ANE.png")},
+    {"Swamp_ANW",love.graphics.newImage("Images/Maps/Details/Forest_ANW.png")},
+    {"Swamp_ASE",love.graphics.newImage("Images/Maps/Details/Forest_ASE.png")},
+    {"Swamp_ASW",love.graphics.newImage("Images/Maps/Details/Forest_ASW.png")},
+
+    {"Swamp_NE_",love.graphics.newImage("Images/Maps/Details/Forest_NE.png")},
+    {"Swamp_NW_",love.graphics.newImage("Images/Maps/Details/Forest_NW.png")},
+    {"Swamp_SE_",love.graphics.newImage("Images/Maps/Details/Forest_SE.png")},
+    {"Swamp_SW_",love.graphics.newImage("Images/Maps/Details/Forest_SW.png")},
+}
+Assets.MapTemperateOtherDetails = {
+    {"Corn_ALL",love.graphics.newImage("Images/Maps/Details/Cornfield.png")},
+    {"Wheat_ALL",love.graphics.newImage("Images/Maps/Details/Barley.png")},
+}
+Assets.MapTemperateHouseDetails = {
+    {"TY01",love.graphics.newImage("Images/Maps/Details/Ty01.png")},
+    {"TY02",love.graphics.newImage("Images/Maps/Details/Ty02.png")},
+    {"SPNA",love.graphics.newImage("Images/Maps/Details/SpawnA.png")},
+    {"SPNB",love.graphics.newImage("Images/Maps/Details/SpawnB.png")},
 }
 
 Assets.Map_Editor_ID = {
@@ -127,7 +173,14 @@ Assets.Map_Editor_ID = {
     {"Swamp","SWP"},
     {"Turnpike","TRP"},
     {"Urban","URB"},
-    {"Farm","FRM"},
+    {"Corn","CRN"},
+    {"Wheat","WHE"},
+}
+Assets.Map_Editor_Detail_ID = {
+    {"House1","TY01"},
+    {"House2","TY02"},
+    {"SpawnA","SPNA"},
+    {"SpawnB","SPNB"},
 }
 
 return Assets

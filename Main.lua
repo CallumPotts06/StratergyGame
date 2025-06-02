@@ -22,6 +22,7 @@ inGame = false
 inMapEdit = false
 enbaledPaintBrush = false
 currentEditRender = "Edit"
+finishedTiles = false
 
 camPos = {0,0}
 zoom = 1
@@ -53,15 +54,20 @@ function clearInterface()
     uiObjects={}
     closeInput()
 end
-function openMenu(menu)
-    if not (menu==MapEditor) then
-        local newUI = menu.OpenMenu()
+function openMenu(menu,specialCondition)
+    if specialCondition=="FinishTiles" then
+        local newUI=menu.FinishTiles()
         for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
     else
-        local openedMenu = menu.OpenMenu()
-        local newUI = openedMenu[1]
-        currentMap = openedMenu[2]
-        for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
+        if not (menu==MapEditor) then
+            local newUI = menu.OpenMenu()
+            for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
+        else
+            local openedMenu = menu.OpenMenu()
+            local newUI = openedMenu[1]
+            currentMap = openedMenu[2]
+            for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
+        end
     end
 end
 
@@ -256,16 +262,62 @@ function love.update(dt)
                         uiObjects[i].OnClick = "Enable Brush"
                         break
                     end 
+
+                    if check=="Finish Tiles" then   
+                        clearInterface()
+                        openMenu(MapEditor,"FinishTiles")
+                        currentEditRender = "Normal"
+                        clickedUI = true
+                        enbaledPaintBrush = false
+                        finishedTiles = true
+                        local convert = MapEditor.ConvertMap("Game")
+                        currentMap = convert[1]
+                        currentMapDetails = convert[2]
+                        break
+                    end
+                    if check=="Enable Detail" then
+                        clickedUI = true
+                        enbaledPaintBrush = false
+                        uiObjects[i].Text = "Brush Disabled"
+                        uiObjects[i].OnClick = "Disable Detail"
+                        break
+                    elseif check=="Disable Detail" then
+                        clickedUI = true
+                        enbaledPaintBrush = true
+                        uiObjects[i].Text = "Brush Enabled"
+                        uiObjects[i].OnClick = "Enable Detail"
+                        break
+                    end
+
+                    if check=="Change Detail" then
+                        clickedUI = true
+                        local index = 1
+                        for x=1,#Assets.Map_Editor_Detail_ID,1 do
+                            if Assets.Map_Editor_Detail_ID[x][1]==string.sub(uiObjects[i].Text,8,#uiObjects[i].Text) then
+                                index = x+1
+                                break
+                            end
+                        end
+                        if index>#Assets.Map_Editor_Detail_ID then index=1 end 
+                        MapEditor.CurrentBrush=Assets.Map_Editor_Detail_ID[index][2]
+                        local newBrush = "Brush: "..Assets.Map_Editor_Detail_ID[index][1]
+                        local newImg = Assets.Map_Details_Editor[index][2]
+                        uiObjects[i].Text=newBrush
+                        uiObjects[i].Image=newImg
+                    end
                 end
             end
         end
         if inMapEdit and (not clickedUI)then
-            if enbaledPaintBrush then
+            if enbaledPaintBrush and (not finishedTiles) then
                 local mouseGridPosX = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
                 local mouseGridPosY = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
-                print("X:"..tostring(mouseGridPosX).." , ".."Y:"..tostring(mouseGridPosY))
-
                 currentMap[mouseGridPosY][mouseGridPosX]=MapEditor.CurrentBrush     
+            end
+            if enbaledPaintBrush and finishedTiles then
+                local mouseGridPosX = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
+                local mouseGridPosY = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
+                currentMapDetails[mouseGridPosY][mouseGridPosX]=MapEditor.CurrentBrush     
             end
         end 
 
@@ -290,10 +342,6 @@ function love.update(dt)
             end
         end
         if love.keyboard.isDown("d") then
-            print("camera "..tostring((camPos[1]*zoom)+gameResolution[1]))
-            print("mapedge "..tostring((#currentMap[1])*200)*(zoom))
-            print("zoom "..tostring((zoom)))
-            print("\n\n")
             if (camPos[1]*zoom)+(gameResolution[1])<((#currentMap[1])*200)*(zoom) then
                 camPos[1]=camPos[1]+(5*camSpeed)
             end

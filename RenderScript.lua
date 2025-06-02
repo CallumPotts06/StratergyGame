@@ -31,7 +31,7 @@ function renderer.RenderUI(objects,zoom)
         --IMG
         if not (object.Image==nil) then
             love.graphics.setColor(1,1,1,1)
-            love.graphics.draw(object.Image,object.Position[1],object.Position[2])
+            love.graphics.draw(object.Image,object.Position[1],object.Position[2],0,object.ImageScale,object.ImageScale)
         end
 
         --TXT
@@ -58,11 +58,9 @@ function DrawTileIMG(terrain,tile,x,y,zoom)
     end
 end
 function DrawDetailIMG(list,tile,x,y,zoom)
-    print(tile)
     for i=1,#list,1 do
         if list[i][1]==tile then 
             currentImg=list[i][2]
-            print("draw") 
             love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom/2,zoom/2)
             currentImg=false
             break
@@ -92,7 +90,7 @@ function renderer.RenderMap(map,mapDetails,mode,zoom)
             for x=1,#map[1],1 do
                 local tile = map[y][x]
                 local code=string.sub(tile,1,3)
-                if (code=="GRS")or(code=="URB")or(code=="FRM") then
+                if (code=="GRS")or(code=="URB")or(code=="CRN")or(code=="WHE") then
                     DrawTileIMG(Assets.MapTemperateOther,tile,x,y,zoom)
                 elseif code=="FST" then
                     DrawTileIMG(Assets.MapTemperateForest,tile,x,y,zoom)
@@ -112,9 +110,17 @@ function renderer.RenderMap(map,mapDetails,mode,zoom)
 
         for y=1,#mapDetails,1 do
             for x=1,#mapDetails[1],1 do
-                local tile = map[y][x]
+                local tile = mapDetails[y][x]
                 local currentImg = false
-                DrawDetailIMG(Assets.MapTemperateDetails,tile,x,y,zoom)
+                if (string.sub(tile,1,6)=="Forest") then
+                    DrawDetailIMG(Assets.MapTemperateForestDetails,mapDetails[y][x],x,y,zoom)
+                elseif (string.sub(tile,1,5)=="Swamp") then
+                    DrawDetailIMG(Assets.MapTemperateSwampDetails,mapDetails[y][x],x,y,zoom)
+                elseif (string.sub(tile,1,4)=="Corn")or(string.sub(tile,1,5)=="Wheat") then
+                    DrawDetailIMG(Assets.MapTemperateOtherDetails,mapDetails[y][x],x,y,zoom)
+                elseif (string.sub(tile,1,2)=="TY") or (string.sub(tile,1,2)=="SP") then
+                    DrawDetailIMG(Assets.MapTemperateHouseDetails,mapDetails[y][x],x,y,zoom)
+                end
             end
         end
     end 
