@@ -299,9 +299,40 @@ end
 function MapEditor.FinishTiles()
     detailUI = uiClass.New("DetailImage",{0,0,0,1},"Detail: House1",{1,1,1,1},6,{1,1,1,1},{25,25},{100,100},"Change Detail",Assets.Map_Details_Editor[1][2],0.25)
     enableDetailUI = uiClass.New("BrushDetail",{0,0,0,1},"Enable Brush",{1,1,1,1},6,{1,1,1,1},{150,25},{100,100},"Enable Detail")
-    finishMapUI = uiClass.New("FinishMap",{0,0,0,1},"Finish Map",{1,1,1,1},6,{1,1,1,1},{400,25},{100,100},"Finish Map")
+    finishMapUI = uiClass.New("FinishMap",{0,0,0,1},"Compile Map",{1,1,1,1},6,{1,1,1,1},{400,25},{100,100},"Finish Map")
     newUI={detailUI,enableDetailUI,finishMapUI}
     return newUI
+end
+
+function MapEditor.CompileMap(name)
+    local str=name
+    str=str.."\nMAP_START_TILES\n"
+    for y=1,#MapEditor.CurrentMap,1 do
+        for x=1,#MapEditor.CurrentMap[1],1 do
+            str=str.."<"..MapEditor.CurrentMap[y][x]..">,"
+        end
+        str=str..";\n"
+    end
+    str=str.."MAP_END_TILES\n\nMAP_START_DETAILS\n"
+    for y=1,#MapEditor.currentMapDetails,1 do
+        for x=1,#MapEditor.currentMapDetails[1],1 do
+            str=str.."<"..MapEditor.currentMapDetails[y][x]..">,"
+        end
+        str=str..";\n"
+    end
+    str=str.."MAP_END_TILES"
+
+    local fileName = name..".lvl"
+    print(str)
+    print(love.filesystem.getWorkingDirectory())
+    cwd = love.filesystem.getWorkingDirectory( )
+    file = love.filesystem.newFile(fileName)
+    success,message = love.filesystem.write(fileName, str)
+    local src_path = love.filesystem.getSaveDirectory()..fileName
+    local dst_path = cwd.."/"..fileName
+    os.rename(src_path, dst_path)
+    print(success)
+    return str
 end
 
 return MapEditor

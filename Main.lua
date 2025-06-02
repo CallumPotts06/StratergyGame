@@ -305,6 +305,14 @@ function love.update(dt)
                         uiObjects[i].Text=newBrush
                         uiObjects[i].Image=newImg
                     end
+
+                    if check=="Finish Map" then
+                        clickedUI = true
+                        clearInterface()
+                        inGame = false
+                        inMapEdit = false
+                        MapEditor.CompileMap("map 1")
+                    end
                 end
             end
         end
