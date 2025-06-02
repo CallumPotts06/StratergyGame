@@ -80,14 +80,17 @@ function renderer.RenderMap(map,mode,zoom)
             for x=1,#map[1],1 do
                 local tile = map[y][x]
                 local currentImg = false
-                if string.sub(tile,1,3)=="GRS" then
-                    DrawTileIMG(Assets.MapTemperateGrass,tile,x,y,zoom)
-                elseif string.sub(tile,1,3)=="FST" then
+                local code=string.sub(tile,1,3)
+                if (code=="GRS")or(code=="URB")or(code=="FRM") then
+                    DrawTileIMG(Assets.MapTemperateOther,tile,x,y,zoom)
+                elseif code=="FST" then
                     DrawTileIMG(Assets.MapTemperateForest,tile,x,y,zoom)
-                elseif string.sub(tile,1,3)=="SWP" then
+                elseif code=="SWP" then
                     DrawTileIMG(Assets.MapTemperateSwamp,tile,x,y,zoom)
-                elseif string.sub(tile,1,3)=="TRP" then
+                elseif code=="TRP" then
                     DrawTileIMG(Assets.MapTemperateTurnpike,tile,x,y,zoom)
+                elseif code=="ROD" then
+                    DrawTileIMG(Assets.MapTemperateRoad,tile,x,y,zoom)
                 end
             end
         end

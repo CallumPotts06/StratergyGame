@@ -11,11 +11,14 @@ Assets.Map_Editor = {
     {"SWP",love.graphics.newImage("Images/Maps/Editor/Swamp.png")},
     {"TRP",love.graphics.newImage("Images/Maps/Editor/Turnpike.png")},
     {"URB",love.graphics.newImage("Images/Maps/Editor/Urban.png")},
+    {"FRM",love.graphics.newImage("Images/Maps/Editor/Farm.png")},
 }
 
 --TEMPERATE MAP TILES--
-Assets.MapTemperateGrass = {
+Assets.MapTemperateOther = {
     {"GRS_ALL",love.graphics.newImage("Images/Maps/Temperate/Grass.png")},
+    {"FRM_ALL",love.graphics.newImage("Images/Maps/Temperate/Farm.png")},
+    {"URB_ALL",love.graphics.newImage("Images/Maps/Temperate/Urban.png")},
 }
 Assets.MapTemperateForest = {
     {"FST_ALL",love.graphics.newImage("Images/Maps/Temperate/Forest_All.png")},
@@ -54,6 +57,8 @@ Assets.MapTemperateSwamp = {
     {"SWP_ASW",love.graphics.newImage("Images/Maps/Temperate/Swamp_ASW.png")},
 }
 Assets.MapTemperateTurnpike = {
+    {"TRP_ALL",love.graphics.newImage("Images/Maps/Temperate/Turnpike_ALL.png")},
+
     {"TRP_S__",love.graphics.newImage("Images/Maps/Temperate/Turnpike_S.png")},
     {"TRP_E__",love.graphics.newImage("Images/Maps/Temperate/Turnpike_E.png")},
 
@@ -61,6 +66,27 @@ Assets.MapTemperateTurnpike = {
     {"TRP_SE_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_SE.png")},
     {"TRP_NW_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_NW.png")},
     {"TRP_SW_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_SW.png")},
+
+    {"TRP_AN_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_AN.png")},
+    {"TRP_AS_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_AS.png")},
+    {"TRP_AE_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_AE.png")},
+    {"TRP_AW_",love.graphics.newImage("Images/Maps/Temperate/Turnpike_AW.png")},
+}
+Assets.MapTemperateRoad = {
+    {"ROD_ALL",love.graphics.newImage("Images/Maps/Temperate/Road_ALL.png")},
+
+    {"ROD_S__",love.graphics.newImage("Images/Maps/Temperate/Road_S.png")},
+    {"ROD_E__",love.graphics.newImage("Images/Maps/Temperate/Road_E.png")},
+
+    {"ROD_NE_",love.graphics.newImage("Images/Maps/Temperate/Road_NE.png")},
+    {"ROD_SE_",love.graphics.newImage("Images/Maps/Temperate/Road_SE.png")},
+    {"ROD_NW_",love.graphics.newImage("Images/Maps/Temperate/Road_NW.png")},
+    {"ROD_SW_",love.graphics.newImage("Images/Maps/Temperate/Road_SW.png")},
+
+    {"ROD_AN_",love.graphics.newImage("Images/Maps/Temperate/Road_AN.png")},
+    {"ROD_AS_",love.graphics.newImage("Images/Maps/Temperate/Road_AS.png")},
+    {"ROD_AE_",love.graphics.newImage("Images/Maps/Temperate/Road_AE.png")},
+    {"ROD_AW_",love.graphics.newImage("Images/Maps/Temperate/Road_AW.png")},
 }
 
 Assets.Map_Editor_ID = {
@@ -73,6 +99,7 @@ Assets.Map_Editor_ID = {
     {"Swamp","SWP"},
     {"Turnpike","TRP"},
     {"Urban","URB"},
+    {"Farm","FRM"},
 }
 
 return Assets

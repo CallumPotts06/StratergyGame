@@ -72,20 +72,29 @@ function MapEditor.CheckAdjacentTiles_Terrain(map,tilePos,tiletype)
 end
 
 function MapEditor.CheckAdjacentTiles_Road(map,tilePos,tiletype)
-    local n=true
-    local s=true
-    local e=true
-    local w=true
+    local n=false
+    local s=false
+    local e=false
+    local w=false
 
     local newType = "_ALL"
 
     if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
-        if not (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)==tiletype) then n = false end
-        if not (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)==tiletype) then s = false end
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="ROD") then n = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="ROD") then s = true end
     end
     if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
-        if not (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)==tiletype) then w = false end
-        if not (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)==tiletype) then e = false end
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="ROD") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="ROD") then e = true end
+    end
+
+    if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="TRP") then n = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="TRP") then s = true end
+    end
+    if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="TRP") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="TRP") then e = true end
     end
 
 
@@ -96,6 +105,13 @@ function MapEditor.CheckAdjacentTiles_Road(map,tilePos,tiletype)
     if (not n) and (s) and (e) and (not w) then newType="_SE_" end
     if (not n) and (s) and (not e) and (w) then newType="_SW_" end
     if (n) and (not s) and (not e) and (w) then newType="_NW_" end
+
+    if (not n) and (s) and (e) and (w) then newType="_AN_" end
+    if (n) and (not s) and (e) and (w) then newType="_AS_" end
+    if (n) and (s) and (not e) and (w) then newType="_AE_" end
+    if (n) and (s) and (e) and (not w) then newType="_AW_" end
+
+    if (n) and (s) and (e) and (w) then newType="_ALL" end
     return newType
 end
 
@@ -104,12 +120,13 @@ function MapEditor.ConvertMap(convertTo)
     if convertTo=="Game" then
         for y=1,#newMap,1 do
             for x=1,#newMap[1],1 do
-                if string.sub(newMap[y][x],1,3)=="GRS" then --GRASS--
+                local code=string.sub(newMap[y][x],1,3)
+                if code=="GRS" then --GRASS--
                     newMap[y][x]="GRS_ALL"
-                elseif (string.sub(newMap[y][x],1,3)=="FST")or(string.sub(newMap[y][x],1,3)=="SWP") then--FOREST AND SWAMP--
+                elseif (code=="FST")or(code=="SWP") then--FOREST AND SWAMP--
                     suffix = MapEditor.CheckAdjacentTiles_Terrain(MapEditor.CurrentMap,{x,y},newMap[y][x])
                     newMap[y][x]=newMap[y][x]..suffix
-                elseif  (string.sub(newMap[y][x],1,3)=="TRP") then--TURNPIKE--
+                elseif  (code=="TRP")or(code=="ROD") then--TURNPIKE AND ROAD--
                     suffix = MapEditor.CheckAdjacentTiles_Road(MapEditor.CurrentMap,{x,y},newMap[y][x])
                     newMap[y][x]=newMap[y][x]..suffix
                 end

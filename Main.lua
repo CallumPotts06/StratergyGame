@@ -26,7 +26,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-gameResolution = {800,600}
+gameResolution = {1024,768}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
