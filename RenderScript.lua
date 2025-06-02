@@ -91,6 +91,10 @@ function renderer.RenderMap(map,mode,zoom)
                     DrawTileIMG(Assets.MapTemperateTurnpike,tile,x,y,zoom)
                 elseif code=="ROD" then
                     DrawTileIMG(Assets.MapTemperateRoad,tile,x,y,zoom)
+                elseif code=="STR" then
+                    DrawTileIMG(Assets.MapTemperateStream,tile,x,y,zoom)
+                elseif (code=="FRD")or(code=="BRD") then
+                    DrawTileIMG(Assets.MapTemperateBridges,tile,x,y,zoom)
                 end
             end
         end

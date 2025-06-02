@@ -79,6 +79,35 @@ function MapEditor.CheckAdjacentTiles_Road(map,tilePos,tiletype)
 
     local newType = "_ALL"
 
+    if (tilePos[2]-1)<=0 then 
+        n=true 
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="ROD") then s = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="TRP") then s = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="BRD") then s = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="FRD") then s = true end
+    end
+    if (tilePos[2]+1)>=#map then 
+        s=true 
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="ROD") then n = true end
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="TRP") then n = true end
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="BRD") then n = true end
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="FRD") then n = true end
+    end
+    if (tilePos[1]-1)<=0 then 
+        w=true 
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="ROD") then e = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="TRP") then e = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="BRD") then e = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="FRD") then e = true end
+    end
+    if (tilePos[1]+1)>=#map[1] then 
+        e=true 
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="ROD") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="TRP") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="BRD") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="FRD") then w = true end
+    end
+
     if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
         if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="ROD") then n = true end
         if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="ROD") then s = true end
@@ -95,6 +124,24 @@ function MapEditor.CheckAdjacentTiles_Road(map,tilePos,tiletype)
     if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
         if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="TRP") then w = true end
         if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="TRP") then e = true end
+    end
+
+    if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="BRD") then n = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="BRD") then s = true end
+    end
+    if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="BRD") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="BRD") then e = true end
+    end
+
+    if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="FRD") then n = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="FRD") then s = true end
+    end
+    if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="FRD") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="FRD") then e = true end
     end
 
 
@@ -115,6 +162,79 @@ function MapEditor.CheckAdjacentTiles_Road(map,tilePos,tiletype)
     return newType
 end
 
+function MapEditor.CheckAdjacentTiles_Stream(map,tilePos,tiletype)
+    local n=false
+    local s=false
+    local e=false
+    local w=false
+
+    local newType = "_S__"
+
+    if (tilePos[2]-1)<=0 then 
+        n=true 
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="STR") then s = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="BRD") then s = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="FRD") then s = true end
+    end
+    if (tilePos[2]+1)>=#map then 
+        s=true 
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="STR") then n = true end
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="BRD") then n = true end
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="FRD") then n = true end
+    end
+    if (tilePos[1]-1)<=0 then 
+        w=true 
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="STR") then e = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="BRD") then e = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="FRD") then e = true end
+    end
+    if (tilePos[1]+1)>=#map[1] then 
+        e=true 
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="STR") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="BRD") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="FRD") then w = true end
+    end
+
+    if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="STR") then n = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="STR") then s = true end
+    end
+    if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="STR") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="STR") then e = true end
+    end
+
+    if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="FRD") then n = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="FRD") then s = true end
+    end
+    if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="FRD") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="FRD") then e = true end
+    end
+
+    if ((tilePos[2]-1)>0) and ((tilePos[2]+1)<#map) then
+        if (string.sub(map[tilePos[2]-1][tilePos[1]],1,3)=="BRD") then n = true end
+        if (string.sub(map[tilePos[2]+1][tilePos[1]],1,3)=="BRD") then s = true end
+    end
+    if ((tilePos[1]-1)>0) and ((tilePos[1]+1)<#map[1]) then
+        if (string.sub(map[tilePos[2]][tilePos[1]-1],1,3)=="BRD") then w = true end
+        if (string.sub(map[tilePos[2]][tilePos[1]+1],1,3)=="BRD") then e = true end
+    end
+
+
+    if (n) and (s) and (not e) and (not w) then newType="_S__" end
+    if (not n) and (not s) and (e) and (w) then newType="_E__" end
+    
+    if (n) and (not s) and (e) and (not w) then newType="_NE_" end
+    if (not n) and (s) and (e) and (not w) then newType="_SE_" end
+    if (not n) and (s) and (not e) and (w) then newType="_SW_" end
+    if (n) and (not s) and (not e) and (w) then newType="_NW_" end
+
+    if (n) and (s) and (e) and (w) then newType="_S__" end
+    return newType
+end
+
 function MapEditor.ConvertMap(convertTo)
     local newMap=MapEditor.CurrentMap
     if convertTo=="Game" then
@@ -128,6 +248,9 @@ function MapEditor.ConvertMap(convertTo)
                     newMap[y][x]=newMap[y][x]..suffix
                 elseif  (code=="TRP")or(code=="ROD") then--TURNPIKE AND ROAD--
                     suffix = MapEditor.CheckAdjacentTiles_Road(MapEditor.CurrentMap,{x,y},newMap[y][x])
+                    newMap[y][x]=newMap[y][x]..suffix
+                elseif  (code=="STR")or(code=="FRD")or(code=="BRD") then--STREAM, BRIDGE AND FORD--
+                    suffix = MapEditor.CheckAdjacentTiles_Stream(MapEditor.CurrentMap,{x,y},newMap[y][x])
                     newMap[y][x]=newMap[y][x]..suffix
                 end
             end

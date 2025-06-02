@@ -88,6 +88,22 @@ Assets.MapTemperateRoad = {
     {"ROD_AE_",love.graphics.newImage("Images/Maps/Temperate/Road_AE.png")},
     {"ROD_AW_",love.graphics.newImage("Images/Maps/Temperate/Road_AW.png")},
 }
+Assets.MapTemperateStream = {
+    {"STR_S__",love.graphics.newImage("Images/Maps/Temperate/Stream_S.png")},
+    {"STR_E__",love.graphics.newImage("Images/Maps/Temperate/Stream_E.png")},
+
+    {"STR_NE_",love.graphics.newImage("Images/Maps/Temperate/Stream_NE.png")},
+    {"STR_SE_",love.graphics.newImage("Images/Maps/Temperate/Stream_SE.png")},
+    {"STR_NW_",love.graphics.newImage("Images/Maps/Temperate/Stream_NW.png")},
+    {"STR_SW_",love.graphics.newImage("Images/Maps/Temperate/Stream_SW.png")},
+}
+Assets.MapTemperateBridges = {
+    {"FRD_S__",love.graphics.newImage("Images/Maps/Temperate/Ford_S.png")},
+    {"FRD_E__",love.graphics.newImage("Images/Maps/Temperate/Ford_E.png")},
+
+    {"BRD_S__",love.graphics.newImage("Images/Maps/Temperate/Bridge_S.png")},
+    {"BRD_E__",love.graphics.newImage("Images/Maps/Temperate/Bridge_E.png")},
+}
 
 Assets.Map_Editor_ID = {
     {"Grass","GRS"},
