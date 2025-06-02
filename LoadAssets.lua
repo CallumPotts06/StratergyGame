@@ -104,6 +104,18 @@ Assets.MapTemperateBridges = {
     {"BRD_S__",love.graphics.newImage("Images/Maps/Temperate/Bridge_S.png")},
     {"BRD_E__",love.graphics.newImage("Images/Maps/Temperate/Bridge_E.png")},
 }
+Assets.MapTemperateDetails = {
+    {"Tree1",love.graphics.newImage("Images/Maps/Details/Tree1.png")},
+    {"Forest_All",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
+    {"Forest_ANE",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
+    {"Forest_ANW",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
+    {"Forest_ASE",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
+    {"Forest_ASW",love.graphics.newImage("Images/Maps/Details/Forest_All_1.png")},
+    {"Forest_NE_",love.graphics.newImage("Images/Maps/Details/Forest_NE.png")},
+    {"Forest_NW_",love.graphics.newImage("Images/Maps/Details/Forest_NW.png")},
+    {"Forest_SE_",love.graphics.newImage("Images/Maps/Details/Forest_SE.png")},
+    {"Forest_SW_",love.graphics.newImage("Images/Maps/Details/Forest_SW.png")},
+}
 
 Assets.Map_Editor_ID = {
     {"Grass","GRS"},

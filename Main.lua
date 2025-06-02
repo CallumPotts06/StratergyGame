@@ -14,6 +14,7 @@ Interface = require("Interface")
 
 --// GAME VARIABLES //--
 currentMap = {}
+currentMapDetails = {}
 
 uiObjects = {}
 
@@ -70,9 +71,9 @@ end
 
 function love.draw()
     if inMapEdit and (currentEditRender == "Edit") then
-        Renderer.RenderMap(currentMap,"Editor",zoom)
+        Renderer.RenderMap(currentMap,currentMapDetails,"Editor",zoom)
     else
-        Renderer.RenderMap(currentMap,"Temperate",zoom)
+        Renderer.RenderMap(currentMap,currentMapDetails,"Temperate",zoom)
     end
 
     Renderer.RenderUI(uiObjects,zoom)
@@ -229,13 +230,16 @@ function love.update(dt)
                     if check=="Change Render" then
                         if currentEditRender == "Edit" then
                             currentEditRender = "Normal"
-                            currentMap = MapEditor.ConvertMap("Game")
+                            local convert = MapEditor.ConvertMap("Game")
+                            currentMap = convert[1]
+                            currentMapDetails = convert[2]
                             clickedUI = true
                             enbaledPaintBrush = true
                             break
                         else
                             currentEditRender = "Edit"
-                            currentMap = MapEditor.ConvertMap("Edit")
+                            convert = MapEditor.ConvertMap("Edit")
+                            currentMap = convert[1]
                             break
                         end
                     end

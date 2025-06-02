@@ -57,8 +57,20 @@ function DrawTileIMG(terrain,tile,x,y,zoom)
         end
     end
 end
+function DrawDetailIMG(list,tile,x,y,zoom)
+    print(tile)
+    for i=1,#list,1 do
+        if list[i][1]==tile then 
+            currentImg=list[i][2]
+            print("draw") 
+            love.graphics.draw(currentImg,(((x-1)*200)-camPos[1])*zoom,(((y-1)*200)-camPos[2])*zoom,0,zoom/2,zoom/2)
+            currentImg=false
+            break
+        end
+    end
+end
 
-function renderer.RenderMap(map,mode,zoom)
+function renderer.RenderMap(map,mapDetails,mode,zoom)
     love.graphics.setBackgroundColor(0,0,0,0)
     if mode=="Editor" then
         for y=1,#map,1 do
@@ -79,7 +91,6 @@ function renderer.RenderMap(map,mode,zoom)
          for y=1,#map,1 do
             for x=1,#map[1],1 do
                 local tile = map[y][x]
-                local currentImg = false
                 local code=string.sub(tile,1,3)
                 if (code=="GRS")or(code=="URB")or(code=="FRM") then
                     DrawTileIMG(Assets.MapTemperateOther,tile,x,y,zoom)
@@ -96,6 +107,14 @@ function renderer.RenderMap(map,mode,zoom)
                 elseif (code=="FRD")or(code=="BRD") then
                     DrawTileIMG(Assets.MapTemperateBridges,tile,x,y,zoom)
                 end
+            end
+        end
+
+        for y=1,#mapDetails,1 do
+            for x=1,#mapDetails[1],1 do
+                local tile = map[y][x]
+                local currentImg = false
+                DrawDetailIMG(Assets.MapTemperateDetails,tile,x,y,zoom)
             end
         end
     end 

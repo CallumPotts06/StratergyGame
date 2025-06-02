@@ -5,12 +5,14 @@ uiClass = require("../Interface")
 Assets = require("../LoadAssets")
 
 MapEditor.CurrentMap = {}
+MapEditor.currentMapDetails = {}
 MapEditor.CurrentBrush = "ROD"
 
 function MapEditor.OpenMenu()
     width = 30
     height = 30
     MapEditor.CurrentMap = {}
+    MapEditor.currentMapDetails = {}
 
     for y=1,height do
         local row = {}
@@ -18,6 +20,13 @@ function MapEditor.OpenMenu()
             table.insert(row, "GRS")
         end
         table.insert(MapEditor.CurrentMap, row)
+    end
+    for y=1,height do
+        local row = {}
+        for x=1,width do
+            table.insert(row, "")
+        end
+        table.insert(MapEditor.currentMapDetails, row)
     end
     brushUI = uiClass.New("BrushImage",{0,0,0,1},"Brush: Road",{1,1,1,1},6,{1,1,1,1},{25,25},{100,100},"Change Brush",Assets.Map_Editor[5][2])
     enableBrushUI = uiClass.New("BrushEnable",{0,0,0,1},"Enable Brush",{1,1,1,1},6,{1,1,1,1},{150,25},{100,100},"Enable Brush")
@@ -237,6 +246,8 @@ end
 
 function MapEditor.ConvertMap(convertTo)
     local newMap=MapEditor.CurrentMap
+    local newMapDetails=MapEditor.currentMapDetails
+
     if convertTo=="Game" then
         for y=1,#newMap,1 do
             for x=1,#newMap[1],1 do
@@ -246,6 +257,11 @@ function MapEditor.ConvertMap(convertTo)
                 elseif (code=="FST")or(code=="SWP") then--FOREST AND SWAMP--
                     suffix = MapEditor.CheckAdjacentTiles_Terrain(MapEditor.CurrentMap,{x,y},newMap[y][x])
                     newMap[y][x]=newMap[y][x]..suffix
+                    if code=="FST" then
+                        newMapDetails[y][x]="Forest"..suffix
+                    else
+                        print("")--!
+                    end
                 elseif  (code=="TRP")or(code=="ROD") then--TURNPIKE AND ROAD--
                     suffix = MapEditor.CheckAdjacentTiles_Road(MapEditor.CurrentMap,{x,y},newMap[y][x])
                     newMap[y][x]=newMap[y][x]..suffix
@@ -263,7 +279,7 @@ function MapEditor.ConvertMap(convertTo)
             end
         end
     end
-    return newMap
+    return {newMap,newMapDetails}
 end
 
 return MapEditor
