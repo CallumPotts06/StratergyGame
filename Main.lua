@@ -28,6 +28,8 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
+nextMap = "map_1.lvl"
+
 gameResolution = {1024,768}
 
 --// OTHER VARIABLES //--
@@ -311,7 +313,16 @@ function love.update(dt)
                         clearInterface()
                         inGame = false
                         inMapEdit = false
-                        MapEditor.CompileMap("map 1")
+                        MapEditor.CompileMap("map_1")
+                    end
+
+                    if check=="Practice Play" then
+                        clearInterface()
+                        inGame = true
+                        local loadedMap = MapEditor.LoadMap(nextMap)
+                        currentMap = loadedMap[1]
+                        currentMapDetails = loadedMap[2]
+                        break
                     end
                 end
             end

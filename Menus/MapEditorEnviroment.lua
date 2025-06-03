@@ -320,19 +320,86 @@ function MapEditor.CompileMap(name)
         end
         str=str..";\n"
     end
-    str=str.."MAP_END_TILES"
+    str=str.."MAP_END_DETAILS"
 
     local fileName = name..".lvl"
-    print(str)
-    print(love.filesystem.getWorkingDirectory())
-    cwd = love.filesystem.getWorkingDirectory( )
     file = love.filesystem.newFile(fileName)
     success,message = love.filesystem.write(fileName, str)
-    local src_path = love.filesystem.getSaveDirectory()..fileName
-    local dst_path = cwd.."/"..fileName
-    os.rename(src_path, dst_path)
+    file:close()
     print(success)
     return str
+end
+
+function MapEditor.LoadMap(fileName)
+    local newMap={{}}
+    local newMapDetails={{}}
+
+    local foundFirstTile = false
+    local finishedTiles = false
+    local finishedDetails = false
+
+    fileName="Maps/"..fileName
+
+    data = love.filesystem.read(fileName)
+
+    local y=1
+    for i=1,string.len(data),1 do
+        local code=""
+        if foundFirstTile then
+            if not finishedTiles then
+                if string.sub(data,i,i)=="<" then
+                    code=string.sub(data,i+1,i+7)
+                    table.insert(newMap[y],code)
+                end
+                if string.sub(data,i,i)==";" then
+                    y=y+1
+                    table.insert(newMap,{})
+                end
+                if string.sub(data,i,i+12)=="MAP_END_TILES" then
+                    table.remove(newMap, #newMap)
+                    finishedTiles = true
+                    y=1
+                end
+            else
+                if not((string.sub(data,i,i)=="<")or(string.sub(data,i,i)==">")) then
+                    if string.sub(data,i,i+5)=="Forest" then
+                        code=string.sub(data,i,i+9)
+                        table.insert(newMapDetails[y],code)
+                    elseif string.sub(data,i,i+4)=="Wheat" then
+                        code=string.sub(data,i,i+8)
+                        table.insert(newMapDetails[y],code)
+                    elseif (string.sub(data,i,i+3)=="Corn")or(string.sub(data,i,i+4)=="Swamp") then
+                        code=string.sub(data,i,i+7)
+                        table.insert(newMapDetails[y],code)
+                    end
+                    print(string.sub(data,i,i))
+                else
+                    code=""
+                    table.insert(newMapDetails[y],code)
+                end
+                if string.sub(data,i,i)==";" then
+                    y=y+1
+                    table.insert(newMapDetails,{})
+                end
+            end
+        else
+            if string.sub(data,i,i)=="<" then
+                foundFirstTile = true
+                code=string.sub(data,i,i+7)
+                table.insert(newMap[y],code)
+            end
+        end
+    end
+
+    table.remove(newMapDetails, #newMapDetails)
+
+    local str2 = ""
+    for y=1,#newMapDetails,1 do for x=1,#newMapDetails[y],1 do str2=str2..newMapDetails[y][x] end str2=str2.."\n" end
+
+    print(str1)
+    print("\n\n"..str2)
+
+    return {newMap,newMapDetails}
 end
 
 return MapEditor
