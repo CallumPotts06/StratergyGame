@@ -245,6 +245,7 @@ function love.update(dt)
                             enbaledPaintBrush = true
                             break
                         else
+                            clickedUI = true
                             currentEditRender = "Edit"
                             convert = MapEditor.ConvertMap("Edit")
                             currentMap = convert[1]

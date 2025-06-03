@@ -361,21 +361,25 @@ function MapEditor.LoadMap(fileName)
                     y=1
                 end
             else
-                if not((string.sub(data,i,i)=="<")or(string.sub(data,i,i)==">")) then
+                if not(string.sub(data,i,i)==">") then
                     if string.sub(data,i,i+5)=="Forest" then
                         code=string.sub(data,i,i+9)
                         table.insert(newMapDetails[y],code)
-                    elseif string.sub(data,i,i+4)=="Wheat" then
+                    elseif string.sub(data,i,i+4)=="Wheat"or(string.sub(data,i,i+4)=="Swamp") then
                         code=string.sub(data,i,i+8)
                         table.insert(newMapDetails[y],code)
-                    elseif (string.sub(data,i,i+3)=="Corn")or(string.sub(data,i,i+4)=="Swamp") then
+                    elseif (string.sub(data,i,i+3)=="Corn") then
                         code=string.sub(data,i,i+7)
                         table.insert(newMapDetails[y],code)
+                    elseif  string.sub(data,i,i+1)=="<>" then
+                        code=""
+                        table.insert(newMapDetails[y],code)
+                    elseif  string.sub(data,i+4,i+4)==">" then
+                        if (string.sub(data,i,i)=="T")or(string.sub(data,i,i)=="S") then
+                            code=string.sub(data,i,i+3)
+                            table.insert(newMapDetails[y],code)
+                        end
                     end
-                    print(string.sub(data,i,i))
-                else
-                    code=""
-                    table.insert(newMapDetails[y],code)
                 end
                 if string.sub(data,i,i)==";" then
                     y=y+1
@@ -385,7 +389,7 @@ function MapEditor.LoadMap(fileName)
         else
             if string.sub(data,i,i)=="<" then
                 foundFirstTile = true
-                code=string.sub(data,i,i+7)
+                code=string.sub(data,i+1,i+7)
                 table.insert(newMap[y],code)
             end
         end
