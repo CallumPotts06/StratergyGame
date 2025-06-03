@@ -3,6 +3,7 @@
 Renderer = require("RenderScript")
 Network = require("Network")
 Assets = require("LoadAssets")
+SoldierAssets = require("LoadSoldiers")
 
 --// GAME MENUS //--
 MainMenu = require("Menus/MainMenu")
@@ -11,6 +12,7 @@ MapEditor = require("Menus/MapEditorEnviroment")
 
 --// SET UP CLASSES //--
 Interface = require("Interface")
+Unit = require("Unit")
 
 --// GAME VARIABLES //--
 currentMap = {}
@@ -30,7 +32,11 @@ camSpeed = 1
 
 nextMap = "map_1.lvl"
 
-gameResolution = {1024,768}
+germanUnits={}
+britishUnits={}
+frenchUnits={}
+
+gameResolution = {1600,900}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
@@ -82,6 +88,10 @@ function love.draw()
         Renderer.RenderMap(currentMap,currentMapDetails,"Editor",zoom)
     else
         Renderer.RenderMap(currentMap,currentMapDetails,"Temperate",zoom)
+
+        for i=1,#germanUnits,1 do
+            germanUnits[i]:DrawUnit(zoom)
+        end
     end
 
     Renderer.RenderUI(uiObjects,zoom)
@@ -323,6 +333,10 @@ function love.update(dt)
                         local loadedMap = MapEditor.LoadMap(nextMap)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
+
+                        local german1 = Unit.New("GermanInfantry1","LineInfantry","German",SoldierAssets.GermanLineInfantry,{1,1},100)
+                        local german2 = Unit.New("GermanInfantry2","LineInfantry","German",SoldierAssets.GermanLineInfantry,{2,1},100)
+                        germanUnits={german1,german2}
                         break
                     end
                 end

@@ -396,13 +396,6 @@ function MapEditor.LoadMap(fileName)
     end
 
     table.remove(newMapDetails, #newMapDetails)
-
-    local str2 = ""
-    for y=1,#newMapDetails,1 do for x=1,#newMapDetails[y],1 do str2=str2..newMapDetails[y][x] end str2=str2.."\n" end
-
-    print(str1)
-    print("\n\n"..str2)
-
     return {newMap,newMapDetails}
 end
 
