@@ -36,7 +36,7 @@ germanUnits={}
 britishUnits={}
 frenchUnits={}
 
-gameResolution = {854,480}
+gameResolution = {1600,900}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
@@ -117,7 +117,7 @@ function love.keypressed(key)
 
     if inMapEdit or inGame then
         if key=="up" then
-            if zoom<1.3 then
+            if zoom<1.7 then
                 zoom=zoom*1.5
             end
         end
@@ -187,6 +187,9 @@ function love.update(dt)
     end
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
+        if #germanUnits>0 then
+            germanUnits[1].Orientation=germanUnits[1].Orientation+0.3
+        end
     end
 
     --Inputs--
