@@ -10,13 +10,15 @@ function soldiers.CreateSquad(img)
     local canvas_width = (soldier_width*2)+8
     local canvas_height = soldiers_height+8
 
-    newSquad = love.graphics.newCanvas(width, height)
-    love.graphics.setCanvas(newSquad)
-        love.graphics.draw(img,8,0)
-        love.graphics.draw(img,soldier_width+8,0)
-        love.graphics.draw(img,8,8)
-        love.graphics.draw(img,soldier_width+8,8)
+    tempCanavas = love.graphics.newCanvas(canvas_width, canvas_height)
+    love.graphics.setCanvas(tempCanavas)
+    love.graphics.draw(img,8,0)
+    love.graphics.draw(img,soldier_width+8,0)
+    love.graphics.draw(img,0,8)
+    love.graphics.draw(img,soldier_width,8)
     love.graphics.setCanvas()
+
+    newSquad = love.graphics.newImage(tempCanavas:newImageData())
 
     return newSquad
 end
