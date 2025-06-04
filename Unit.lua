@@ -28,9 +28,18 @@ end
 function unit:DrawUnit(zoom,camPos)
     local imgName = self.Facing.."_"..self.Stance..self.OpenOrder
     local img = false
+    local flagImg = false
     for i=1,#self.Images,1 do
         if self.Images[i][1]==imgName then
             img=self.Images[i][2]
+            break
+        end
+    end
+
+    local imgName = self.Facing.."_FlagBearer"..self.OpenOrder
+    for i=1,#self.Images,1 do
+        if self.Images[i][1]==imgName then
+            flagImg=self.Images[i][2]
             break
         end
     end
@@ -53,7 +62,11 @@ function unit:DrawUnit(zoom,camPos)
                 local h = i*22*zoom
                 local x = (((self.Position[1]*200)-camPos[1])*zoom)+(h*math.cos(self.Orientation))
                 local y = (((self.Position[2]*200)-camPos[2])*zoom)+(h*math.sin(self.Orientation))
-                love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
+                if i==0 then
+                    love.graphics.draw(flagImg,x,y-49,0,zoom/2,zoom/2)
+                else
+                    love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
+                end
             end
         elseif(rad>=0.785)and(rad<=2.356)then--EAST--
             self.Facing = "East"
@@ -61,7 +74,11 @@ function unit:DrawUnit(zoom,camPos)
                 local h = i*22*zoom
                 local x = (((self.Position[1]*200)-camPos[1])*zoom)+(h*math.cos(self.Orientation))
                 local y = (((self.Position[2]*200)-camPos[2])*zoom)+(h*math.sin(self.Orientation))
-                love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
+                if i==0 then
+                    love.graphics.draw(flagImg,x,y-49,0,zoom/2,zoom/2)
+                else
+                    love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
+                end
             end
         elseif(rad>=2.356)and(rad<=3.927)then--SOUTH--
             self.Facing = "South"
@@ -69,7 +86,11 @@ function unit:DrawUnit(zoom,camPos)
                 local h = i*22*zoom
                 local x = (((self.Position[1]*200)-camPos[1])*zoom)+(h*math.cos(self.Orientation))
                 local y = (((self.Position[2]*200)-camPos[2])*zoom)+(h*math.sin(self.Orientation))
-                love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
+                if i==0 then
+                    love.graphics.draw(flagImg,x,y-49,0,zoom/2,zoom/2)
+                else
+                    love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
+                end
             end
         elseif(rad>=3.927)or(rad<=5.498)then--WEST--
             self.Facing = "West"
@@ -77,7 +98,11 @@ function unit:DrawUnit(zoom,camPos)
                 local h = i*22*zoom
                 local x = (((self.Position[1]*200)-camPos[1])*zoom)+(h*math.cos(self.Orientation))
                 local y = (((self.Position[2]*200)-camPos[2])*zoom)+(h*math.sin(self.Orientation))
-                love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
+                if i==0 then
+                    love.graphics.draw(flagImg,x,y-49,0,zoom/2,zoom/2)
+                else
+                    love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
+                end
             end
         end
         print(self.Facing)
