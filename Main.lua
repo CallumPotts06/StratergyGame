@@ -184,11 +184,12 @@ function love.update(dt)
         if Network.Hosting then
             Network.SendMessage("Peer Check In")
         end
+        
     end
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
         if #germanUnits>0 then
-            germanUnits[1].Orientation=germanUnits[1].Orientation+0.3
+            germanUnits[1]:ChangeOrientation(0.2)
         end
     end
 
@@ -338,8 +339,7 @@ function love.update(dt)
                         currentMapDetails = loadedMap[2]
 
                         local german1 = Unit.New("GermanInfantry1","LineInfantry","German",SoldierAssets.GermanLineInfantry,{2,6},100)
-                        local german2 = Unit.New("GermanInfantry2","LineInfantry","German",SoldierAssets.GermanLineInfantry,{3,6},100)
-                        germanUnits={german1,german2}
+                        germanUnits={german1}
                         break
                     end
                 end

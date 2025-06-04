@@ -3,19 +3,19 @@ soldiers = {}
 
 --SQUAD SIZES: 2x+8, y+8
 
-function soldiers.CreateSquad(img)
+function soldiers.CreateSquad(img,dress_width,dress_height)
     local dimensionsx,dimensionsy = img:getPixelDimensions()    
     local soldier_width = dimensionsx
-    local soldiers_height = dimensionsy
+    local soldier_height = dimensionsy
     local canvas_width = (soldier_width*2)+8
-    local canvas_height = soldiers_height+8
+    local canvas_height = soldier_height+8
 
     tempCanavas = love.graphics.newCanvas(canvas_width, canvas_height)
     love.graphics.setCanvas(tempCanavas)
     love.graphics.draw(img,8,0)
-    love.graphics.draw(img,soldier_width+8,0)
+    love.graphics.draw(img,dress_width+8,0)
     love.graphics.draw(img,0,8)
-    love.graphics.draw(img,soldier_width,8)
+    love.graphics.draw(img,dress_width,8)
     love.graphics.setCanvas()
 
     newSquad = love.graphics.newImage(tempCanavas:newImageData())
@@ -62,11 +62,15 @@ function soldiers.LoadSoldierGroup(fileDir)
 
     local squads = {}
 
+    local dimensionsx,dimensionsy = newGroup[2][2]:getPixelDimensions()    
+    local dress_width = dimensionsx
+    local dress_height = dimensionsy
+
     for i1 = 1,#anims,1 do
         for i2 = 1,#facings,1 do
             for i3=1,#newGroup,1 do
                 if newGroup[i3][1]==facings[i2].."_"..anims[i1] then
-                    squad = soldiers.CreateSquad(newGroup[i3][2])
+                    squad = soldiers.CreateSquad(newGroup[i3][2],dress_width,dress_height)
                     table.insert(squads,{facings[i2].."_"..anims[i1].."_Squad",squad})
                     break
                 end
