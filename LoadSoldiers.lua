@@ -40,6 +40,7 @@ end
 function soldiers.LoadSoldierGroup(fileDir)
     local newGroup = {
         {"Card",love.graphics.newImage(fileDir.."/Card.png")},
+        {"Flag",love.graphics.newImage(fileDir.."/Flag.png")},
 
         {"North_Aiming",love.graphics.newImage(fileDir.."/North/Aiming.png")},
         {"North_Idle",love.graphics.newImage(fileDir.."/North/Idle.png")},
@@ -79,7 +80,7 @@ function soldiers.LoadSoldierGroup(fileDir)
 
     local squads = {}
 
-    local dimensionsx,dimensionsy = newGroup[2][2]:getPixelDimensions()    
+    local dimensionsx,dimensionsy = newGroup[3][2]:getPixelDimensions()    
     local dress_width = dimensionsx
     local dress_height = dimensionsy
 
@@ -122,5 +123,7 @@ function soldiers.LoadSoldierGroup(fileDir)
 end
 
 soldiers.GermanLineInfantry = soldiers.LoadSoldierGroup("Images/GermanTroops/LineInfantry")
+soldiers.FrenchLineInfantry = soldiers.LoadSoldierGroup("Images/FrenchTroops/LineInfantry")
+
 
 return soldiers

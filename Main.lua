@@ -92,6 +92,9 @@ function love.draw()
         for i=1,#germanUnits,1 do
             germanUnits[i]:DrawUnit(zoom,camPos)
         end
+        for i=1,#frenchUnits,1 do
+            frenchUnits[i]:DrawUnit(zoom,camPos)
+        end
     end
 
     Renderer.RenderUI(uiObjects,zoom)
@@ -188,9 +191,6 @@ function love.update(dt)
     end
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
-        if #germanUnits>0 then
-            germanUnits[1]:ChangeOrientation(0.2)
-        end
     end
 
     --Inputs--
@@ -338,8 +338,13 @@ function love.update(dt)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
 
-                        local german1 = Unit.New("GermanInfantry1","LineInfantry","German",SoldierAssets.GermanLineInfantry,{2,6},100)
-                        germanUnits={german1}
+                        local german1 = Unit.New("GermanInfantry1","LineInfantry","German",SoldierAssets.GermanLineInfantry,{18,12},100)
+                        local german2 = Unit.New("GermanInfantry2","LineInfantry","German",SoldierAssets.GermanLineInfantry,{19,10},100)
+
+                        local french1 = Unit.New("FrenchInfantry1","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{20,12},100)
+                        local french2 = Unit.New("FrenchInfantry2","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{21,10},100)
+                        germanUnits={german1,german2}
+                        frenchUnits={french1,french2}
                         break
                     end
                 end
