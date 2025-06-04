@@ -36,7 +36,7 @@ germanUnits={}
 britishUnits={}
 frenchUnits={}
 
-gameResolution = {1600,900}
+gameResolution = {854,480}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
@@ -90,7 +90,7 @@ function love.draw()
         Renderer.RenderMap(currentMap,currentMapDetails,"Temperate",zoom)
 
         for i=1,#germanUnits,1 do
-            germanUnits[i]:DrawUnit(zoom)
+            germanUnits[i]:DrawUnit(zoom,camPos)
         end
     end
 
@@ -334,8 +334,8 @@ function love.update(dt)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
 
-                        local german1 = Unit.New("GermanInfantry1","LineInfantry","German",SoldierAssets.GermanLineInfantry,{1,1},100)
-                        local german2 = Unit.New("GermanInfantry2","LineInfantry","German",SoldierAssets.GermanLineInfantry,{2,1},100)
+                        local german1 = Unit.New("GermanInfantry1","LineInfantry","German",SoldierAssets.GermanLineInfantry,{2,6},100)
+                        local german2 = Unit.New("GermanInfantry2","LineInfantry","German",SoldierAssets.GermanLineInfantry,{3,6},100)
                         germanUnits={german1,german2}
                         break
                     end
