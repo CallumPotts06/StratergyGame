@@ -191,10 +191,6 @@ function love.update(dt)
     end
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
-
-        for i=1,#germanUnits,1 do
-            germanUnits[1]:ChangeOrientation(0.1)
-        end
     end
 
     --Inputs--

@@ -40,7 +40,7 @@ function soldiers.CreateMarchingSquad(img,dress_width,dress_height,flagImg,flagB
     local dimensionsx,dimensionsy = img:getPixelDimensions()    
     local soldier_width = dimensionsx
     local soldier_height = dimensionsy
-    local canvas_width = (soldier_width*4)+8
+    local canvas_width = (soldier_width*4)+16
     local canvas_height = soldier_height+8
 
     if flagBool then
@@ -55,10 +55,10 @@ function soldiers.CreateMarchingSquad(img,dress_width,dress_height,flagImg,flagB
         love.graphics.draw(flagImg,0,8)
         love.graphics.draw(img,dress_width,8+49)
 
-        love.graphics.draw(img,28,49)
-        love.graphics.draw(img,dress_width+28,49)
-        love.graphics.draw(flagImg,20,8)
-        love.graphics.draw(img,dress_width+20,8+49)
+        love.graphics.draw(img,(2*dress_width)+8,49)
+        love.graphics.draw(img,(3*dress_width)+8,49)
+        love.graphics.draw(img,(2*dress_width),8+49)
+        love.graphics.draw(img,(3*dress_width),8+49)
 
         love.graphics.setCanvas()
     else
@@ -70,10 +70,10 @@ function soldiers.CreateMarchingSquad(img,dress_width,dress_height,flagImg,flagB
         love.graphics.draw(img,0,8)
         love.graphics.draw(img,dress_width,8)
 
-        love.graphics.draw(img,28,0)
-        love.graphics.draw(img,dress_width+28,0)
-        love.graphics.draw(img,20,8)
-        love.graphics.draw(img,dress_width+20,8)
+        love.graphics.draw(img,(2*dress_width)+8,0)
+        love.graphics.draw(img,(3*dress_width)+8,0)
+        love.graphics.draw(img,(2*dress_width),8)
+        love.graphics.draw(img,(3*dress_width),8)
 
         love.graphics.setCanvas()
     end
