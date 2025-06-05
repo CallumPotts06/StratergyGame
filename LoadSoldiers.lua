@@ -36,6 +36,53 @@ function soldiers.CreateSquad(img,dress_width,dress_height,flagImg,flagBool)
     return newSquad
 end
 
+function soldiers.CreateMarchingSquad(img,dress_width,dress_height,flagImg,flagBool)
+    local dimensionsx,dimensionsy = img:getPixelDimensions()    
+    local soldier_width = dimensionsx
+    local soldier_height = dimensionsy
+    local canvas_width = (soldier_width*4)+8
+    local canvas_height = soldier_height+8
+
+    if flagBool then
+        dimensionsx,dimensionsy = flagImg:getPixelDimensions()    
+        canvas_width = (dimensionsx*2)+(soldier_width*2)+16
+        canvas_height = dimensionsy+8
+        tempCanavas = love.graphics.newCanvas(canvas_width, canvas_height)
+        love.graphics.setCanvas(tempCanavas)
+
+        love.graphics.draw(img,8,49)
+        love.graphics.draw(img,dress_width+8,49)
+        love.graphics.draw(flagImg,0,8)
+        love.graphics.draw(img,dress_width,8+49)
+
+        love.graphics.draw(img,28,49)
+        love.graphics.draw(img,dress_width+28,49)
+        love.graphics.draw(flagImg,20,8)
+        love.graphics.draw(img,dress_width+20,8+49)
+
+        love.graphics.setCanvas()
+    else
+        tempCanavas = love.graphics.newCanvas(canvas_width, canvas_height)
+        love.graphics.setCanvas(tempCanavas)
+
+        love.graphics.draw(img,8,0)
+        love.graphics.draw(img,dress_width+8,0)
+        love.graphics.draw(img,0,8)
+        love.graphics.draw(img,dress_width,8)
+
+        love.graphics.draw(img,28,0)
+        love.graphics.draw(img,dress_width+28,0)
+        love.graphics.draw(img,20,8)
+        love.graphics.draw(img,dress_width+20,8)
+
+        love.graphics.setCanvas()
+    end
+
+    newSquad = love.graphics.newImage(tempCanavas:newImageData())
+
+    return newSquad
+end
+
 
 function soldiers.LoadSoldierGroup(fileDir)
     local newGroup = {
@@ -96,6 +143,18 @@ function soldiers.LoadSoldierGroup(fileDir)
         end
     end
 
+    for i1 = 1,#anims,1 do
+        for i2 = 1,#facings,1 do
+            for i3=1,#newGroup,1 do
+                if newGroup[i3][1]==facings[i2].."_"..anims[i1] then
+                    squad = soldiers.CreateMarchingSquad(newGroup[i3][2],dress_width,dress_height,false,false)
+                    table.insert(squads,{facings[i2].."_"..anims[i1].."_MarchingSquad",squad})
+                    break
+                end
+            end
+        end
+    end
+
     
 
     for i1=1,#facings,1 do
@@ -111,6 +170,22 @@ function soldiers.LoadSoldierGroup(fileDir)
         if idleIMG then
             squad = soldiers.CreateSquad(idleIMG,dress_width,dress_height,flagIMG,true)
             table.insert(squads,{facings[i1].."_FlagBearer_Squad",squad})
+        end
+    end
+
+    for i1=1,#facings,1 do
+        local idleIMG = false
+        local flagIMG = false
+        for i2=1,#newGroup,1 do
+            if newGroup[i2][1]==facings[i1].."_Idle" then
+                idleIMG = newGroup[i2][2]
+            elseif newGroup[i2][1]==facings[i1].."_FlagBearer" then
+                flagIMG = newGroup[i2][2]
+            end
+        end
+        if idleIMG then
+            squad = soldiers.CreateMarchingSquad(idleIMG,dress_width,dress_height,flagIMG,true)
+            table.insert(squads,{facings[i1].."_FlagBearer_MarchingSquad",squad})
         end
     end
 
