@@ -26,6 +26,7 @@ enbaledPaintBrush = false
 currentEditRender = "Edit"
 finishedTiles = false
 
+movingUnits = {}
 camPos = {0,0}
 zoom = 1
 camSpeed = 1
@@ -35,6 +36,8 @@ nextMap = "map_1.lvl"
 germanUnits={}
 britishUnits={}
 frenchUnits={}
+
+currentTeam = "German"
 
 gameResolution = {1600,900}
 
@@ -187,10 +190,17 @@ function love.update(dt)
         if Network.Hosting then
             Network.SendMessage("Peer Check In")
         end
-        
     end
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
+
+        for i=1,#movingUnits-1,1 do
+            local index = movingUnits[i][2]
+            print(index)
+            movingUnits[i][1]:ChangeOrientation(movingUnits[i][3][index])
+            movingUnits[i][2]=movingUnits[i][2]+1
+            if movingUnits[i][2]>#movingUnits[i][3] then table.remove(movingUnits,i) end
+        end
     end
 
     --Inputs--
@@ -358,6 +368,17 @@ function love.update(dt)
                 currentMapDetails[mouseGridPosY][mouseGridPosX]=MapEditor.CurrentBrush     
             end
         end 
+
+        if not clickedUI then
+            if currentTeam=="German" then
+                for i=1,#germanUnits,1 do
+                    local mouseGridPosX = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
+                    local mouseGridPosY = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
+                    wheel = germanUnits[i]:CheckClick({mouseGridPosX,mouseGridPosY},zoom)
+                    table.insert(movingUnits,{germanUnits[i],1,wheel})
+                end
+            end
+        end
 
     elseif not (love.mouse.isDown(1)) then
         mouseDeBounce = false

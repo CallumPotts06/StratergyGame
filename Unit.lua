@@ -21,6 +21,9 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp)
     newUnit.Health = iHp
     newUnit.MaxSquads = 14
 
+    newUnit.Moving = false
+    newUnit.Selected = false
+
     setmetatable(newUnit, unit)
     return newUnit
 end
@@ -55,10 +58,6 @@ function unit:DrawUnit(zoom,camPos)
         local FlagPos = math.floor(squadCount/4)
         local rad = (-self.Orientation)
         local flagPos= {0,0}
-
-        print(self.Orientation)--!
-
-
         if((self.Orientation>=0)and(self.Orientation<=0.785))or(self.Orientation>=5.498)then--NORTH--
             self.Facing = "North"
             for i=math.ceil(1-(squadCount/4)),math.floor(squadCount/4),1 do
@@ -226,7 +225,6 @@ function unit:DrawUnit(zoom,camPos)
                 love.graphics.draw(img,x2,y2,0,zoom/2,zoom/2)
             end
         end
-
     end
 end
 
@@ -242,6 +240,42 @@ function unit:ChangeOrientation(drad)
         else
             self.Orientation=6.283-lostRad
         end
+    end
+end
+
+
+function unit:CalculateWheel(newOrientation)
+    local radsPerTick = 0.05
+    local vector = 1
+
+    if ((math.pi*2)-self.Orientation)<newOrientation then vector=1 end
+    if self.Orientation<newOrientation then vector=-1 end
+
+    local radTable = {}
+
+    for i=self.Orientation,newOrientation,vector*radsPerTick do
+        table.insert(radTable,i)
+        print(i)
+    end
+
+    return radTable
+end
+
+function unit:CheckClick(mousePos,zoom)
+    self.Selected = false
+    if (mousePos[1])<=(self.Position[1]+(5*zoom)) then
+        if (mousePos[1])>=(self.Position[1]-(5*zoom)) then
+            if (mousePos[2])<=(self.Position[2]+(5*zoom)) then
+                if (mousePos[2])>=(self.Position[2]-(5*zoom)) then
+                    self.Selected = true
+                end
+            end
+        end
+    end
+
+    --TEMP--
+    if self.Selected then
+        return self:CalculateWheel(self.Orientation+4)
     end
 end
 
