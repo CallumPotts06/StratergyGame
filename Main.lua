@@ -33,11 +33,11 @@ camSpeed = 1
 
 nextMap = "map_1.lvl"
 
-germanUnits={}
+prussianUnits={}
 britishUnits={}
 frenchUnits={}
 
-currentTeam = "German"
+currentTeam = "Prussian"
 
 gameResolution = {1600,900}
 
@@ -92,8 +92,8 @@ function love.draw()
     else
         Renderer.RenderMap(currentMap,currentMapDetails,"Temperate",zoom)
 
-        for i=1,#germanUnits,1 do
-            germanUnits[i]:DrawUnit(zoom,camPos)
+        for i=1,#prussianUnits,1 do
+            prussianUnits[i]:DrawUnit(zoom,camPos)
         end
         for i=1,#frenchUnits,1 do
             frenchUnits[i]:DrawUnit(zoom,camPos)
@@ -348,9 +348,9 @@ function love.update(dt)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
 
-                        local german1 = Unit.New("GermanInfantry1","LineInfantry","German",SoldierAssets.GermanLineInfantry,{500,500},100)
+                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{500,500},100)
 
-                        germanUnits={german1}
+                        prussianUnits={prussian1}
                         break
                     end
                 end
@@ -369,16 +369,6 @@ function love.update(dt)
             end
         end 
 
-        if not clickedUI then
-            if currentTeam=="German" then
-                for i=1,#germanUnits,1 do
-                    local mouseGridPosX = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
-                    local mouseGridPosY = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
-                    wheel = germanUnits[i]:CheckClick({mouseGridPosX,mouseGridPosY},zoom)
-                    table.insert(movingUnits,{germanUnits[i],1,wheel})
-                end
-            end
-        end
 
     elseif not (love.mouse.isDown(1)) then
         mouseDeBounce = false

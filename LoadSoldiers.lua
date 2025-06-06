@@ -197,7 +197,7 @@ function soldiers.LoadSoldierGroup(fileDir)
     return newGroup
 end
 
-soldiers.GermanLineInfantry = soldiers.LoadSoldierGroup("Images/GermanTroops/LineInfantry")
+soldiers.PrussianLineInfantry = soldiers.LoadSoldierGroup("Images/PrussianTroops/LineInfantry")
 soldiers.FrenchLineInfantry = soldiers.LoadSoldierGroup("Images/FrenchTroops/LineInfantry")
 
 

@@ -11,11 +11,11 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp)
     newUnit.Images = iImgs
 
     newUnit.Position = iPos
-    newUnit.Orientation = 0
+    newUnit.Orientation = 1
     newUnit.Stance = "Idle"
     newUnit.Facing = "South"
     newUnit.Formation = "MarchingColumn"
-    newUnit.OpenOrder = ""
+    newUnit.OpenOrder = "_Squad"
 
     newUnit.MaxHealth = iHp
     newUnit.Health = iHp
@@ -243,40 +243,11 @@ function unit:ChangeOrientation(drad)
     end
 end
 
-
-function unit:CalculateWheel(newOrientation)
-    local radsPerTick = 0.05
-    local vector = 1
-
-    if ((math.pi*2)-self.Orientation)<newOrientation then vector=1 end
-    if self.Orientation<newOrientation then vector=-1 end
-
-    local radTable = {}
-
-    for i=self.Orientation,newOrientation,vector*radsPerTick do
-        table.insert(radTable,i)
-        print(i)
-    end
-
-    return radTable
-end
-
 function unit:CheckClick(mousePos,zoom)
-    self.Selected = false
-    if (mousePos[1])<=(self.Position[1]+(5*zoom)) then
-        if (mousePos[1])>=(self.Position[1]-(5*zoom)) then
-            if (mousePos[2])<=(self.Position[2]+(5*zoom)) then
-                if (mousePos[2])>=(self.Position[2]-(5*zoom)) then
-                    self.Selected = true
-                end
-            end
-        end
-    end
-
-    --TEMP--
-    if self.Selected then
-        return self:CalculateWheel(self.Orientation+4)
-    end
+    
 end
+
+
+
 
 return unit
