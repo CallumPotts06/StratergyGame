@@ -226,6 +226,15 @@ function unit:DrawUnit(zoom,camPos)
             end
         end
     end
+
+
+    if self.Selected then
+        love.graphics.setColor(0.2, 0.2, 1)
+        local x = ((self.Position[1])-camPos[1])*zoom
+        local y = ((self.Position[2]-45)-camPos[2])*zoom
+        love.graphics.circle("fill", x, y, 5*zoom, 6)
+        love.graphics.setColor(1,1,1)
+    end
 end
 
 
@@ -243,11 +252,25 @@ function unit:ChangeOrientation(drad)
     end
 end
 
-function unit:CheckClick(mousePos,zoom)
-    
+function unit:CheckClick(mousePos,camPos,zoom)
+    print("Checking Click: "..self.Name)
+    local xmin = ((self.Position[1]*zoom)-camPos[1])-(50*zoom)
+    local ymin = ((self.Position[2]*zoom)-camPos[2])-(50*zoom)
+    local xmax = ((self.Position[1]*zoom)-camPos[1])+(50*zoom)
+    local ymax = ((self.Position[2]*zoom)-camPos[2])+(50*zoom)
+
+    if (mousePos[1]>=xmin) and (mousePos[1]<=xmax) then
+        if (mousePos[2]>=ymin) and (mousePos[2]<=ymax) then
+            if self.Selected then
+                self.Selected = false
+            else
+                self.Selected = true
+            end
+        end
+    end
 end
 
 
-
+ 
 
 return unit

@@ -1,0 +1,8 @@
+{
+    "editor.fontFamily": "Consolas",
+    "editor.fontSize": 14,
+    "editor.fontWeight": "550",
+    "editor.fontLigatures": false,
+    "editor.cursorStyle": "line",
+    "editor.tabSize": 4
+}

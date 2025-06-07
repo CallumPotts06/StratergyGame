@@ -369,6 +369,14 @@ function love.update(dt)
             end
         end 
 
+        if inGame and (not clickedUI) then
+            if currentTeam=="Prussian" then
+                for i=1,#prussianUnits,1 do
+                    prussianUnits[i]:CheckClick({mousePos[1],mousePos[2]},camPos,zoom)
+                end
+            end
+        end 
+
 
     elseif not (love.mouse.isDown(1)) then
         mouseDeBounce = false
