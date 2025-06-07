@@ -432,12 +432,14 @@ function love.update(dt)
             if not (not selectedUnit) then--UNIT CONTROLS--
                 if wheelSelected then--WHEEL UNIT--
                     local newWheel = unitControl.CalculateWheel(selectedUnit,mousePos,camPos,zoom)
-                    for i=1,#movingUnits,1 do
-                        if movingUnits[i][1].Name==selectedUnit then
-                            table.remove(movingUnits,i)
+                    if not (not newWheel) then
+                        for i=1,#movingUnits,1 do
+                            if movingUnits[i][1].Name==selectedUnit then
+                                table.remove(movingUnits,i)
+                            end
                         end
+                        table.insert(movingUnits,newWheel)
                     end
-                    table.insert(movingUnits,newWheel)
                 end
             end
         end 
