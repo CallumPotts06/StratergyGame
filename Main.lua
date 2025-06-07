@@ -138,7 +138,7 @@ function love.keypressed(key)
 
     if inMapEdit or inGame then
         if key=="up" then
-            if zoom<1.7 then
+            if zoom<2.5 then
                 zoom=zoom*1.5
             end
         end

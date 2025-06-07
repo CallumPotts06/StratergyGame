@@ -239,23 +239,25 @@ end
 
 
 function unit:ChangeOrientation(drad)
-    if (drad+self.Orientation<=6.283)and((drad+self.Orientation>=0)) then
+    if (drad+self.Orientation<=(math.pi*2))and((drad+self.Orientation>=0)) then
         self.Orientation=self.Orientation+drad
     else
-        local lostRad = (self.Orientation-6.283)+math.abs(drad)
-        if (drad+self.Orientation>=6.283) then
-            self.Orientation=0+lostRad
+        local lostRad = (self.Orientation-(math.pi*2))+math.abs(drad)
+        if (drad+self.Orientation>=(math.pi*2)) then
+            self.Orientation=0+math.abs(drad)
+            print("lostrad1")
         else
-            self.Orientation=6.283-lostRad
+            self.Orientation=(math.pi*2)-(math.abs(drad))
+            print("lostrad2")
         end
     end
 end
 
 function unit:CheckClick(mousePos,camPos,zoom)
-    local xmin = (((self.Position[1])-camPos[1])-(50))*zoom
-    local ymin = (((self.Position[2])-camPos[2])-(50))*zoom
-    local xmax = (((self.Position[1])-camPos[1])+(50))*zoom
-    local ymax = (((self.Position[2])-camPos[2])+(50))*zoom
+    local xmin = (((self.Position[1])-camPos[1])-(65))*zoom
+    local ymin = (((self.Position[2])-camPos[2])-(65))*zoom
+    local xmax = (((self.Position[1])-camPos[1])+(65))*zoom
+    local ymax = (((self.Position[2])-camPos[2])+(65))*zoom
 
     local clicked = false
     if (mousePos[1]>=xmin) and (mousePos[1]<=xmax) then
