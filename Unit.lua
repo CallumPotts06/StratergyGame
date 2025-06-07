@@ -14,7 +14,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp)
     newUnit.Orientation = 1
     newUnit.Stance = "Idle"
     newUnit.Facing = "South"
-    newUnit.Formation = "MarchingColumn"
+    newUnit.Formation = "BattleLine"
     newUnit.OpenOrder = "_Squad"
 
     newUnit.MaxHealth = iHp
@@ -243,7 +243,6 @@ function unit:ChangeOrientation(drad)
         self.Orientation=self.Orientation+drad
     else
         local lostRad = (self.Orientation-6.283)+math.abs(drad)
-        print("LOST RAD: "..tostring(lostRad))
         if (drad+self.Orientation>=6.283) then
             self.Orientation=0+lostRad
         else
@@ -253,14 +252,15 @@ function unit:ChangeOrientation(drad)
 end
 
 function unit:CheckClick(mousePos,camPos,zoom)
-    print("Checking Click: "..self.Name)
-    local xmin = ((self.Position[1]*zoom)-camPos[1])-(50*zoom)
-    local ymin = ((self.Position[2]*zoom)-camPos[2])-(50*zoom)
-    local xmax = ((self.Position[1]*zoom)-camPos[1])+(50*zoom)
-    local ymax = ((self.Position[2]*zoom)-camPos[2])+(50*zoom)
+    local xmin = (((self.Position[1])-camPos[1])-(50))*zoom
+    local ymin = (((self.Position[2])-camPos[2])-(50))*zoom
+    local xmax = (((self.Position[1])-camPos[1])+(50))*zoom
+    local ymax = (((self.Position[2])-camPos[2])+(50))*zoom
 
+    local clicked = false
     if (mousePos[1]>=xmin) and (mousePos[1]<=xmax) then
         if (mousePos[2]>=ymin) and (mousePos[2]<=ymax) then
+            clicked = true
             if self.Selected then
                 self.Selected = false
             else
@@ -268,6 +268,7 @@ function unit:CheckClick(mousePos,camPos,zoom)
             end
         end
     end
+    return {clicked,self.Selected,self}
 end
 
 

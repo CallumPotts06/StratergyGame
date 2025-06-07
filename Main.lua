@@ -4,6 +4,7 @@ Renderer = require("RenderScript")
 Network = require("Network")
 Assets = require("LoadAssets")
 SoldierAssets = require("LoadSoldiers")
+unitControl = require("UnitControl")
 
 --// GAME MENUS //--
 MainMenu = require("Menus/MainMenu")
@@ -26,7 +27,7 @@ enbaledPaintBrush = false
 currentEditRender = "Edit"
 finishedTiles = false
 
-movingUnits = {}
+
 camPos = {0,0}
 zoom = 1
 camSpeed = 1
@@ -36,6 +37,11 @@ nextMap = "map_1.lvl"
 prussianUnits={}
 britishUnits={}
 frenchUnits={}
+
+selectedUnit = false
+wheelSelected = false
+moveSelected = false
+movingUnits = {}
 
 currentTeam = "Prussian"
 
@@ -78,6 +84,15 @@ function openMenu(menu,specialCondition)
             local newUI = openedMenu[1]
             currentMap = openedMenu[2]
             for i=1,#newUI,1 do table.insert(uiObjects,newUI[i]) end
+        end
+    end
+end
+function clearControls()
+    wheelSelected = false
+    moveSelected = false
+    for i=1,#uiObjects,1 do
+        if uiObjects[i].Name=="controlinfo" then
+            table.remove(uiObjects,i)
         end
     end
 end
@@ -130,6 +145,31 @@ function love.keypressed(key)
         if key=="down" then
             if zoom>0.3 then
                 zoom=zoom/1.5
+            end
+        end
+    end
+
+    if inGame then
+        if not (not selectedUnit) then
+            if key=="e" then --WHEEL--
+                print("Wheel")
+                clearControls()
+                local info = interface.New("controlinfo",{0,0,0,0},"Wheel Unit",{0,0,0,1},1,{0,0,0,0},{15,15},{300,300},"")
+                table.insert(uiObjects,info)
+                wheelSelected = true
+            end
+            if key=="q" then --MARCH--
+                print("March")
+                clearControls()
+                local info = interface.New("controlinfo",{0,0,0,0},"Move Unit",{0,0,0,1},1,{0,0,0,0},{15,15},{300,300},"")
+                table.insert(uiObjects,info)
+                moveSelected = true
+            end
+            if key=="x" then --DESELECT--
+                print("Deselect")
+                clearControls()
+                selectedUnit.Selected = false
+                selectedUnit = false
             end
         end
     end
@@ -194,12 +234,13 @@ function love.update(dt)
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
 
-        for i=1,#movingUnits-1,1 do
-            local index = movingUnits[i][2]
-            print(index)
-            movingUnits[i][1]:ChangeOrientation(movingUnits[i][3][index])
-            movingUnits[i][2]=movingUnits[i][2]+1
-            if movingUnits[i][2]>#movingUnits[i][3] then table.remove(movingUnits,i) end
+        for i=1,#movingUnits,1 do
+            local index = movingUnits[i][3]
+            if movingUnits[i][2]=="Wheel" then--WHEEL UNITS--
+                movingUnits[i][1]:ChangeOrientation(movingUnits[i][4][index])
+                movingUnits[i][3]=movingUnits[i][3]+1
+                if movingUnits[i][3]>#movingUnits[i][4] then table.remove(movingUnits,i) end
+            end
         end
     end
 
@@ -349,8 +390,9 @@ function love.update(dt)
                         currentMapDetails = loadedMap[2]
 
                         local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{500,500},100)
+                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1000,300},100)
 
-                        prussianUnits={prussian1}
+                        prussianUnits={prussian1,prussian2}
                         break
                     end
                 end
@@ -370,9 +412,32 @@ function love.update(dt)
         end 
 
         if inGame and (not clickedUI) then
-            if currentTeam=="Prussian" then
-                for i=1,#prussianUnits,1 do
-                    prussianUnits[i]:CheckClick({mousePos[1],mousePos[2]},camPos,zoom)
+            local newTable = {}
+            if currentTeam=="Prussian" then newTable = prussianUnits end
+
+            if (not wheelSelected)or(not moveSelected) then
+                for i=1,#newTable,1 do--SELECT UNIT--
+                    local selected = newTable[i]:CheckClick(mousePos,camPos,zoom)
+                    if selected[1] then
+                        for i2=1,#newTable,1 do
+                            newTable[i2].Selected = false
+                        end
+                        selectedUnit = selected[3]
+                        selected[3].Selected = selected[2]
+                        break
+                    end
+                end
+            end
+
+            if not (not selectedUnit) then--UNIT CONTROLS--
+                if wheelSelected then--WHEEL UNIT--
+                    local newWheel = unitControl.CalculateWheel(selectedUnit,mousePos,camPos,zoom)
+                    for i=1,#movingUnits,1 do
+                        if movingUnits[i][1].Name==selectedUnit then
+                            table.remove(movingUnits,i)
+                        end
+                    end
+                    table.insert(movingUnits,newWheel)
                 end
             end
         end 
