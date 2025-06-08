@@ -2,7 +2,10 @@
 unit = {}
 unit.__index = unit
 
-function unit.New(iName,iType,iTeam,iImgs,iPos,iHp)
+unitControl = require("../UnitControl")
+assets = require("../LoadAssets")
+
+function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     local newUnit = {}
 
     newUnit.Name = iName
@@ -20,9 +23,13 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp)
     newUnit.MaxHealth = iHp
     newUnit.Health = iHp
     newUnit.MaxSquads = 16
+    newUnit.AimRange = 2000
+    newUnit.FireRate = iFireRate
+    newUnit.Accuracy = iAccuracy
 
     newUnit.Moving = false
     newUnit.Selected = false
+    newUnit.CurrentTarget = false
 
     setmetatable(newUnit, unit)
     return newUnit
@@ -268,6 +275,47 @@ function unit:CheckClick(mousePos,camPos,zoom)
         end
     end
     return {clicked,self.Selected,self}
+end
+
+function unit:CheckForTargets(enemyUnits)
+    local closestDistance=999999
+    local closestEnemy=999999
+    for i=1,#enemyUnits,1 do
+        local x1=self.Position[1]
+        local y1=self.Position[2]
+        local x2=enemyUnits[i].Position[1]
+        local y2=enemyUnits[i].Position[2]
+        local dx = math.abs(x2-x1)
+        local dy = math.abs(y2-y1)
+        local mag = math.sqrt((dx*dx)+(dy*dy))
+        if (mag<closestDistance)and(mag<self.AimRange) then closestEnemy = i closestDistance=mag end
+    end
+    if not (closestEnemy==999999) then
+        self.CurrentTarget = enemyUnits[closestEnemy]
+        return unitControl.CalculateWheel(self,"Aiming")
+    else
+        self.CurrentTarget = false
+        return false
+    end
+end
+
+function unit:Fire()
+    if not (not self.CurrentTarget) then
+        local smoke = {"Smoke1",{self.Position[1]+math.random(-15,15),self.Position[2]+math.random(-15,15)}}
+        local sound = "MusketShot"..tostring(math.random(1,6))
+
+        for i=1,#assets.Sounds,1 do
+            if assets.Sounds[i][1]==sound then
+                love.audio.play(assets.Sounds[i][2])
+                break
+            end
+        end
+
+        local hit = math.random(1,self.Accuracy)
+        if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-1 end
+    end
+
+    return {smoke,sound}
 end
 
  

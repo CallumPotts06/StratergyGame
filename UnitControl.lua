@@ -12,10 +12,22 @@ function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
     local unitX=unit.Position[1]
     local unitY=unit.Position[2]
 
-    local x1 = (unitX)
-    local y1 = (unitY)
-    local x2 = ((mousePos[1]/zoom)+(camPos[1]))
-    local y2 = ((mousePos[2]/zoom)+(camPos[2]))
+    local x1=0
+    local x2=0
+    local y1=0
+    local y2=0
+
+    if mousePos=="Aiming" then
+        x1 = (unitX)
+        y1 = (unitY)
+        x2 = (unit.CurrentTarget.Position[1])
+        y2 = (unit.CurrentTarget.Position[2])
+    else
+        x1 = (unitX)
+        y1 = (unitY)
+        x2 = ((mousePos[1]/zoom)+(camPos[1]))
+        y2 = ((mousePos[2]/zoom)+(camPos[2]))
+    end
 
     local dx = (x2-x1)
     local dy = -(y2-y1)
@@ -157,9 +169,7 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
 
         local tileX = math.ceil((gainedX)/200)
         local tileY = math.ceil((gainedY)/200)
-        print(tostring(tileX)..","..tostring(tileY))
         local currentTile = mapTiles[tileY][tileX]
-        print(currentTile)
 
         local speedList = {}
         if unit.Formation=="BattleLine" then speedList=BattleLineSpeeds end
@@ -186,9 +196,7 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
 
         local tileX = math.ceil((gainedX)/200)
         local tileY = math.ceil((gainedY)/200)
-        print(tostring(tileX)..","..tostring(tileY))
         local currentTile = mapTiles[tileY][tileX]
-        print(currentTile)
 
         local speedList = {}
         if unit.Formation=="BattleLine" then speedList=BattleLineSpeeds end
@@ -223,5 +231,7 @@ function unitControl.ChangeFormationOptions()
 
     return {btn1,btn2,btn3}
 end
+
+
 
 return unitControl

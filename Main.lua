@@ -18,7 +18,7 @@ Unit = require("Unit")
 --// GAME VARIABLES //--
 currentMap = {}
 currentMapDetails = {}
-
+visualEffects = {}
 uiObjects = {}
 
 inGame = false
@@ -37,6 +37,7 @@ nextMap = "map_1.lvl"
 prussianUnits={}
 britishUnits={}
 frenchUnits={}
+enemyUnits = {}
 
 selectedUnit = false
 wheelSelected = false
@@ -44,8 +45,10 @@ moveSelected = false
 movingUnits = {}
 
 currentTeam = "Prussian"
+enemyTeam = "French"
 
 gameResolution = {1600,900}
+mousePos = {0,0}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
@@ -205,6 +208,7 @@ twoSec = 0
 oneSec = 0
 halfSec = 0
 quarterSec = 0
+eighthSec = 0
 local initUpdate = true
 fourSecondTimer = false
 
@@ -216,6 +220,9 @@ function love.update(dt)
     oneSec = oneSec + dt
     halfSec = halfSec + dt
     quarterSec = quarterSec + dt
+    eighthSec = eighthSec + dt
+
+
 
     if (initUpdate) and (oneSec>=1) then 
         initUpdate = false
@@ -252,6 +259,26 @@ function love.update(dt)
         if Network.Hosting then
             Network.SendMessage("Peer Check In")
         end
+
+
+        for i=1,#prussianUnits,1 do
+            if (prussianUnits[i].Stance=="Idle")or(prussianUnits[i].Stance=="Aiming") then
+                if not prussianUnits[i].CurrentTarget then
+                    local newWheel = prussianUnits[i]:CheckForTargets(frenchUnits)
+                    if not (not newWheel) then table.insert(movingUnits,newWheel) end
+                end
+            end
+        end
+        for i=1,#frenchUnits,1 do
+            if (frenchUnits[i].Stance=="Idle")or(frenchUnits[i].Stance=="Aiming") then
+                if not frenchUnits[i].CurrentTarget then
+                    local newWheel = frenchUnits[i]:CheckForTargets(prussianUnits)
+                    if not (not newWheel) then table.insert(movingUnits,newWheel) end
+                end
+            end
+        end
+
+
     end
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
@@ -263,7 +290,12 @@ function love.update(dt)
                 movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
                 movingUnits[i][1].Position=movingUnits[i][4][index][2]
                 movingUnits[i][3]=movingUnits[i][3]+1
-                if movingUnits[i][3]>#movingUnits[i][4] then movingUnits[i][1].Stance="Idle"table.remove(movingUnits,i) break end
+                if movingUnits[i][3]>#movingUnits[i][4] then 
+                    if not (not movingUnits[i][1].CurrentTarget) then movingUnits[i][1].Stance="Aiming"
+                    else movingUnits[i][1].Stance="Idle" end
+                    table.remove(movingUnits,i) 
+                    break 
+                end
             end
         end
     end
@@ -277,7 +309,34 @@ function love.update(dt)
                 movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
                 movingUnits[i][1]:ChangeOrientation(movingUnits[i][4][index][2])
                 movingUnits[i][3]=movingUnits[i][3]+1
-                if movingUnits[i][3]>#movingUnits[i][4] then movingUnits[i][1].Stance="Idle"table.remove(movingUnits,i) break end
+                if movingUnits[i][3]>#movingUnits[i][4] then 
+                    if not (not movingUnits[i][1].CurrentTarget) then movingUnits[i][1].Stance="Aiming"
+                    else movingUnits[i][1].Stance="Idle" end
+                    table.remove(movingUnits,i) 
+                    break 
+                end
+            end
+        end
+    end
+
+
+    if eighthSec >= 0.125 then
+        eighthSec = eighthSec - 0.125
+
+
+        for i=1,#prussianUnits,1 do
+            if not (not prussianUnits[i].CurrentTarget) then
+                if math.random(1,prussianUnits[i].FireRate)==1 then
+                    prussianUnits[i]:Fire()
+                end
+            end
+        end
+
+        for i=1,#frenchUnits,1 do
+            if not (not frenchUnits[i].CurrentTarget) then
+                if math.random(1,frenchUnits[i].FireRate)==1 then
+                    frenchUnits[i]:Fire()
+                end
             end
         end
     end
@@ -286,7 +345,7 @@ function love.update(dt)
     if (love.mouse.isDown(1)) and (not mouseDeBounce) then
         mouseDeBounce = true
         local x,y = love.mouse.getPosition()
-        local mousePos = {x,y}
+        mousePos = {x,y}
 
         local clickedUI = false
 
@@ -427,13 +486,13 @@ function love.update(dt)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
 
-                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{2500,500},100)
-                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{2000,300},100)
+                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3200,300},100,4,5)
+                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{4000,300},100,4,5)
 
                         prussianUnits={prussian1,prussian2}
 
-                        local french1 = Unit.New("FrenchInfantry1","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1000,500},100)
-                        local french2 = Unit.New("FrenchInfantry2","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1000,300},100)
+                        local french1 = Unit.New("FrenchInfantry1","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1000,300},100,10,3)
+                        local french2 = Unit.New("FrenchInfantry2","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1000,700},100,10,3)
 
                         frenchUnits={french1,french2}
                         break

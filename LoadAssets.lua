@@ -183,4 +183,19 @@ Assets.Map_Editor_Detail_ID = {
     {"SpawnB","SPNB"},
 }
 
+
+
+Assets.Effects = {
+    {"Smoke1",love.graphics.newImage("Images/Effects/Smoke1.png")},
+}
+
+Assets.Sounds = {
+    {"MusketShot1",love.audio.newSource("Sounds/MusketFire1.mp3","static")},
+    {"MusketShot2",love.audio.newSource("Sounds/MusketFire2.mp3","static")},
+    {"MusketShot3",love.audio.newSource("Sounds/MusketFire3.mp3","static")},
+    {"MusketShot4",love.audio.newSource("Sounds/MusketFire4.mp3","static")},
+    {"MusketShot5",love.audio.newSource("Sounds/MusketFire5.mp3","static")},
+    {"MusketShot6",love.audio.newSource("Sounds/MusketFire6.mp3","static")},
+}
+
 return Assets
