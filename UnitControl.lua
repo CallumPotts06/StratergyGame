@@ -1,6 +1,8 @@
 
 unitControl = {}
 
+newUI = require("Interface")
+
 function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
     local startRad = unit.Orientation
     local dRad = 0
@@ -207,16 +209,19 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         table.insert(movePos,{x,y})
     end end
 
-    --[[for i=1,#movePos,1 do
-        local y=unitY+(ySpeed*(i-1))
-        movePos[i][2]=y
-    end]]
-
     for i=1,#movePos,1 do
         table.insert(newTable[4],{"Move",movePos[i]})
     end
 
     return newTable
+end
+
+function unitControl.ChangeFormationOptions()
+    btn1=newUI.New("MarchingColumnBtn",{0.2,0.2,1,1},"Marching Column",{1,1,1,1},5,{1,1,1,1},{15,15},{100,100},"Form_March")
+    btn2=newUI.New("BattleLineBtn",{0.2,0.2,1,1},"Battle Line",{1,1,1,1},5,{1,1,1,1},{130,15},{100,100},"Form_Battle")
+    btn3=newUI.New("SkirmishLineBtn",{0.2,0.2,1,1},"Skirmish Line",{1,1,1,1},5,{1,1,1,1},{245,15},{100,100},"Form_Skirmish")
+
+    return {btn1,btn2,btn3}
 end
 
 return unitControl

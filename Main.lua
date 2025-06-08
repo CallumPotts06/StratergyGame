@@ -90,10 +90,22 @@ end
 function clearControls()
     wheelSelected = false
     moveSelected = false
-    for i=1,#uiObjects,1 do
+    local i=1
+    while i<#uiObjects do
         if uiObjects[i].Name=="controlinfo" then
             table.remove(uiObjects,i)
         end
+        if (uiObjects[i].Name=="MarchingColumnBtn") then
+            table.remove(uiObjects,i)
+        end
+        if (uiObjects[i].Name=="BattleLineBtn") then
+            table.remove(uiObjects,i)
+        end
+        if (uiObjects[i].Name=="SkirmishLineBtn") then
+            table.remove(uiObjects,i)
+        end
+
+        i=i+1
     end
 end
 
@@ -166,6 +178,11 @@ function love.keypressed(key)
                 local info = interface.New("controlinfo",{0,0,0,0},"Move Unit",{0,0,0,1},1,{0,0,0,0},{15,15},{300,300},"")
                 table.insert(uiObjects,info)
                 moveSelected = true
+            end
+            if key=="f" then --FORMATION CHANGE--
+                clearControls()
+                local info = unitControl.ChangeFormationOptions()
+                for i=1,#info,1 do table.insert(uiObjects,info[i]) end
             end
             if key=="x" then --DESELECT--
                 clearControls()
@@ -415,6 +432,17 @@ function love.update(dt)
 
                         prussianUnits={prussian1,prussian2}
                         break
+                    end
+
+                    if check=="Form_March" then
+                        selectedUnit.Formation="MarchingColumn"
+                        selectedUnit.OpenOrder = "_Squad"
+                    elseif check=="Form_Battle" then
+                        selectedUnit.Formation="BattleLine"
+                        selectedUnit.OpenOrder = "_Squad"
+                    elseif check=="Form_Skirmish" then
+                        selectedUnit.Formation="SkirmishLine"
+                        selectedUnit.OpenOrder = ""
                     end
                 end
             end
