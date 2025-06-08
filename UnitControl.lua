@@ -12,10 +12,10 @@ function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
     local unitX=unit.Position[1]
     local unitY=unit.Position[2]
 
-    local x1 = (unitX*zoom)
-    local y1 = (unitY*zoom)
-    local x2 = ((mousePos[1])+(camPos[1]*zoom))
-    local y2 = ((mousePos[2])+(camPos[2]*zoom))
+    local x1 = (unitX)
+    local y1 = (unitY)
+    local x2 = ((mousePos[1]/zoom)+(camPos[1]))
+    local y2 = ((mousePos[2]/zoom)+(camPos[2]))
 
     local dx = (x2-x1)
     local dy = -(y2-y1)
@@ -25,9 +25,9 @@ function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
     local opp = dy
 
     --ASTC RULE--
-    if (dx>=0)and(dy>=0) then theta = math.asin(opp/hyp) end
+    if (dx>=0)and(dy>=0) then theta = math.atan(adj/opp) end
     if (dx<=0)and(dy>=0) then theta = ((3/2)*(math.pi))+math.asin(opp/hyp) end
-    if (dx<=0)and(dy<=0) then theta = ((2/2)*(math.pi))+math.atan(opp/adj) end
+    if (dx<=0)and(dy<=0) then theta = ((math.pi))+math.atan(adj/opp) end
     if (dx>=0)and(dy<=0) then theta = ((1/2)*(math.pi))+math.acos(adj/hyp) end
 
     radsPerSecond = 0.1
@@ -75,10 +75,10 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         {"FRD",0.5},
         {"FST",0.5},
         {"BRD",1.3},
-        {"ROD",1.5},
+        {"ROD",1.6},
         {"STR",0.1},
         {"SWP",0.2},
-        {"TRP",1.25},
+        {"TRP",1.3},
         {"URB",0.1},
         {"CRN",0.35},
         {"WHE",0.35},
@@ -89,10 +89,10 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         {"FRD",0.5},
         {"FST",0.5},
         {"BRD",1.3},
-        {"ROD",1.5},
+        {"ROD",1.3},
         {"STR",0.1},
         {"SWP",0.2},
-        {"TRP",1.25},
+        {"TRP",1.175},
         {"URB",0.1},
         {"CRN",0.4},
         {"WHE",0.4},
@@ -119,8 +119,8 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
 
     local x1 = (unitX)
     local y1 = (unitY)
-    local x2 = ((mousePos[1]/zoom)+(camPos[1]/zoom))
-    local y2 = ((mousePos[2]/zoom)+(camPos[2]/zoom))
+    local x2 = ((mousePos[1]/zoom)+(camPos[1]))
+    local y2 = ((mousePos[2]/zoom)+(camPos[2]))
     
 
     local dx = (x2-x1)
