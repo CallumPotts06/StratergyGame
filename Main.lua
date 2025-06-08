@@ -45,7 +45,7 @@ movingUnits = {}
 
 currentTeam = "Prussian"
 
-gameResolution = {1080,640}
+gameResolution = {1600,900}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
@@ -152,21 +152,18 @@ function love.keypressed(key)
     if inGame then
         if not (not selectedUnit) then
             if key=="e" then --WHEEL--
-                print("Wheel")
                 clearControls()
                 local info = interface.New("controlinfo",{0,0,0,0},"Wheel Unit",{0,0,0,1},1,{0,0,0,0},{15,15},{300,300},"")
                 table.insert(uiObjects,info)
                 wheelSelected = true
             end
             if key=="q" then --MARCH--
-                print("March")
                 clearControls()
                 local info = interface.New("controlinfo",{0,0,0,0},"Move Unit",{0,0,0,1},1,{0,0,0,0},{15,15},{300,300},"")
                 table.insert(uiObjects,info)
                 moveSelected = true
             end
             if key=="x" then --DESELECT--
-                print("Deselect")
                 clearControls()
                 selectedUnit.Selected = false
                 selectedUnit = false
@@ -236,7 +233,6 @@ function love.update(dt)
 
         for i=1,#movingUnits,1 do
             local index = movingUnits[i][3]
-            print(movingUnits[i][4][index][1])
             if movingUnits[i][4][index][1]=="Wheel" then--WHEEL UNITS--
                 movingUnits[i][1]:ChangeOrientation(movingUnits[i][4][index][2])
                 movingUnits[i][3]=movingUnits[i][3]+1

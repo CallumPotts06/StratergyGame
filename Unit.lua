@@ -244,10 +244,8 @@ function unit:ChangeOrientation(drad)
         local lostRad = (self.Orientation-(math.pi*2))+math.abs(drad)
         if (drad+self.Orientation>=(math.pi*2)) then
             self.Orientation=0+math.abs(drad)
-            print("lostrad1")
         else
             self.Orientation=(math.pi*2)-(math.abs(drad))
-            print("lostrad2")
         end
     end
 end
