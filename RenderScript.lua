@@ -68,7 +68,7 @@ function DrawDetailIMG(list,tile,x,y,zoom)
     end
 end
 
-function renderer.RenderMap(map,mapDetails,mode,zoom)
+function renderer.RenderMap(map,mode,zoom)
     love.graphics.setBackgroundColor(0,0,0,0)
     if mode=="Editor" then
         for y=1,#map,1 do
@@ -107,7 +107,12 @@ function renderer.RenderMap(map,mapDetails,mode,zoom)
                 end
             end
         end
+    end 
+end
 
+function renderer.RenderDetails(mapDetails,mode,zoom)
+    love.graphics.setBackgroundColor(0,0,0,0)
+    if  mode=="Temperate" then
         for y=1,#mapDetails,1 do
             for x=1,#mapDetails[1],1 do
                 local tile = mapDetails[y][x]
@@ -123,7 +128,7 @@ function renderer.RenderMap(map,mapDetails,mode,zoom)
                 end
             end
         end
-    end 
+    end
 end
 
 return renderer

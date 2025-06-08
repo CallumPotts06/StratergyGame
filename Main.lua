@@ -105,7 +105,7 @@ function love.draw()
     if inMapEdit and (currentEditRender == "Edit") then
         Renderer.RenderMap(currentMap,currentMapDetails,"Editor",zoom)
     else
-        Renderer.RenderMap(currentMap,currentMapDetails,"Temperate",zoom)
+        Renderer.RenderMap(currentMap,"Temperate",zoom)
 
         for i=1,#prussianUnits,1 do
             prussianUnits[i]:DrawUnit(zoom,camPos)
@@ -113,6 +113,10 @@ function love.draw()
         for i=1,#frenchUnits,1 do
             frenchUnits[i]:DrawUnit(zoom,camPos)
         end
+    end
+
+    if not (inMapEdit and (currentEditRender == "Edit")) then
+        renderer.RenderDetails(currentMapDetails,"Temperate",zoom)
     end
 
     Renderer.RenderUI(uiObjects,zoom)
@@ -183,6 +187,7 @@ fourSec = 0
 twoSec = 0
 oneSec = 0
 halfSec = 0
+quarterSec = 0
 local initUpdate = true
 fourSecondTimer = false
 
@@ -193,6 +198,7 @@ function love.update(dt)
     twoSec = twoSec + dt
     oneSec = oneSec + dt
     halfSec = halfSec + dt
+    quarterSec = quarterSec + dt
 
     if (initUpdate) and (oneSec>=1) then 
         initUpdate = false
@@ -236,14 +242,23 @@ function love.update(dt)
 
         for i=1,#movingUnits,1 do
             local index = movingUnits[i][3]
+            if movingUnits[i][4][index][1]=="Move" then--MOVE UNITS--
+                movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
+                movingUnits[i][1].Position=movingUnits[i][4][index][2]
+                movingUnits[i][3]=movingUnits[i][3]+1
+                if movingUnits[i][3]>#movingUnits[i][4] then movingUnits[i][1].Stance="Idle"table.remove(movingUnits,i) break end
+            end
+        end
+    end
+
+    if  quarterSec >= 0.25 then
+        quarterSec = quarterSec - 0.25
+        
+        for i=1,#movingUnits,1 do
+            local index = movingUnits[i][3]
             if movingUnits[i][4][index][1]=="Wheel" then--WHEEL UNITS--
                 movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
                 movingUnits[i][1]:ChangeOrientation(movingUnits[i][4][index][2])
-                movingUnits[i][3]=movingUnits[i][3]+1
-                if movingUnits[i][3]>#movingUnits[i][4] then movingUnits[i][1].Stance="Idle"table.remove(movingUnits,i) break end
-            elseif movingUnits[i][4][index][1]=="Move" then--MOVE UNITS--
-                movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
-                movingUnits[i][1].Position=movingUnits[i][4][index][2]
                 movingUnits[i][3]=movingUnits[i][3]+1
                 if movingUnits[i][3]>#movingUnits[i][4] then movingUnits[i][1].Stance="Idle"table.remove(movingUnits,i) break end
             end
@@ -442,7 +457,7 @@ function love.update(dt)
                         for i=1,#movingUnits,1 do
                             if movingUnits[i][1].Name==selectedUnit.Name then
                                 table.remove(movingUnits,i)
-                                print("Removed Old Wheel")
+                                break
                             end
                         end
                         table.insert(movingUnits,newWheel)
@@ -450,12 +465,12 @@ function love.update(dt)
                 end
 
                 if moveSelected then--MOVE UNIT--
-                    local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom)
+                    local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom,currentMap)
                     if not (not newMarch) then
                         for i=1,#movingUnits,1 do
                             if movingUnits[i][1].Name==selectedUnit.Name then
                                 table.remove(movingUnits,i)
-                                print("Removed Old March")
+                                break
                             end
                         end
                         table.insert(movingUnits,newMarch)
