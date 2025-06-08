@@ -14,7 +14,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp)
     newUnit.Orientation = 0
     newUnit.Stance = "Idle"
     newUnit.Facing = "South"
-    newUnit.Formation = "MarchingColumn"
+    newUnit.Formation = "BattleLine"
     newUnit.OpenOrder = "_Squad"
 
     newUnit.MaxHealth = iHp

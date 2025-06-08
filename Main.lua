@@ -177,6 +177,8 @@ connectionEstablished = false
 
 mouseDeBounce = false
 
+local marchStep = 1
+
 fourSec = 0
 twoSec = 0
 oneSec = 0
@@ -230,19 +232,20 @@ function love.update(dt)
     end
     if halfSec >= 0.5 then
         halfSec = halfSec - 0.5 
+        if marchStep==1 then marchStep=2 else marchStep=1 end
 
         for i=1,#movingUnits,1 do
             local index = movingUnits[i][3]
             if movingUnits[i][4][index][1]=="Wheel" then--WHEEL UNITS--
+                movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
                 movingUnits[i][1]:ChangeOrientation(movingUnits[i][4][index][2])
                 movingUnits[i][3]=movingUnits[i][3]+1
-                if movingUnits[i][3]>#movingUnits[i][4] then table.remove(movingUnits,i) end
-            end
-
-            if movingUnits[i][4][index][1]=="Move" then--MOVE UNITS--
+                if movingUnits[i][3]>#movingUnits[i][4] then movingUnits[i][1].Stance="Idle"table.remove(movingUnits,i) break end
+            elseif movingUnits[i][4][index][1]=="Move" then--MOVE UNITS--
+                movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
                 movingUnits[i][1].Position=movingUnits[i][4][index][2]
                 movingUnits[i][3]=movingUnits[i][3]+1
-                if movingUnits[i][3]>#movingUnits[i][4] then table.remove(movingUnits,i) end
+                if movingUnits[i][3]>#movingUnits[i][4] then movingUnits[i][1].Stance="Idle"table.remove(movingUnits,i) break end
             end
         end
     end

@@ -41,30 +41,31 @@ function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
     local endRad = theta
 
     for i = startRad,theta,radsPerSecond do
-        --endRad=theta
+        endRad=theta
         if index==1 then tempTables[1][1]={"Wheel",radsPerSecond} index=index+1 shortest=1 gainedRad=0.2
         else table.insert(tempTables[1],{"Wheel",radsPerSecond}) gainedRad=gainedRad+0.2 end
     end
     index=1
     for i = theta2,startRad,radsPerSecond do
-        --endRad=theta2
+        endRad=theta2
         if index==1 then tempTables[2][1]={"Wheel",-radsPerSecond} index=index+1 shortest=2 gainedRad=-0.2
         else table.insert(tempTables[2],{"Wheel",-radsPerSecond}) gainedRad=gainedRad-0.2 end
     end
     index=1
     for i = startRad,theta,-radsPerSecond do
-        --endRad=theta
+        endRad=theta 
         if index==1 then tempTables[3][1]={"Wheel",-radsPerSecond} index=index+1 shortest=3 gainedRad=-0.2
         else table.insert(tempTables[3],{"Wheel",-radsPerSecond}) gainedRad=gainedRad-0.2 end
     end
     index=1
     for i = theta2,startRad,-radsPerSecond do
-        --endRad=theta2
+        endRad=theta2
         if index==1 then tempTables[4][1]={"Wheel",radsPerSecond} index=index+1 shortest=4 gainedRad=0.2
         else table.insert(tempTables[4],{"Wheel",radsPerSecond}) gainedRad=gainedRad+0.2 end
     end
     
     local dRad = endRad-gainedRad
+    print("DRAD="..tostring(dRad))
     
     
     for i=1,#tempTables,1 do 
@@ -84,10 +85,11 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom)
     local unitX=unit.Position[1]
     local unitY=unit.Position[2]
 
-    local x1 = (unitX*zoom)
-    local y1 = (unitY*zoom)
-    local x2 = ((mousePos[1])+(camPos[1]*zoom))
-    local y2 = ((mousePos[2])+(camPos[2]*zoom))
+    local x1 = (unitX)
+    local y1 = (unitY)
+    local x2 = ((mousePos[1]/zoom)+(camPos[1]/zoom))
+    local y2 = ((mousePos[2]/zoom)+(camPos[2]/zoom))
+    
 
     local dx = (x2-x1)
     local dy = -(y2-y1)
