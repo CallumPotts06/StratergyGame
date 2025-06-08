@@ -45,7 +45,7 @@ movingUnits = {}
 
 currentTeam = "Prussian"
 
-gameResolution = {1600,900}
+gameResolution = {1080,640}
 
 --// OTHER VARIABLES //--
 textInputEnabled = false
@@ -236,8 +236,15 @@ function love.update(dt)
 
         for i=1,#movingUnits,1 do
             local index = movingUnits[i][3]
-            if movingUnits[i][2]=="Wheel" then--WHEEL UNITS--
-                movingUnits[i][1]:ChangeOrientation(movingUnits[i][4][index])
+            print(movingUnits[i][4][index][1])
+            if movingUnits[i][4][index][1]=="Wheel" then--WHEEL UNITS--
+                movingUnits[i][1]:ChangeOrientation(movingUnits[i][4][index][2])
+                movingUnits[i][3]=movingUnits[i][3]+1
+                if movingUnits[i][3]>#movingUnits[i][4] then table.remove(movingUnits,i) end
+            end
+
+            if movingUnits[i][4][index][1]=="Move" then--MOVE UNITS--
+                movingUnits[i][1].Position=movingUnits[i][4][index][2]
                 movingUnits[i][3]=movingUnits[i][3]+1
                 if movingUnits[i][3]>#movingUnits[i][4] then table.remove(movingUnits,i) end
             end
@@ -434,11 +441,25 @@ function love.update(dt)
                     local newWheel = unitControl.CalculateWheel(selectedUnit,mousePos,camPos,zoom)
                     if not (not newWheel) then
                         for i=1,#movingUnits,1 do
-                            if movingUnits[i][1].Name==selectedUnit then
+                            if movingUnits[i][1].Name==selectedUnit.Name then
                                 table.remove(movingUnits,i)
+                                print("Removed Old Wheel")
                             end
                         end
                         table.insert(movingUnits,newWheel)
+                    end
+                end
+
+                if moveSelected then--MOVE UNIT--
+                    local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom)
+                    if not (not newMarch) then
+                        for i=1,#movingUnits,1 do
+                            if movingUnits[i][1].Name==selectedUnit.Name then
+                                table.remove(movingUnits,i)
+                                print("Removed Old March")
+                            end
+                        end
+                        table.insert(movingUnits,newMarch)
                     end
                 end
             end

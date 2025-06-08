@@ -19,7 +19,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp)
 
     newUnit.MaxHealth = iHp
     newUnit.Health = iHp
-    newUnit.MaxSquads = 14
+    newUnit.MaxSquads = 16
 
     newUnit.Moving = false
     newUnit.Selected = false
@@ -125,7 +125,6 @@ function unit:DrawUnit(zoom,camPos)
                     love.graphics.draw(img,x,y,0,zoom/2,zoom/2)
                 end
             end
-
         end
         love.graphics.draw(overlayFlag,flagPos[1],flagPos[2],0,zoom/2,zoom/2)
 
@@ -272,7 +271,6 @@ function unit:CheckClick(mousePos,camPos,zoom)
     end
     return {clicked,self.Selected,self}
 end
-
 
  
 
