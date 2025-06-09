@@ -14,7 +14,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     newUnit.Images = iImgs
 
     newUnit.Position = iPos
-    newUnit.Orientation = 0
+    newUnit.Orientation = math.pi
     newUnit.Stance = "Idle"
     newUnit.Facing = "South"
     newUnit.Formation = "BattleLine"
@@ -317,7 +317,7 @@ function unit:Fire()
         if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
         if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
         if(rad>=3.927)or(rad<=5.498)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
-        local h = math.random(bound1,bound2)*22*zoom
+        local h = math.random(bound1,bound2)*25*zoom
         local x = ((self.Position[1]))+(h*math.cos(self.Orientation))
         local y = ((self.Position[2]))+(h*math.sin(self.Orientation))
 
@@ -330,7 +330,7 @@ function unit:Fire()
             end
         end
 
-        local hit = math.random(1,self.Accuracy)
+        local hit = math.random(1,math.floor(self.Accuracy/2))
         if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-1 end
     end
 

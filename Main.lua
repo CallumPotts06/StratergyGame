@@ -32,7 +32,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "map_1.lvl"
+nextMap = "Map2.lvl"
 
 prussianUnits={}
 britishUnits={}
@@ -120,7 +120,7 @@ function love.draw()
     if inMapEdit and (currentEditRender == "Edit") then
         Renderer.RenderMap(currentMap,currentMapDetails,"Editor",zoom)
     else
-        Renderer.RenderMap(currentMap,"Temperate",zoom)
+        Renderer.RenderMap(currentMap,currentMapDetails,"Temperate",zoom)
 
         for i=1,#prussianUnits,1 do
             prussianUnits[i]:DrawUnit(zoom,camPos)
@@ -491,15 +491,18 @@ function love.update(dt)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
 
-                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{2700,300},100,4,5)
-                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3500,300},100,4,5)
+                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{750,3500},100,5,5)
+                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1250,3500},100,5,5)
+                        local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1750,3500},100,5,5)
+                        local prussian4 = Unit.New("PrussianInfantry4","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{2250,3500},100,5,5)
 
-                        prussianUnits={prussian1,prussian2}
+                        prussianUnits={prussian1,prussian2,prussian3,prussian4}
 
-                        local french1 = Unit.New("FrenchInfantry1","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1000,300},100,10,3)
-                        local french2 = Unit.New("FrenchInfantry2","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1000,700},100,10,3)
+                        local french1 = Unit.New("FrenchInfantry1","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1000,1250},100,10,4)
+                        local french2 = Unit.New("FrenchInfantry2","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1500,1250},100,10,4)
+                        local french3 = Unit.New("FrenchInfantry3","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{2000,1250},100,10,4)
 
-                        frenchUnits={french1,french2}
+                        frenchUnits={french1,french2,french3}
                         break
                     end
 
