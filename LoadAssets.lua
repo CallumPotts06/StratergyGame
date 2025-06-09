@@ -186,7 +186,7 @@ Assets.Map_Editor_Detail_ID = {
 
 
 Assets.Effects = {
-    {"Smoke1",love.graphics.newImage("Images/Effects/Smoke1.png")},
+    {"Smoke",love.graphics.newImage("Images/Effects/Smoke1.png")},
 }
 
 Assets.Sounds = {

@@ -69,7 +69,7 @@ function DrawDetailIMG(list,tile,x,y,zoom)
 end
 
 function renderer.RenderMap(map,mode,zoom)
-    love.graphics.setBackgroundColor(0,0,0,0)
+    love.graphics.setColor(1,1,1,1)
     if mode=="Editor" then
         for y=1,#map,1 do
             for x=1,#map[1],1 do
@@ -111,7 +111,7 @@ function renderer.RenderMap(map,mode,zoom)
 end
 
 function renderer.RenderDetails(mapDetails,mode,zoom)
-    love.graphics.setBackgroundColor(0,0,0,0)
+    love.graphics.setColor(1,1,1,1)
     if  mode=="Temperate" then
         for y=1,#mapDetails,1 do
             for x=1,#mapDetails[1],1 do
@@ -129,6 +129,37 @@ function renderer.RenderDetails(mapDetails,mode,zoom)
             end
         end
     end
+end
+
+
+function renderer.RenderEffects(effects,zoom,camPos)
+    for i=1,#effects,1 do
+        if effects[i][1]=="Smoke" then
+            local alpha = 1/(effects[i][3])
+            effects[i][3]=effects[i][3]+0.03
+            love.graphics.setColor{1,1,1,alpha}
+            local img = ""
+            for i2=1,#Assets.Effects,1 do
+                if Assets.Effects[i2][1]==effects[i][1] then
+                    img = Assets.Effects[i2][2]
+                end
+            end
+            if not (img=="") then
+                local x = (effects[i][2][1]-camPos[1])*zoom
+                local y = (effects[i][2][2]-camPos[2])*zoom
+                love.graphics.draw(img,x,y,0,zoom,zoom)
+            end
+        end
+    end
+    love.graphics.setColor{1,1,1,1}
+
+    local newTable = effects
+    local i=0
+    while i<#effects do
+        i=i+1
+        if effects[i][3]>6 then table.remove(effects,i) end
+    end
+    return newTable
 end
 
 return renderer

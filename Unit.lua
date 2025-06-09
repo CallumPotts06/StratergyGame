@@ -300,9 +300,28 @@ function unit:CheckForTargets(enemyUnits)
 end
 
 function unit:Fire()
+    local smoke
+    local sound
+
     if not (not self.CurrentTarget) then
-        local smoke = {"Smoke1",{self.Position[1]+math.random(-15,15),self.Position[2]+math.random(-15,15)}}
-        local sound = "MusketShot"..tostring(math.random(1,6))
+        
+        sound = "MusketShot"..tostring(math.random(1,6))
+
+        local bound1 = -5
+        local bound2 = 5
+
+        local rad = self.Orientation
+        local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
+
+        if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
+        if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
+        if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
+        if(rad>=3.927)or(rad<=5.498)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
+        local h = math.random(bound1,bound2)*22*zoom
+        local x = ((self.Position[1]))+(h*math.cos(self.Orientation))
+        local y = ((self.Position[2]))+(h*math.sin(self.Orientation))
+
+        smoke = {"Smoke",{x,y},1}
 
         for i=1,#assets.Sounds,1 do
             if assets.Sounds[i][1]==sound then
@@ -315,7 +334,7 @@ function unit:Fire()
         if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-1 end
     end
 
-    return {smoke,sound}
+    return smoke
 end
 
  

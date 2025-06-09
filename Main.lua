@@ -130,6 +130,9 @@ function love.draw()
         end
     end
 
+    local temp = renderer.RenderEffects(visualEffects,zoom,camPos)
+    visualEffects = temp
+
     if not (inMapEdit and (currentEditRender == "Edit")) then
         renderer.RenderDetails(currentMapDetails,"Temperate",zoom)
     end
@@ -327,7 +330,8 @@ function love.update(dt)
         for i=1,#prussianUnits,1 do
             if not (not prussianUnits[i].CurrentTarget) then
                 if math.random(1,prussianUnits[i].FireRate)==1 then
-                    prussianUnits[i]:Fire()
+                    local smoke = prussianUnits[i]:Fire(camPos,zoom)
+                    table.insert(visualEffects,smoke)
                 end
             end
         end
@@ -335,7 +339,8 @@ function love.update(dt)
         for i=1,#frenchUnits,1 do
             if not (not frenchUnits[i].CurrentTarget) then
                 if math.random(1,frenchUnits[i].FireRate)==1 then
-                    frenchUnits[i]:Fire()
+                    local smoke = frenchUnits[i]:Fire(camPos,zoom)
+                    table.insert(visualEffects,smoke)
                 end
             end
         end
@@ -486,8 +491,8 @@ function love.update(dt)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
 
-                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3200,300},100,4,5)
-                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{4000,300},100,4,5)
+                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{2700,300},100,4,5)
+                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3500,300},100,4,5)
 
                         prussianUnits={prussian1,prussian2}
 
