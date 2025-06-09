@@ -150,6 +150,24 @@ function renderer.RenderEffects(effects,zoom,camPos)
                 love.graphics.draw(img,x,y,0,zoom,zoom)
             end
         end
+
+
+        if string.sub(effects[i][1],1,4)=="Dead" then
+            local alpha = 1/((effects[i][3])/2)
+            effects[i][3]=effects[i][3]+0.0075
+            love.graphics.setColor{1,1,1,alpha}
+            local img = ""
+            for i2=1,#Assets.Effects,1 do
+                if Assets.Effects[i2][1]==effects[i][1] then
+                    img = Assets.Effects[i2][2]
+                end
+            end
+            if not (img=="") then
+                local x = (effects[i][2][1]-camPos[1])*zoom
+                local y = (effects[i][2][2]-camPos[2])*zoom
+                love.graphics.draw(img,x,y,0,(zoom)/1.8,(zoom)/1.8)
+            end
+        end
     end
     love.graphics.setColor{1,1,1,1}
 
@@ -157,7 +175,7 @@ function renderer.RenderEffects(effects,zoom,camPos)
     local i=0
     while i<#effects do
         i=i+1
-        if effects[i][3]>8 then table.remove(effects,i) end
+        if effects[i]=="" then table.remove(effects,i) elseif effects[i][3]>10 then table.remove(effects,i) end
     end
     return newTable
 end

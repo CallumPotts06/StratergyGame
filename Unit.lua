@@ -309,10 +309,8 @@ function unit:Fire()
 
         local bound1 = -5
         local bound2 = 5
-
         local rad = self.Orientation
         local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
-
         if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
         if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
         if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
@@ -320,8 +318,21 @@ function unit:Fire()
         local h = math.random(bound1,bound2)*25*zoom
         local x = ((self.Position[1]))+(h*math.cos(self.Orientation))
         local y = ((self.Position[2]))+(h*math.sin(self.Orientation))
-
         smoke = {"Smoke",{x,y},1}
+
+        local enemy = self.CurrentTarget
+        local bound1 = -5
+        local bound2 = 5
+        local rad = enemy.Orientation
+        local squadCount = enemy.MaxSquads*(enemy.Health/enemy.MaxHealth)
+        if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
+        if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
+        if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
+        if(rad>=3.927)or(rad<=5.498)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
+        local h = math.random(bound1,bound2)*23*zoom
+        local x = ((enemy.Position[1]))+(h*math.cos(enemy.Orientation))
+        local y = ((enemy.Position[2]))+(h*math.sin(enemy.Orientation))
+        dead = {"Dead"..enemy.Team..enemy.Type,{x+math.random(-8,8),y+math.random(-8,8)},1}
 
         for i=1,#assets.Sounds,1 do
             if assets.Sounds[i][1]==sound then
@@ -331,10 +342,10 @@ function unit:Fire()
         end
 
         local hit = math.random(1,math.floor(self.Accuracy/2))
-        if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-1 end
+        if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-1 else dead="" end
     end
 
-    return smoke
+    return {smoke,dead}
 end
 
  

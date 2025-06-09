@@ -187,6 +187,9 @@ Assets.Map_Editor_Detail_ID = {
 
 Assets.Effects = {
     {"Smoke",love.graphics.newImage("Images/Effects/Smoke1.png")},
+
+    {"DeadFrenchLineInfantry",love.graphics.newImage("Images/FrenchTroops/LineInfantry/DeadSoldier.png")},
+    {"DeadPrussianLineInfantry",love.graphics.newImage("Images/PrussianTroops/LineInfantry/DeadSoldier.png")},
 }
 
 Assets.Sounds = {
