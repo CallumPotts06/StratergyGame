@@ -197,8 +197,31 @@ function soldiers.LoadSoldierGroup(fileDir)
     return newGroup
 end
 
+
+function soldiers.LoadArtyGroup(fileDir)
+    local newGroup = {
+        {"Card",love.graphics.newImage(fileDir.."/Card.png")},
+        {"Flag",love.graphics.newImage(fileDir.."/Flag.png")},
+
+        {"North_RegularGun",love.graphics.newImage(fileDir.."/North/RegularGun.png")},
+        {"North_FlagGun",love.graphics.newImage(fileDir.."/North/FlagGun.png")},
+
+        {"South_RegularGun",love.graphics.newImage(fileDir.."/South/RegularGun.png")},
+        {"South_FlagGun",love.graphics.newImage(fileDir.."/South/FlagGun.png")},
+
+        {"East_RegularGun",love.graphics.newImage(fileDir.."/East/RegularGun.png")},
+        {"East_FlagGun",love.graphics.newImage(fileDir.."/East/FlagGun.png")},
+
+        {"West_RegularGun",love.graphics.newImage(fileDir.."/West/RegularGun.png")},
+        {"West_FlagGun",love.graphics.newImage(fileDir.."/West/FlagGun.png")},
+    }
+    return newGroup
+end
+
 soldiers.PrussianLineInfantry = soldiers.LoadSoldierGroup("Images/PrussianTroops/LineInfantry")
 soldiers.FrenchLineInfantry = soldiers.LoadSoldierGroup("Images/FrenchTroops/LineInfantry")
+
+soldiers.PrussianArtillery = soldiers.LoadArtyGroup("Images/PrussianTroops/Artillery")
 
 
 return soldiers
