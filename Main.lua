@@ -47,7 +47,7 @@ movingUnits = {}
 currentTeam = "Prussian"
 enemyTeam = "French"
 
-gameResolution = {1600,900}
+gameResolution = {1000,600}
 mousePos = {0,0}
 
 --// OTHER VARIABLES //--
@@ -496,6 +496,7 @@ function love.update(dt)
                         local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3500,1000},100,5,5)
                         local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3500,1500},100,5,5)
                         local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3500,2000},100,5,5)
+                        local prussian4 = Unit.New("PrussianArtillery4","Artillery","Prussian",SoldierAssets.PrussianArtillery,{3500,2500},100,5,5)
 
                         prussianUnits={prussian1,prussian2,prussian3,prussian4}
 
