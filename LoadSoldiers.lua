@@ -223,5 +223,6 @@ soldiers.FrenchLineInfantry = soldiers.LoadSoldierGroup("Images/FrenchTroops/Lin
 
 soldiers.PrussianArtillery = soldiers.LoadArtyGroup("Images/PrussianTroops/Artillery")
 
+soldiers.PrussianLightInfantry = soldiers.LoadSoldierGroup("Images/PrussianTroops/LightInfantry")
 
 return soldiers

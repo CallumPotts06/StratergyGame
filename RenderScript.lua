@@ -170,8 +170,8 @@ function renderer.RenderEffects(effects,zoom,camPos)
         end
 
         if (string.sub(effects[i][1],1,6)=="Bullet")or(string.sub(effects[i][1],1,6)=="Cannon") then
-            local alpha = 1/((effects[i][3])/1.5)
-            effects[i][3]=effects[i][3]+0.05
+            local alpha = 1/((effects[i][3])/2)
+            effects[i][3]=effects[i][3]+0.06
             love.graphics.setColor{1,1,1,alpha}
             local img = ""
             for i2=1,#Assets.Effects,1 do
@@ -182,7 +182,7 @@ function renderer.RenderEffects(effects,zoom,camPos)
             if not (img=="") then
                 local x = (effects[i][2][1]-camPos[1])*zoom
                 local y = (effects[i][2][2]-camPos[2])*zoom
-                love.graphics.draw(img,x,y,0,(zoom)/1.8,(zoom)/1.8)
+                love.graphics.draw(img,x,y,0,(zoom)/1.2,(zoom)/1.2)
             end
         end
     end

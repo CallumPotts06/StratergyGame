@@ -33,11 +33,11 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     newUnit.CurrentTarget = false
     newUnit.IsDead = false
 
-    if iType=="LineInfantry" then
-        newUnit.AimRange = 2000
+    if (iType=="LineInfantry")or(iType=="LightInfantry") then
+        newUnit.AimRange = 1750
         newUnit.Damage = 1
     elseif iType=="Artillery" then
-        newUnit.AimRange = 5000
+        newUnit.AimRange = 4000
         newUnit.Damage = 6
     end
 
@@ -46,7 +46,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
 end
 
 function unit:DrawUnit(zoom,camPos)
-    if self.Type=="LineInfantry" then
+    if (self.Type=="LineInfantry") or (self.Type=="LightInfantry")  then
         if (self.Formation=="MarchingColumn")and(self.OpenOrder=="_Squad")then self.OpenOrder="_MarchingSquad" end
 
         local imgName = self.Facing.."_"..self.Stance..self.OpenOrder
@@ -316,6 +316,7 @@ function unit:DrawUnit(zoom,camPos)
                     end
                 end
             end
+
             love.graphics.draw(overlayFlag,flagPos[1],flagPos[2],0,zoom/2,zoom/2)
         end
     end
@@ -365,8 +366,8 @@ function unit:CheckClick(mousePos,camPos,zoom)
 end
 
 function unit:CheckForTargets(enemyUnits)
-    local closestDistance=999999
-    local closestEnemy=999999
+    local closestDistance=999999999
+    local closestEnemy=999999999
     for i=1,#enemyUnits,1 do
         local x1=self.Position[1]
         local y1=self.Position[2]
@@ -377,7 +378,7 @@ function unit:CheckForTargets(enemyUnits)
         local mag = math.sqrt((dx*dx)+(dy*dy))
         if (mag<closestDistance)and(mag<self.AimRange) then closestEnemy = i closestDistance=mag end
     end
-    if not (closestEnemy==999999) then
+    if not (closestEnemy==999999999) then
         self.CurrentTarget = enemyUnits[closestEnemy]
         return unitControl.CalculateWheel(self,"Aiming")
     else
@@ -396,14 +397,14 @@ function unit:Fire()
         local multiplier = 25
         local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
 
-        if self.Type=="LineInfantry" then
+        if (self.Type=="LineInfantry")or(self.Type=="LightInfantry") then
             sound = "MusketShot"..tostring(math.random(1,6))
             multiplier=25
             squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
         elseif self.Type=="Artillery" then
             sound = "CannonShot"..tostring(math.random(1,6))
-            multiplier=125
-            squadCount = self.MaxSquads*(self.Health/self.MaxHealth)/2.5
+            multiplier=100
+            squadCount = self.MaxSquads*(self.Health/self.MaxHealth)/3
         end
 
         local bound1 = -5
@@ -430,13 +431,13 @@ function unit:Fire()
         local h = math.random(bound1,bound2)*23*zoom
         local x = ((enemy.Position[1]))+(h*math.cos(enemy.Orientation))
         local y = ((enemy.Position[2]))+(h*math.sin(enemy.Orientation))
-        if self.Type == "LineInfantry" then
+        if (self.Type=="LineInfantry")or(self.Type=="LightInfantry") then
             hitFX = {"BulletHit"..tostring(math.random(1,3)),{x+math.random(-15,15),y+math.random(-15,15)},1}
         elseif self.Type=="Artillery" then
             hitFX = {"CannonHit"..tostring(math.random(1,3)),{x+math.random(-15,15),y+math.random(-15,15)},1}
         end
 
-        if enemy.Type=="LineInfantry" then
+        if (enemy.Type=="LineInfantry")or(enemy.Type=="LightInfantry") then
             dead = {"Dead"..enemy.Team..enemy.Type,{x+math.random(-8,8),y+math.random(-8,8)},1}
         end
 
