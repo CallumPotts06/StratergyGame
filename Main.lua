@@ -330,7 +330,7 @@ function love.update(dt)
         for i=1,#prussianUnits,1 do
             if not (not prussianUnits[i].CurrentTarget) then
                 if math.random(1,prussianUnits[i].FireRate)==1 then
-                    local fx = prussianUnits[i]:Fire()
+                    local fx = prussianUnits[i]:Fire(camPos,gameResolution)
                     table.insert(visualEffects,fx[1])
                     table.insert(visualEffects,fx[3])
                     if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
@@ -341,7 +341,7 @@ function love.update(dt)
         for i=1,#frenchUnits,1 do
             if not (not frenchUnits[i].CurrentTarget) then
                 if math.random(1,frenchUnits[i].FireRate)==1 then
-                    local fx = frenchUnits[i]:Fire()
+                    local fx = frenchUnits[i]:Fire(camPos,gameResolution)
                     table.insert(visualEffects,fx[1])
                     table.insert(visualEffects,fx[3])
                     if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
@@ -495,13 +495,20 @@ function love.update(dt)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
 
-                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,3500},100,5,5)
+                        --SPAWN1--
+                        --[[local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,3500},100,5,5)
                         local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,4000},100,5,5)
                         local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,4500},100,5,5)
                         local prussian4 = Unit.New("PrussianJaegers4","LightInfantry","Prussian",SoldierAssets.PrussianLightInfantry,{5500,3000},100,5,5)
-                        local prussian5 = Unit.New("PrussianArtillery5","Artillery","Prussian",SoldierAssets.PrussianArtillery,{1400,5800},100,40,5)
+                        local prussian5 = Unit.New("PrussianArtillery5","Artillery","Prussian",SoldierAssets.PrussianArtillery,{1400,5800},100,40,5)]]
 
-                        prussianUnits={prussian1,prussian2,prussian3,prussian4,prussian5}
+                        --SPAWN2--
+                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{800,2800},100,5,5)
+                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1200,2800},100,5,5)
+                        local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1600,2800},100,5,5)
+                        local prussian4 = Unit.New("PrussianJaegers4","LightInfantry","Prussian",SoldierAssets.PrussianLightInfantry,{2000,2800},100,5,5)
+
+                        prussianUnits={prussian1,prussian2,prussian3,prussian4}
 
                         local french1 = Unit.New("FrenchInfantry1","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{800,1200},100,10,4)
                         local french2 = Unit.New("FrenchInfantry2","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1200,1200},100,10,4)

@@ -387,7 +387,7 @@ function unit:CheckForTargets(enemyUnits)
     end
 end
 
-function unit:Fire()
+function unit:Fire(camPos,gameResolution)
     local smoke
     local sound
     local dead
@@ -398,7 +398,7 @@ function unit:Fire()
         local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
 
         if (self.Type=="LineInfantry")or(self.Type=="LightInfantry") then
-            sound = "MusketShot"..tostring(math.random(1,6))
+            sound = "MusketShot"..tostring(math.random(1,18))
             multiplier=25
             squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
         elseif self.Type=="Artillery" then
@@ -443,6 +443,16 @@ function unit:Fire()
 
         for i=1,#assets.Sounds,1 do
             if assets.Sounds[i][1]==sound then
+                local dx = (((camPos[1]-(gameResolution[1]/2))-x)/1500)+1
+                local dy = (((camPos[2]-(gameResolution[2]/2))-y)/1500)+1
+                local mag = math.sqrt((dx*dx)+(dy*dy))
+
+                print("Pos: "..tostring(dx)..","..tostring(dy))
+                --print("Volume: "..tostring(1/mag))
+
+                assets.Sounds[i][2]:setPosition(-dx, 0, -dy)
+                love.audio.setPosition(0,0,0)
+                --love.audio.setVolume(1/(mag/0.1))
                 love.audio.play(assets.Sounds[i][2])
                 break
             end
