@@ -47,7 +47,7 @@ movingUnits = {}
 currentTeam = "Prussian"
 enemyTeam = "French"
 
-gameResolution = {1000,600}
+gameResolution = {1600,900}
 mousePos = {0,0}
 
 --// OTHER VARIABLES //--
@@ -332,6 +332,7 @@ function love.update(dt)
                 if math.random(1,prussianUnits[i].FireRate)==1 then
                     local fx = prussianUnits[i]:Fire()
                     table.insert(visualEffects,fx[1])
+                    table.insert(visualEffects,fx[3])
                     if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
                 end
             end
@@ -342,6 +343,7 @@ function love.update(dt)
                 if math.random(1,frenchUnits[i].FireRate)==1 then
                     local fx = frenchUnits[i]:Fire()
                     table.insert(visualEffects,fx[1])
+                    table.insert(visualEffects,fx[3])
                     if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
                 end
             end
@@ -496,7 +498,7 @@ function love.update(dt)
                         local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3500,1000},100,5,5)
                         local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3500,1500},100,5,5)
                         local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{3500,2000},100,5,5)
-                        local prussian4 = Unit.New("PrussianArtillery4","Artillery","Prussian",SoldierAssets.PrussianArtillery,{3500,2500},100,5,5)
+                        local prussian4 = Unit.New("PrussianArtillery4","Artillery","Prussian",SoldierAssets.PrussianArtillery,{3500,2500},100,25,5)
 
                         prussianUnits={prussian1,prussian2,prussian3,prussian4}
 

@@ -24,12 +24,22 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     newUnit.Health = iHp
     newUnit.MaxSquads = 16
     newUnit.AimRange = 2000
+    newUnit.Damage = 2000
     newUnit.FireRate = iFireRate
     newUnit.Accuracy = iAccuracy
 
     newUnit.Moving = false
     newUnit.Selected = false
     newUnit.CurrentTarget = false
+    newUnit.IsDead = false
+
+    if iType=="LineInfantry" then
+        newUnit.AimRange = 2000
+        newUnit.Damage = 1
+    elseif iType=="Artillery" then
+        newUnit.AimRange = 5000
+        newUnit.Damage = 6
+    end
 
     setmetatable(newUnit, unit)
     return newUnit
@@ -379,27 +389,38 @@ end
 function unit:Fire()
     local smoke
     local sound
+    local dead
+    local hitFX
 
     if not (not self.CurrentTarget) then
-        
-        sound = "MusketShot"..tostring(math.random(1,6))
+        local multiplier = 25
+        local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
+
+        if self.Type=="LineInfantry" then
+            sound = "MusketShot"..tostring(math.random(1,6))
+            multiplier=25
+            squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
+        elseif self.Type=="Artillery" then
+            sound = "CannonShot"..tostring(math.random(1,6))
+            multiplier=125
+            squadCount = self.MaxSquads*(self.Health/self.MaxHealth)/2.5
+        end
 
         local bound1 = -5
         local bound2 = 5
-        local rad = self.Orientation
-        local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
+        local rad = self.Orientation  
         if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
         if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
         if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
         if(rad>=3.927)or(rad<=5.498)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
-        local h = math.random(bound1,bound2)*25*zoom
+        local h = math.random(bound1,bound2)*multiplier*zoom
         local x = ((self.Position[1]))+(h*math.cos(self.Orientation))
         local y = ((self.Position[2]))+(h*math.sin(self.Orientation))
         smoke = {"Smoke",{x,y},1}
 
         local enemy = self.CurrentTarget
-        local bound1 = -5
-        local bound2 = 5
+        local bound1 = -8
+        local bound2 = 8
         local rad = enemy.Orientation
         local squadCount = enemy.MaxSquads*(enemy.Health/enemy.MaxHealth)
         if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
@@ -409,7 +430,15 @@ function unit:Fire()
         local h = math.random(bound1,bound2)*23*zoom
         local x = ((enemy.Position[1]))+(h*math.cos(enemy.Orientation))
         local y = ((enemy.Position[2]))+(h*math.sin(enemy.Orientation))
-        dead = {"Dead"..enemy.Team..enemy.Type,{x+math.random(-8,8),y+math.random(-8,8)},1}
+        if self.Type == "LineInfantry" then
+            hitFX = {"BulletHit"..tostring(math.random(1,3)),{x+math.random(-15,15),y+math.random(-15,15)},1}
+        elseif self.Type=="Artillery" then
+            hitFX = {"CannonHit"..tostring(math.random(1,3)),{x+math.random(-15,15),y+math.random(-15,15)},1}
+        end
+
+        if enemy.Type=="LineInfantry" then
+            dead = {"Dead"..enemy.Team..enemy.Type,{x+math.random(-8,8),y+math.random(-8,8)},1}
+        end
 
         for i=1,#assets.Sounds,1 do
             if assets.Sounds[i][1]==sound then
@@ -419,10 +448,10 @@ function unit:Fire()
         end
 
         local hit = math.random(1,math.floor(self.Accuracy/2))
-        if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-1 else dead="" end
+        if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
     end
 
-    return {smoke,dead}
+    return {smoke,dead,hitFX}
 end
 
  

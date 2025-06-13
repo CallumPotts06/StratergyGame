@@ -188,6 +188,14 @@ Assets.Map_Editor_Detail_ID = {
 Assets.Effects = {
     {"Smoke",love.graphics.newImage("Images/Effects/Smoke1.png")},
 
+    {"BulletHit1",love.graphics.newImage("Images/Effects/BulletHit1.png")},
+    {"BulletHit2",love.graphics.newImage("Images/Effects/BulletHit2.png")},
+    {"BulletHit3",love.graphics.newImage("Images/Effects/BulletHit3.png")},
+
+    {"CannonHit1",love.graphics.newImage("Images/Effects/CannonHit1.png")},
+    {"CannonHit2",love.graphics.newImage("Images/Effects/CannonHit2.png")},
+    {"CannonHit3",love.graphics.newImage("Images/Effects/CannonHit3.png")},
+
     {"DeadFrenchLineInfantry",love.graphics.newImage("Images/FrenchTroops/LineInfantry/DeadSoldier.png")},
     {"DeadPrussianLineInfantry",love.graphics.newImage("Images/PrussianTroops/LineInfantry/DeadSoldier.png")},
 }
@@ -199,6 +207,13 @@ Assets.Sounds = {
     {"MusketShot4",love.audio.newSource("Sounds/MusketFire4.mp3","static")},
     {"MusketShot5",love.audio.newSource("Sounds/MusketFire5.mp3","static")},
     {"MusketShot6",love.audio.newSource("Sounds/MusketFire6.mp3","static")},
+
+    {"CannonShot1",love.audio.newSource("Sounds/CannonFire1.mp3","static")},
+    {"CannonShot2",love.audio.newSource("Sounds/CannonFire2.mp3","static")},
+    {"CannonShot3",love.audio.newSource("Sounds/CannonFire3.mp3","static")},
+    {"CannonShot4",love.audio.newSource("Sounds/CannonFire4.mp3","static")},
+    {"CannonShot5",love.audio.newSource("Sounds/CannonFire5.mp3","static")},
+    {"CannonShot6",love.audio.newSource("Sounds/CannonFire6.mp3","static")},
 }
 
 return Assets
