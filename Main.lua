@@ -496,17 +496,17 @@ function love.update(dt)
                         currentMapDetails = loadedMap[2]
 
                         --SPAWN1--
-                        --[[local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,3500},100,5,5)
+                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,3500},100,5,5)
                         local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,4000},100,5,5)
                         local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,4500},100,5,5)
                         local prussian4 = Unit.New("PrussianJaegers4","LightInfantry","Prussian",SoldierAssets.PrussianLightInfantry,{5500,3000},100,5,5)
-                        local prussian5 = Unit.New("PrussianArtillery5","Artillery","Prussian",SoldierAssets.PrussianArtillery,{1400,5800},100,40,5)]]
+                        local prussian5 = Unit.New("PrussianArtillery5","Artillery","Prussian",SoldierAssets.PrussianArtillery,{1400,5800},100,40,5)
 
                         --SPAWN2--
-                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{800,2800},100,5,5)
+                        --[[local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{800,2800},100,5,5)
                         local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1200,2800},100,5,5)
                         local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1600,2800},100,5,5)
-                        local prussian4 = Unit.New("PrussianJaegers4","LightInfantry","Prussian",SoldierAssets.PrussianLightInfantry,{2000,2800},100,5,5)
+                        local prussian4 = Unit.New("PrussianJaegers4","LightInfantry","Prussian",SoldierAssets.PrussianLightInfantry,{2000,2800},100,5,5)]]
 
                         prussianUnits={prussian1,prussian2,prussian3,prussian4}
 
@@ -578,15 +578,28 @@ function love.update(dt)
                 end
 
                 if moveSelected then--MOVE UNIT--
-                    local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom,currentMap)
-                    if not (not newMarch) then
-                        for i=1,#movingUnits,1 do
-                            if movingUnits[i][1].Name==selectedUnit.Name then
-                                table.remove(movingUnits,i)
-                                break
+                    if selectedUnit.Formation=="MarchingColumn" then
+                        local newMarch = unitControl.Dijkstras(mousePos,currentMap,selectedUnit,mousePos,camPos,zoom)
+                        if not (not newMarch) then
+                            for i=1,#movingUnits,1 do
+                                if movingUnits[i][1].Name==selectedUnit.Name then
+                                    table.remove(movingUnits,i)
+                                    break
+                                end
                             end
+                            table.insert(movingUnits,newMarch)
                         end
-                        table.insert(movingUnits,newMarch)
+                    else
+                        local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom,currentMap)
+                        if not (not newMarch) then
+                            for i=1,#movingUnits,1 do
+                                if movingUnits[i][1].Name==selectedUnit.Name then
+                                    table.remove(movingUnits,i)
+                                    break
+                                end
+                            end
+                            table.insert(movingUnits,newMarch)
+                        end
                     end
                 end
             end

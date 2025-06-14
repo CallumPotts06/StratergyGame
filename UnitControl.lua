@@ -83,17 +83,17 @@ end
 
 function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
     local MarchingColumnSpeeds = {
-        {"GRS",1},
-        {"FRD",0.5},
-        {"FST",0.5},
-        {"BRD",1.3},
-        {"ROD",1.6},
-        {"STR",0.1},
-        {"SWP",0.2},
-        {"TRP",1.3},
-        {"URB",0.1},
-        {"CRN",0.35},
-        {"WHE",0.35},
+        {"GRS",1.4},
+        {"FRD",0.6},
+        {"FST",0.4},
+        {"BRD",1.5},
+        {"ROD",2.1},
+        {"STR",0.4},
+        {"SWP",0.3},
+        {"TRP",1.6},
+        {"URB",0.05},
+        {"CRN",0.4},
+        {"WHE",0.4},
     }
 
     local BattleLineSpeeds = {
@@ -232,6 +232,96 @@ function unitControl.ChangeFormationOptions()
     return {btn1,btn2,btn3}
 end
 
+function unitControl.Dijkstras(endPos,mapTiles,unit,mousePos,camPos,zoom)
+    local terrain = {
+        {"GRS",2},
+        {"FRD",4},
+        {"FST",4},
+        {"BRD",1},
+        {"ROD",1},
+        {"STR",6},
+        {"SWP",4},
+        {"TRP",1},
+        {"URB",15},
+        {"CRN",5},
+        {"WHE",5},
+    }
+
+    local lastTile = {math.ceil(unit.Position[1]/200),math.ceil(unit.Position[2]/200)}
+    local endTile = {math.ceil(endPos[1]/200),math.ceil(endPos[2]/200)}
+
+    local path = {}
+    local graph = {}
+
+    local str=""--!
+
+    for y=1,#mapTiles,1 do
+        table.insert(graph,{})
+        str=str.."\n"--!
+        for x=1,#mapTiles[1],1 do
+            local newValue = {}
+            local dx = endTile[1]-x
+            local dy = endTile[2]-y
+            local currentTerrain = 2 
+            for i=1,#terrain,1 do if terrain[i][1]==string.sub(mapTiles[y][x],1,3)then currentTerrain=terrain[i][2]end end
+            local heurisitic = dx+dy+currentTerrain
+            local weight = currentTerrain
+            table.insert(graph[y],{weight,heurisitic})
+            str=str..tostring(heurisitic)..", "--!
+        end
+    end
+
+    print(str)--!
+
+    local reachedDestination = false
+    
+
+    while not reachedDestination do
+
+        local adjTiles = {}
+        table.insert(adjTiles,{lastTile[1],lastTile[2]-1})--N--
+        table.insert(adjTiles,{lastTile[1]+1,lastTile[2]-1})--NE--
+        table.insert(adjTiles,{lastTile[1]+1,lastTile[2]})--E--
+        table.insert(adjTiles,{lastTile[1]+1,lastTile[2]+1})--SE--
+        table.insert(adjTiles,{lastTile[1],lastTile[2]+1})--S--
+        table.insert(adjTiles,{lastTile[1]-1,lastTile[2]+1})--SW--
+        table.insert(adjTiles,{lastTile[1]-1,lastTile[2]})--W--
+        table.insert(adjTiles,{lastTile[1]-1,lastTile[2]-1})--NW--
+
+        local shortest = {1,99999999999999999}
+        local index=1
+        for i=1,#adjTiles,1 do
+            index=i
+            if graph[adjTiles[2]][adjTiles[1]][2]<shortest[2] then
+                shortest={index,graph[adjTiles[2]][adjTiles[1]][2]}
+            end
+        end
+
+        lastTile = adjTiles[shortest[1]]
+        table.insert(path,adjTiles[shortest[1]])
+         print("Path: ("..tostring(adjTiles[shortest[1]][1])..","..tostring(adjTiles[shortest[1]][2])..")")
+        if (adjTiles[shortest[1]][1]==endPos[1])and(adjTiles[shortest[1]][2]==endPos[2]) then
+            reachedDestination = true
+        end
+    end
+
+    local fullTable = {}
+
+    for i=1,#path,1 do
+        if i==1 then
+            local temptable = unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
+            table.insert(fullTable,tempTable)
+        else
+            local temptable = unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
+            for i=1,#temptable,1 do
+                table.insert(fullTable[4],temptable[4])
+            end
+        end
+    end 
+
+
+    return fullTable
+end
 
 
 return unitControl
