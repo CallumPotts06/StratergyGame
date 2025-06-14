@@ -260,8 +260,8 @@ function unitControl.Dijkstras(endPos,mapTiles,unit,mousePos,camPos,zoom)
         str=str.."\n"--!
         for x=1,#mapTiles[1],1 do
             local newValue = {}
-            local dx = endTile[1]-x
-            local dy = endTile[2]-y
+            local dx = math.abs(endTile[1]-x)
+            local dy = math.abs(endTile[2]-y)
             local currentTerrain = 2 
             for i=1,#terrain,1 do if terrain[i][1]==string.sub(mapTiles[y][x],1,3)then currentTerrain=terrain[i][2]end end
             local heurisitic = dx+dy+currentTerrain
@@ -292,8 +292,12 @@ function unitControl.Dijkstras(endPos,mapTiles,unit,mousePos,camPos,zoom)
         local index=1
         for i=1,#adjTiles,1 do
             index=i
-            if graph[adjTiles[2]][adjTiles[1]][2]<shortest[2] then
-                shortest={index,graph[adjTiles[2]][adjTiles[1]][2]}
+            if (adjTiles[i][2]<#mapTiles)and(adjTiles[i][2]>0) then
+                if (adjTiles[i][1]<#mapTiles[1])and(adjTiles[i][1]>0) then
+                    if graph[adjTiles[i][2]][adjTiles[i][1]][2]<shortest[2] then
+                        shortest={index,graph[adjTiles[i][2]][adjTiles[i][1]][2]}
+                    end
+                end
             end
         end
 
