@@ -446,13 +446,11 @@ function unit:Fire(camPos,gameResolution)
                 local dx = (((camPos[1]-(gameResolution[1]/2))-x)/1500)+1
                 local dy = (((camPos[2]-(gameResolution[2]/2))-y)/1500)+1
                 local mag = math.sqrt((dx*dx)+(dy*dy))
-
-                print("Pos: "..tostring(dx)..","..tostring(dy))
                 --print("Volume: "..tostring(1/mag))
 
                 assets.Sounds[i][2]:setPosition(-dx, 0, -dy)
                 love.audio.setPosition(0,0,0)
-                --love.audio.setVolume(1/(mag/0.1))
+                love.audio.setVolume(1)
                 love.audio.play(assets.Sounds[i][2])
                 break
             end
