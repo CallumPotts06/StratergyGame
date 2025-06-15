@@ -263,6 +263,22 @@ function love.update(dt)
             Network.SendMessage("Peer Check In")
         end
 
+        local index = 0
+        while index<#prussianUnits do
+            index=index+1
+            if prussianUnits[index].IsDead then 
+                table.remove(prussianUnits,index)
+            end
+        end
+        index = 0
+        while index<#frenchUnits do
+            index=index+1
+            if frenchUnits[index].IsDead then 
+                table.remove(frenchUnits,index)
+            end
+        end
+
+
 
         for i=1,#prussianUnits,1 do
             if (prussianUnits[i].Stance=="Idle")or(prussianUnits[i].Stance=="Aiming") then
@@ -284,12 +300,17 @@ function love.update(dt)
 
     end
     if halfSec >= 0.5 then
+        for i=1,#Assets.MarchSounds,1 do
+            Assets.MarchSounds[i][3] = false
+        end
+
         halfSec = halfSec - 0.5 
         if marchStep==1 then marchStep=2 else marchStep=1 end
 
         for i=1,#movingUnits,1 do
             local index = movingUnits[i][3]
             if movingUnits[i][4][index][1]=="Move" then--MOVE UNITS--
+                movingUnits[i][1]:PlayMarchingSounds(camPos,gameResolution,currentMap)
                 movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
                 movingUnits[i][1].Position=movingUnits[i][4][index][2]
                 movingUnits[i][3]=movingUnits[i][3]+1

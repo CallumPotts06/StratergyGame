@@ -1,9 +1,11 @@
 
 unitControl = {}
 
+assets = require("LoadAssets")
 newUI = require("Interface")
 
 function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
+
     local startRad = unit.Orientation
     local dRad = 0
     local theta = 0
@@ -57,8 +59,8 @@ function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
     end
     index=1
     for i = theta2,startRad,radsPerSecond do
-        if index==1 then tempTables[2][1]={"Wheel",-radsPerSecond} index=index+1 shortest=2
-        else table.insert(tempTables[2],{"Wheel",-radsPerSecond}) end
+        if index==1 then tempTables[2][1]={"Wheel",radsPerSecond} index=index+1 shortest=2
+        else table.insert(tempTables[2],{"Wheel",radsPerSecond}) end
     end
     index=1
     for i = startRad,theta,-radsPerSecond do
@@ -67,8 +69,8 @@ function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
     end
     index=1
     for i = theta2,startRad,-radsPerSecond do
-        if index==1 then tempTables[4][1]={"Wheel",radsPerSecond} index=index+1 shortest=4
-        else table.insert(tempTables[4],{"Wheel",radsPerSecond}) end
+        if index==1 then tempTables[4][1]={"Wheel",-radsPerSecond} index=index+1 shortest=4
+        else table.insert(tempTables[4],{"Wheel",-radsPerSecond}) end
     end
     
     
@@ -82,6 +84,12 @@ function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
 end
 
 function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
+    local unitSpeeds = {
+        {"LineInfantry",1},
+        {"LightInfantry",1.2},
+        {"Artillery",0.6},
+    }
+
     local MarchingColumnSpeeds = {
         {"GRS",1.5},
         {"FRD",0.6},
@@ -149,8 +157,8 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
     if (dx>=0)and(dy<=0) then theta = math.acos(adj/hyp) end
 
     theta = math.atan(opp/adj)
-
     local movementSpeed = 15
+    for i=1,#unitSpeeds,1 do if unitSpeeds[i][1]==unit.Type then movementSpeed=movementSpeed*unitSpeeds[i][2] end end
     local xSpeed = math.cos(theta)*movementSpeed--CAH : ADJ = COS(TH) x HYP--
     local ySpeed = math.sin(theta)*movementSpeed--SOH : OPP = SIN(TH) x HYP--
 
@@ -170,7 +178,6 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         local tileX = math.ceil((gainedX)/200)
         local tileY = math.ceil((gainedY)/200)
         local currentTile = mapTiles[tileY][tileX]
-        print(tostring(tileX)..","..tostring(tileY))
 
         local speedList = {}
         if unit.Formation=="BattleLine" then speedList=BattleLineSpeeds end
@@ -189,7 +196,7 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         local y = gainedY
        
 
-        table.insert(movePos,{x,y})
+        table.insert(movePos,{x,y,currentTile})
     end else while x2<gainedX do
         i=i+1
         local newSpeedX = xSpeed
@@ -215,7 +222,7 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         local x = gainedX
         local y = gainedY
 
-        table.insert(movePos,{x,y})
+        table.insert(movePos,{x,y,currentTile})
     end end
 
     for i=1,#movePos,1 do

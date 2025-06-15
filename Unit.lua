@@ -46,6 +46,8 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
 end
 
 function unit:DrawUnit(zoom,camPos)
+    if unit.IsDead then return end
+
     if (self.Type=="LineInfantry") or (self.Type=="LightInfantry")  then
         if (self.Formation=="MarchingColumn")and(self.OpenOrder=="_Squad")then self.OpenOrder="_MarchingSquad" end
 
@@ -441,28 +443,107 @@ function unit:Fire(camPos,gameResolution)
             dead = {"Dead"..enemy.Team..enemy.Type,{x+math.random(-8,8),y+math.random(-8,8)},1}
         end
 
-        for i=1,#assets.Sounds,1 do
-            if assets.Sounds[i][1]==sound then
+        for i=1,#assets.FireSounds,1 do
+            if assets.FireSounds[i][1]==sound then
                 local dx = (((camPos[1]-(gameResolution[1]/2))-x)/1500)+1
                 local dy = (((camPos[2]-(gameResolution[2]/2))-y)/1500)+1
                 local mag = math.sqrt((dx*dx)+(dy*dy))
                 --print("Volume: "..tostring(1/mag))
 
-                assets.Sounds[i][2]:setPosition(-dx, 0, -dy)
+                assets.FireSounds[i][2]:setPosition(-dx, 0, -dy)
                 love.audio.setPosition(0,0,0)
                 love.audio.setVolume(1)
-                love.audio.play(assets.Sounds[i][2])
+                love.audio.play(assets.FireSounds[i][2])
                 break
             end
         end
 
         local hit = math.random(1,math.floor(self.Accuracy/2))
         if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
+        if self.CurrentTarget.Health<=0 then self.CurrentTarget.IsDead = true end
     end
 
     return {smoke,dead,hitFX}
 end
 
- 
+function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
+    local tileX = math.ceil((self.Position[1])/200)
+    local tileY = math.ceil((self.Position[2])/200)
+    local currentTile = mapTiles[tileY][tileX]
+
+    local soundsTable = {
+        {"GRS","Grass"},
+        {"FRD","Stream"},
+        {"FST","Forest"},
+        {"BRD","Road"},
+        {"ROD","Road"},
+        {"STR","Stream"},
+        {"SWP","Forest"},
+        {"TRP","Road"},
+        {"URB","Road"},
+        {"CRN","Grass"},
+        {"WHE","Grass"},
+    }
+    local sound=false
+    for i=1,#soundsTable,1 do
+        if soundsTable[i][1]==string.sub(currentTile,1,3) then
+            if soundsTable[i][2]=="Grass" then
+                sound = assets.MarchSounds[1][2]
+                local index = 1
+                while index<=6 do
+                    if not assets.MarchSounds[(4*index)+1][3] then
+                        assets.MarchSounds[(4*index)+1][3] = true
+                        sound = assets.MarchSounds[(4*index)+1][2]
+                        break
+                    end
+                    index=index+1
+                end
+            elseif soundsTable[i][2]=="Forest" then
+                sound = assets.MarchSounds[2][2]
+                local index = 1
+                while index<=6 do
+                    if not assets.MarchSounds[(4*index)+2][3] then
+                        assets.MarchSounds[(4*index)+2][3] = true
+                        sound = assets.MarchSounds[(4*index)+2][2]
+                        break
+                    end
+                    index=index+1
+                end
+            elseif soundsTable[i][2]=="Road" then
+                sound = assets.MarchSounds[3][2]
+                local index = 1
+                while index<=6 do
+                    if not assets.MarchSounds[(4*index)+3][3] then
+                        assets.MarchSounds[(4*index)+3][3] = true
+                        sound = assets.MarchSounds[(4*index)+3][2]
+                        break
+                    end
+                    index=index+1
+                end
+            elseif soundsTable[i][2]=="Stream" then
+                sound = assets.MarchSounds[4][2]
+                local index = 1
+                while index<=6 do
+                    if not assets.MarchSounds[(4*index)+4][3] then
+                        assets.MarchSounds[(4*index)+4][3] = true
+                        sound = assets.MarchSounds[(4*index)+4][2]
+                        break
+                    end
+                    index=index+1
+                end
+            end 
+        end
+    end
+
+    if not (not sound) then
+        local dx = (((camPos[1]-(gameResolution[1]/2))-self.Position[1])/1500)+1
+        local dy = (((camPos[2]-(gameResolution[2]/2))-self.Position[2])/1500)+1
+
+        sound:setPosition(-dx, 0, -dy)
+        love.audio.setPosition(0,0,0)
+        love.audio.setVolume(1)
+        love.audio.play(sound)
+    end
+end
 
 return unit
