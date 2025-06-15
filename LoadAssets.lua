@@ -17,6 +17,8 @@ Assets.Map_Editor = {
 Assets.Map_Details_Editor = {
     {"TY01",love.graphics.newImage("Images/Maps/Details/Ty01.png")},
     {"TY02",love.graphics.newImage("Images/Maps/Details/Ty02.png")},
+    {"TY03",love.graphics.newImage("Images/Maps/Details/Ty03.png")},
+    {"TY04",love.graphics.newImage("Images/Maps/Details/Ty04.png")},
     {"SPNA",love.graphics.newImage("Images/Maps/Details/SpawnA.png")},
     {"SPNB",love.graphics.newImage("Images/Maps/Details/SpawnB.png")},
 }
@@ -159,6 +161,8 @@ Assets.MapTemperateOtherDetails = {
 Assets.MapTemperateHouseDetails = {
     {"TY01",love.graphics.newImage("Images/Maps/Details/Ty01.png")},
     {"TY02",love.graphics.newImage("Images/Maps/Details/Ty02.png")},
+    {"TY03",love.graphics.newImage("Images/Maps/Details/Ty03.png")},
+    {"TY04",love.graphics.newImage("Images/Maps/Details/Ty04.png")},
     {"SPNA",love.graphics.newImage("Images/Maps/Details/SpawnA.png")},
     {"SPNB",love.graphics.newImage("Images/Maps/Details/SpawnB.png")},
 }
@@ -179,6 +183,8 @@ Assets.Map_Editor_ID = {
 Assets.Map_Editor_Detail_ID = {
     {"House1","TY01"},
     {"House2","TY02"},
+    {"House3","TY03"},
+    {"House4","TY04"},
     {"SpawnA","SPNA"},
     {"SpawnB","SPNB"},
 }

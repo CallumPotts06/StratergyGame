@@ -460,7 +460,7 @@ function unit:Fire(camPos,gameResolution)
 
         local hit = math.random(1,math.floor(self.Accuracy/2))
         if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
-        if self.CurrentTarget.Health<=0 then self.CurrentTarget.IsDead = true end
+        if self.CurrentTarget.Health<=5 then self.CurrentTarget.IsDead = true end
     end
 
     return {smoke,dead,hitFX}

@@ -27,12 +27,22 @@ enbaledPaintBrush = false
 currentEditRender = "Edit"
 finishedTiles = false
 
+Cards = {
+    "LineInfantry",
+    "LineInfantry",
+    "LineInfantry",
+    "LineInfantry",
+    "LightInfantry",
+    "Artillery",
+    "Artillery",
+}
+
 
 camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "Map3.lvl"
+nextMap = "ForestBattle1.lvl"
 
 prussianUnits={}
 britishUnits={}
@@ -267,6 +277,7 @@ function love.update(dt)
         while index<#prussianUnits do
             index=index+1
             if prussianUnits[index].IsDead then 
+                print("Removed: "..tostring(prussianUnits[index].Name))
                 table.remove(prussianUnits,index)
             end
         end
@@ -274,10 +285,10 @@ function love.update(dt)
         while index<#frenchUnits do
             index=index+1
             if frenchUnits[index].IsDead then 
+                print("Removed: "..tostring(frenchUnits[index].Name))
                 table.remove(frenchUnits,index)
             end
         end
-
 
 
         for i=1,#prussianUnits,1 do
@@ -285,6 +296,8 @@ function love.update(dt)
                 if not prussianUnits[i].CurrentTarget then
                     local newWheel = prussianUnits[i]:CheckForTargets(frenchUnits)
                     if not (not newWheel) then table.insert(movingUnits,newWheel) end
+                else
+                    prussianUnits[i]:CheckForTargets(frenchUnits)
                 end
             end
         end
@@ -293,11 +306,11 @@ function love.update(dt)
                 if not frenchUnits[i].CurrentTarget then
                     local newWheel = frenchUnits[i]:CheckForTargets(prussianUnits)
                     if not (not newWheel) then table.insert(movingUnits,newWheel) end
+                else
+                    frenchUnits[i]:CheckForTargets(prussianUnits)
                 end
             end
         end
-
-
     end
     if halfSec >= 0.5 then
         for i=1,#Assets.MarchSounds,1 do
@@ -506,7 +519,7 @@ function love.update(dt)
                         clearInterface()
                         inGame = false
                         inMapEdit = false
-                        MapEditor.CompileMap("map_1")
+                        MapEditor.CompileMap("ForestBattle1")
                     end
 
                     if check=="Practice Play" then
@@ -637,26 +650,26 @@ function love.update(dt)
     if inMapEdit or inGame then
         if love.keyboard.isDown("w") then
             if camPos[2]>0 then
-                camPos[2]=camPos[2]-(5*camSpeed)
+                camPos[2]=camPos[2]-(9*camSpeed)
             end
         end
         if love.keyboard.isDown("a") then
             if camPos[1]>0 then
-                camPos[1]=camPos[1]-(5*camSpeed)
+                camPos[1]=camPos[1]-(9*camSpeed)
             end
         end
         if love.keyboard.isDown("s") then
             if (camPos[2]*zoom)+(gameResolution[2])<((#currentMap)*200)*(zoom) then
-                camPos[2]=camPos[2]+(5*camSpeed)
+                camPos[2]=camPos[2]+(9*camSpeed)
             end
         end
         if love.keyboard.isDown("d") then
             if (camPos[1]*zoom)+(gameResolution[1])<((#currentMap[1])*200)*(zoom) then
-                camPos[1]=camPos[1]+(5*camSpeed)
+                camPos[1]=camPos[1]+(9*camSpeed)
             end
         end
         if love.keyboard.isDown("lshift") then
-            camSpeed=4
+            camSpeed=5
         else
             camSpeed=1
         end
