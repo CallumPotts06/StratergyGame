@@ -83,17 +83,17 @@ end
 
 function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
     local MarchingColumnSpeeds = {
-        {"GRS",1.4},
+        {"GRS",1.5},
         {"FRD",0.6},
         {"FST",0.4},
-        {"BRD",1.5},
-        {"ROD",2.1},
-        {"STR",0.4},
+        {"BRD",1.7},
+        {"ROD",2.2},
+        {"STR",0.35},
         {"SWP",0.3},
-        {"TRP",1.6},
+        {"TRP",1.75},
         {"URB",0.05},
-        {"CRN",0.4},
-        {"WHE",0.4},
+        {"CRN",0.35},
+        {"WHE",0.35},
     }
 
     local BattleLineSpeeds = {
@@ -170,6 +170,7 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         local tileX = math.ceil((gainedX)/200)
         local tileY = math.ceil((gainedY)/200)
         local currentTile = mapTiles[tileY][tileX]
+        print(tostring(tileX)..","..tostring(tileY))
 
         local speedList = {}
         if unit.Formation=="BattleLine" then speedList=BattleLineSpeeds end
@@ -232,16 +233,16 @@ function unitControl.ChangeFormationOptions()
     return {btn1,btn2,btn3}
 end
 
-function unitControl.Dijkstras(endPos,mapTiles,unit,mousePos,camPos,zoom)
+--[[function unitControl.Dijkstras(endPos,mapTiles,unit,mousePos,camPos,zoom)
     local terrain = {
-        {"GRS",2},
+        {"GRS",3},
         {"FRD",4},
         {"FST",4},
-        {"BRD",1},
-        {"ROD",1},
+        {"BRD",3},
+        {"ROD",3},
         {"STR",6},
         {"SWP",4},
-        {"TRP",1},
+        {"TRP",3},
         {"URB",15},
         {"CRN",5},
         {"WHE",5},
@@ -253,28 +254,32 @@ function unitControl.Dijkstras(endPos,mapTiles,unit,mousePos,camPos,zoom)
     local path = {}
     local graph = {}
 
-    local str=""--!
-
     for y=1,#mapTiles,1 do
         table.insert(graph,{})
-        str=str.."\n"--!
         for x=1,#mapTiles[1],1 do
             local newValue = {}
-            local dx = math.abs(endTile[1]-x)
-            local dy = math.abs(endTile[2]-y)
+            local dx = math.abs((endTile[1]-x))
+            local dy = math.abs((endTile[2]-y))
             local currentTerrain = 2 
             for i=1,#terrain,1 do if terrain[i][1]==string.sub(mapTiles[y][x],1,3)then currentTerrain=terrain[i][2]end end
             local heurisitic = dx+dy+currentTerrain
             local weight = currentTerrain
             table.insert(graph[y],{weight,heurisitic})
-            str=str..tostring(heurisitic)..", "--!
         end
     end
 
-    print(str)--!
-
     local reachedDestination = false
     
+    local visited = {{-1,-1}}
+
+    local function isVisited(tile, visited)
+        for i2=1,#visited do
+            if tile[1] == visited[i2][1] and tile[2] == visited[i2][2] then
+                return true
+            end
+        end
+        return false
+    end
 
     while not reachedDestination do
 
@@ -294,18 +299,23 @@ function unitControl.Dijkstras(endPos,mapTiles,unit,mousePos,camPos,zoom)
             index=i
             if (adjTiles[i][2]<#mapTiles)and(adjTiles[i][2]>0) then
                 if (adjTiles[i][1]<#mapTiles[1])and(adjTiles[i][1]>0) then
-                    if graph[adjTiles[i][2]][adjTiles[i][1]][2]<shortest[2] then
-                        shortest={index,graph[adjTiles[i][2]][adjTiles[i][1]][2]}
+                    if graph[adjTiles[i][2]]--[adjTiles[i][1]][2]<shortest[2] then
+                        --[[for i2=1,#visited,1 do
+                            if not isVisited(adjTiles[i], visited) then
+                                shortest = {index, graph[adjTiles[i][2]]--[adjTiles[i][1]][2]}
+                            --[[end
+                        end
                     end
                 end
             end
         end
 
         lastTile = adjTiles[shortest[1]]
-        table.insert(path,adjTiles[shortest[1]])
-         print("Path: ("..tostring(adjTiles[shortest[1]][1])..","..tostring(adjTiles[shortest[1]][2])..")")
-        if (adjTiles[shortest[1]][1]==endPos[1])and(adjTiles[shortest[1]][2]==endPos[2]) then
-            reachedDestination = true
+        --[[table.insert(path,adjTiles[shortest[1]]--)
+        --[[table.insert(visited,{adjTiles[shortest[1]]--[1],adjTiles[shortest[1]][2]})
+        --[[print("Path: ("..tostring(adjTiles[shortest[1]]--[1])..","..tostring(adjTiles[shortest[1]][2])..")")
+        --if (adjTiles[shortest[1]][1]==endPos[1])and(adjTiles[shortest[1]][2]==endPos[2]) then
+            --[[reachedDestination = true
         end
     end
 
@@ -325,7 +335,126 @@ function unitControl.Dijkstras(endPos,mapTiles,unit,mousePos,camPos,zoom)
 
 
     return fullTable
-end
+end]]
 
+function unitControl.Dijkstras(endPos1,endPos2,mapTiles,unit,mousePos,camPos,zoom)
+    local terrainCosts = {
+        ["GRS"] = 3, ["FRD"] = 4, ["FST"] = 4, ["BRD"] = 3, ["ROD"] = 3, 
+        ["STR"] = 6, ["SWP"] = 4, ["TRP"] = 3, ["URB"] = 15, ["CRN"] = 5, ["WHE"] = 5
+    }
+
+    local function heuristic(x1, y1, x2, y2)
+        return math.sqrt((x2 - x1)^2 + (y2 - y1)^2) -- Euclidean distance
+    end
+
+    local function getTerrainCost(tileType)
+        return terrainCosts[tileType] or 2
+    end
+
+    local function getTile(pos)
+        return {math.floor(pos[1] / 200), math.floor(pos[2] / 200)}
+    end
+
+    local startTile = getTile(unit.Position)
+    local endTile = {endPos1,endPos2}
+
+    local openList = {}
+    local closedList = {}
+    local cameFrom = {}
+
+    table.insert(openList, {x = startTile[1], y = startTile[2], g = 0, h = heuristic(startTile[1], startTile[2], endTile[1], endTile[2]), f = 0})
+
+    while #openList > 0 do
+        table.sort(openList, function(a, b) 
+            if a.f == b.f then 
+                return a.h < b.h -- Tie-breaker
+            end
+            return a.f < b.f 
+        end)
+
+        local current = table.remove(openList, 1)
+        table.insert(closedList, {x = current.x, y = current.y})
+
+        if current.x == endTile[1] and current.y == endTile[2] then
+            local path = {}
+            while cameFrom[current.x .. "," .. current.y] do
+                table.insert(path, 1, {current.x, current.y})
+                current = cameFrom[current.x .. "," .. current.y]
+            end
+            
+            local fullTable = {}
+            for i=1,#path,1 do
+                if i==1 then
+                    local temptable = unitControl.CalculateMove(unit,{path[i][1]*200,path[i][2]*200},{0,0},zoom,mapTiles)
+                    table.insert(fullTable,tempTable)
+                else
+                    local temptable = unitControl.CalculateMove(unit,{path[i][1]*200,path[i][2]*200},{0,0},zoom,mapTiles)
+                    if not(temptable==nil)then for i=1,#temptable,1 do
+                        table.insert(fullTable[4],temptable[4])
+                    end end
+                end
+            end 
+            print(#fullTable)
+            print(#fullTable[4])
+            for i=1,#fullTable,1 do
+                print(fullTable[i])
+            end
+            for i=1,#fullTable[4],1 do
+                print(fullTable[4][i])
+            end
+
+            return fullTable
+        end
+
+        local directions = {{0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}}
+
+        for _, dir in ipairs(directions) do
+            local nx, ny = current.x + dir[1], current.y + dir[2]
+            local maxX, maxY = #mapTiles[1], #mapTiles
+            if nx >= 1 and nx <= maxX and ny >= 1 and ny <= maxY then
+                local terrainType = string.sub(mapTiles[ny][nx], 1, 3)
+                local moveCost = getTerrainCost(terrainType)
+                local newG = current.g + moveCost
+                local newH = heuristic(nx, ny, endTile[1], endTile[2])
+                local newF = (newG * 0.5) + newH
+
+                local alreadyVisited = false
+                for _, tile in ipairs(closedList) do
+                    if tile.x == nx and tile.y == ny then
+                        alreadyVisited = true
+                        break
+                    end
+                end
+
+                if not alreadyVisited then
+                    local foundInOpen = false
+                    for _, node in ipairs(openList) do
+                        if node.x == nx and node.y == ny then
+                            foundInOpen = true
+                            if newG < node.g then
+                                node.g = newG
+                                node.f = newF
+                                if not cameFrom[nx .. "," .. ny] or newG < cameFrom[nx .. "," .. ny].g then
+                                    cameFrom[nx .. "," .. ny] = current
+                                end
+                            end
+                            break
+                        end
+                    end
+
+                    if not foundInOpen then
+                        table.insert(openList, {x = nx, y = ny, g = newG, h = newH, f = newF})
+                        if not cameFrom[nx .. "," .. ny] or newG < cameFrom[nx .. "," .. ny].g then
+                            cameFrom[nx .. "," .. ny] = current
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    print("No Solution")
+    return {} -- Return empty path if no solution found
+end
 
 return unitControl

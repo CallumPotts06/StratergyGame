@@ -579,7 +579,10 @@ function love.update(dt)
 
                 if moveSelected then--MOVE UNIT--
                     if selectedUnit.Formation=="MarchingColumn" then
-                        local newMarch = unitControl.Dijkstras(mousePos,currentMap,selectedUnit,mousePos,camPos,zoom)
+                        local mgx = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
+                        local mgy = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
+                        print(tostring(mgx)..","..tostring(mgy))
+                        local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom,currentMap)
                         if not (not newMarch) then
                             for i=1,#movingUnits,1 do
                                 if movingUnits[i][1].Name==selectedUnit.Name then
