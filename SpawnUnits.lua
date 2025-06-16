@@ -20,7 +20,7 @@ local stats = {
 
 function spawnUnits.CreateUnit(unitType,team,pos)
     for i=1,#stats,1 do
-        if if stats[i][1]==unitType then--iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
+        if stats[i][1]==unitType then--iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
             if team=="Prussian" then
                 prussianUnits=prussianUnits+1
                 local newUnit = unit.New(
