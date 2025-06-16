@@ -17,7 +17,6 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     newUnit.Orientation = math.pi
     newUnit.Stance = "Idle"
     newUnit.Facing = "South"
-    newUnit.Formation = "BattleLine"
     newUnit.OpenOrder = "_Squad"
 
     newUnit.MaxHealth = iHp
@@ -36,9 +35,11 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     if (iType=="LineInfantry")or(iType=="LightInfantry") then
         newUnit.AimRange = 1750
         newUnit.Damage = 1
+        newUnit.Formation = "MarchingColumn"
     elseif iType=="Artillery" then
         newUnit.AimRange = 4000
         newUnit.Damage = 6
+        newUnit.Formation = "BattleLine"
     end
 
     setmetatable(newUnit, unit)

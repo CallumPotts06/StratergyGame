@@ -531,28 +531,6 @@ function love.update(dt)
                         local loadedMap = MapEditor.LoadMap(nextMap)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
-
-                        --SPAWN1--
-                        local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,3500},100,5,5)
-                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,4000},100,5,5)
-                        local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{5500,4500},100,5,5)
-                        local prussian4 = Unit.New("PrussianJaegers4","LightInfantry","Prussian",SoldierAssets.PrussianLightInfantry,{5500,3000},100,5,5)
-                        local prussian5 = Unit.New("PrussianArtillery5","Artillery","Prussian",SoldierAssets.PrussianArtillery,{1400,5800},100,40,5)
-
-                        --SPAWN2--
-                        --[[local prussian1 = Unit.New("PrussianInfantry1","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{800,2800},100,5,5)
-                        local prussian2 = Unit.New("PrussianInfantry2","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1200,2800},100,5,5)
-                        local prussian3 = Unit.New("PrussianInfantry3","LineInfantry","Prussian",SoldierAssets.PrussianLineInfantry,{1600,2800},100,5,5)
-                        local prussian4 = Unit.New("PrussianJaegers4","LightInfantry","Prussian",SoldierAssets.PrussianLightInfantry,{2000,2800},100,5,5)]]
-
-                        prussianUnits={prussian1,prussian2,prussian3,prussian4}
-
-                        local french1 = Unit.New("FrenchInfantry1","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{800,1200},100,10,4)
-                        local french2 = Unit.New("FrenchInfantry2","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1200,1200},100,10,4)
-                        local french3 = Unit.New("FrenchInfantry3","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{1600,1200},100,10,4)
-                        local french4 = Unit.New("FrenchInfantry4","LineInfantry","French",SoldierAssets.FrenchLineInfantry,{2000,1200},100,10,4)
-
-                        frenchUnits={french1,french2,french3,french4}
                         break
                     end
 
@@ -644,6 +622,30 @@ function love.update(dt)
                 end
             end
         end 
+
+        if inGame and (unitsPlaced<#Cards) then
+            local mgx = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
+            local mgy = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
+            local mx = math.ceil((((mousePos[1])/zoom)+camPos[1]))
+            local my = math.ceil((((mousePos[2])/zoom)+camPos[2]))
+
+            if (currentTeam=="Prussian")and(currentMapDetails[mgy][mgx]=="SPNA") then
+                unitsPlaced=unitsPlaced+1
+                newUnit = SpawnUnits.CreateUnit(currentTeam..Cards[unitsPlaced],currentTeam,{mx,my})
+                table.insert(prussianUnits,newUnit)
+                print(newUnit.Health)
+            elseif (currentTeam=="French")and(currentMapDetails[mgy][mgx]=="SPNB") then
+                unitsPlaced=unitsPlaced+1
+                newUnit = SpawnUnits.CreateUnit(currentTeam..Cards[unitsPlaced],currentTeam,{mx,my})
+                table.insert(frenchUnits,newUnit)
+                print(newUnit.Health)
+            end
+            if unitsPlaced==#Cards then
+                plr1ReadyForBattle = true
+            end
+            print("Prussian Units: "..tostring(#prussianUnits))
+            
+        end
 
 
     elseif not (love.mouse.isDown(1)) then

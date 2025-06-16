@@ -19,20 +19,16 @@ local stats = {
 }
 
 function spawnUnits.CreateUnit(unitType,team,pos)
+    local newUnit
     for i=1,#stats,1 do
         if stats[i][1]==unitType then--iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
             if team=="Prussian" then
                 prussianUnits=prussianUnits+1
-                local newUnit = unit.New(
-                    unitType..tostring(prussianUnits),stats[i][1],stats[i][2],stats[i][3],
-                    stats[i][4],pos,stats[i][5],stats[i][6]
-                )
+                newUnit=unit.New(unitType..tostring(prussianUnits),stats[i][2][1],stats[i][2][2],stats[i][2][3],pos,stats[i][2][4],stats[i][2][5],stats[i][2][6])
+                print(newUnit.Health)
             elseif team=="French" then
                 frenchUnits=frenchUnits+1
-                local newUnit = unit.New(
-                    unitType..tostring(frenchUnits),stats[i][1],stats[i][2],stats[i][3],
-                    stats[i][4],pos,stats[i][5],stats[i][6]
-                )
+                newUnit = unit.New(unitType..tostring(frenchUnits),stats[i][2][1],stats[i][2][2],stats[i][2][3],pos,stats[i][2][4],stats[i][2][5],stats[i][2][6])
             end
         end
     end
