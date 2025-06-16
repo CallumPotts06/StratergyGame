@@ -269,4 +269,13 @@ Assets.MarchSounds = {
     {"Stream6",love.audio.newSource("Sounds/March/Stream1.mp3","static"),false},
 }
 
+Assets.UnitCards = {
+    {"PrussianLineInfantry",love.graphics.newImage("Images/PrussianTroops/LineInfantry/FlagLarge.png")},
+    {"PrussianLightInfantry",love.graphics.newImage("Images/PrussianTroops/LightInfantry/FlagLarge.png")},
+    {"PrussianArtillery",love.graphics.newImage("Images/PrussianTroops/Artillery/FlagLarge.png")},
+
+    {"FrenchLineInfantry",love.graphics.newImage("Images/FrenchTroops/LineInfantry/FlagLarge.png")},
+    {"FrenchLightInfantry",love.graphics.newImage("Images/FrenchTroops/LightInfantry/FlagLarge.png")},
+}
+
 return Assets

@@ -221,8 +221,10 @@ end
 soldiers.PrussianLineInfantry = soldiers.LoadSoldierGroup("Images/PrussianTroops/LineInfantry")
 soldiers.FrenchLineInfantry = soldiers.LoadSoldierGroup("Images/FrenchTroops/LineInfantry")
 
-soldiers.PrussianArtillery = soldiers.LoadArtyGroup("Images/PrussianTroops/Artillery")
-
 soldiers.PrussianLightInfantry = soldiers.LoadSoldierGroup("Images/PrussianTroops/LightInfantry")
+soldiers.FrenchLightInfantry = soldiers.LoadSoldierGroup("Images/FrenchTroops/LightInfantry")
+
+soldiers.PrussianArtillery = soldiers.LoadArtyGroup("Images/PrussianTroops/Artillery")
+soldiers.FrenchArtillery = soldiers.LoadArtyGroup("Images/FrenchTroops/Artillery")
 
 return soldiers

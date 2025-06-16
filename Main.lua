@@ -5,6 +5,7 @@ Network = require("Network")
 Assets = require("LoadAssets")
 SoldierAssets = require("LoadSoldiers")
 unitControl = require("UnitControl")
+SpawnUnits = require("SpawnUnits")
 
 --// GAME MENUS //--
 MainMenu = require("Menus/MainMenu")
@@ -56,6 +57,8 @@ movingUnits = {}
 
 currentTeam = "Prussian"
 enemyTeam = "French"
+unitsPlaced = 0
+plr1ReadyForBattle = false
 
 gameResolution = {2048,1156}
 mousePos = {0,0}
