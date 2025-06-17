@@ -188,14 +188,14 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
     end
 
     for i=1,#updates,1 do
-        if string.sub(updates[i],1,5)=="Dead:" then
+        if type(updates[i])=="string" then
             for i=1,#team,1 do
                 if team[i].Name==string.sub(updates[i],6,#updates[i]) then
                     team[i].IsDead=true
                     team[i].Health=0
                 end
             end 
-        elseif string.sub(updates[i],1,8)=="NewUnit:" then
+        else
             local imgs
             if updates[i].Img=="PrussianLineInfantry" then imgs=LoadSoldiers.PrussianLineInfantry end
             if updates[i].Img=="PrussianLightInfantry" then imgs=LoadSoldiers.PrussianLightInfantry end
