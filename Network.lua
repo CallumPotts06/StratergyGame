@@ -94,7 +94,7 @@ function Network.CreateMessage(units,updates,moves,currentTeam)
 
     for i=1,#units,1 do--iPos,iHp
         str=units[i].Name..":"..tostring(units[i].Position[1])..","..tostring(units[i].Position[2])..","
-        str=str..tostring(units[i].Health)..";"
+        str=str..tostring(units[i].Orientation)..","..tostring(units[i].Health)..";"
         netmsg=netmsg..str
     end
 
@@ -165,13 +165,15 @@ function Network.DecodeMessage(message)
 
     -- Decode unit stats
     for unit in stats_section:gmatch("([^;]+);") do
-        local name, x, y, hp = unit:match("([^:]+):([^,]+),([^,]+),([^,]+)")
+        local name, x, y, theta, hp = unit:match("([^:]+):([^,]+),([^,]+),([^,]+),([^,]+)")
         table.insert(data.units, {
             Name = name,
             Position = { tonumber(x), tonumber(y) },
+            Orientation = tonumber(theta),
             Health = tonumber(hp)
         })
     end
+
 
     return data
 end
@@ -184,6 +186,7 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
         for i2=1,#team,1 do
             if team[i2].Name==units[i].Name then
                 team[i2].Position=units[i].Position
+                team[i2].Orientation=units[i].Orientation
                 team[i2].Health=units[i].Health
                 break
             end
@@ -223,19 +226,8 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
         end
     end
 
-    for i=1,#moves,1 do
-        for i2=1,#newMoves,1 do
-            if moves[i].Name==newMoves[i2][1] then
-                table.remove(newMoves,i2)
-                local newTable = {moves[i].Name,moves[i].Type,moves[i].Index,moves[i].Path}
-                table.insert(newMoves,i2,newTable)
-                break
-            end
-        end
-    end
 
-
-    return {team,newMoves}
+    return {team,nil}
 end
 
 
