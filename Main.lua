@@ -460,6 +460,7 @@ function love.update(dt)
                         Network.ConnectToHost(lastTextInput)
 
                         --from practise play--
+                        love.window.setMode(gameResolution[1],gameResolution[2])
                         clearInterface()
                         inGame = true
                         local loadedMap = MapEditor.LoadMap(nextMap)
