@@ -256,6 +256,14 @@ function love.update(dt)
                 connectionEstablished = true
                 uiObjects={}
                 closeInput()
+
+                --from practise play--
+                love.window.setMode(gameResolution[1],gameResolution[2])
+                clearInterface()
+                inGame = true
+                local loadedMap = MapEditor.LoadMap(nextMap)
+                currentMap = loadedMap[1]
+                currentMapDetails = loadedMap[2]
             elseif events[1] == "disconnected" then
                 print("A Peer Has Disconnected")
                 connectionEstablished = false
