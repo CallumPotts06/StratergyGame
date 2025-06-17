@@ -56,7 +56,7 @@ function Network.CreateMessage(units,updates,moves,currentTeam)
 
     for i=1,#updates,1 do
         local str = ""
-        if string.sub(updates[i],1,5)=="Dead:" then
+        if type(updates[i])=="string" then
             netmsg=netmsg..updates[i]..";"
         else
             --iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
