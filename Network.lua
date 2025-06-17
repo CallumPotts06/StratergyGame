@@ -1,7 +1,9 @@
 
 Network = {}
 
+Unit = require("Unit")
 enet = require("enet")
+LoadSoldiers = require("LoadSoldiers")
 local host
 local peer
 Network.Hosting = false
@@ -46,5 +48,193 @@ function Network.SendMessage(msg)
         peer:send(msg)
     end
 end
+
+function Network.CreateMessage(units,updates,moves,currentTeam)
+    local netmsg = ""
+    if currentTeam=="Prussian" then netmsg="PRUSSIAN_UNIT_UPADATES:" end
+    if currentTeam=="French" then netmsg="FRENCH_UNIT_UPADATES:" end
+
+    for i=1,#updates,1 do
+        local str = ""
+        if string.sub(updates[i],1,5)=="Dead:" then
+            netmsg=netmsg..updates[i]..";"
+        else
+            --iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
+            str="NewUnit:"..updates[i][2].Name..","..updates[i][2].Type..","..updates[i][2].Team..","
+            srt=str..updates[i][2].Team..updates[i][2].Type..","..tostring(updates[i][2].Position[1])..","
+            str=str..tostring(updates[i][2].Position[2])..","..tostring(updates[i][2].Health)..","
+            str=str..tostring(updates[i][2].FireRate)..","..tostring(updates[i][2].Accuracy)..";"
+            netmsg=netmsg..str
+        end
+    end
+
+    if currentTeam=="Prussian" then netmsg=netmsg.."PRUSSIAN_UNIT_MOVES:" end
+    if currentTeam=="French" then netmsg=netmsg.."FRENCH_UNIT_MOVES:" end
+
+    for i=1,#moves,1 do
+        str="Move"..tostring(i)..":Unit="..moves[i][1].Name..","..moves[i][2]..","..tostring(moves[i][3])..",{"
+        for i2=1,#moves[i][4],1 do for i3=1,#moves[i][4][i2] do
+            str2=""
+            if i3<#moves[i][4][i2] then
+                str2=str2..moves[i][4][i2][i3]..","
+            else
+                str2=str2..moves[i][4][i2][i3]..";"
+            end
+            str=str..str2
+        end end
+        str=str.."};"
+        netmsg=netmsg..str
+    end
+
+    if currentTeam=="Prussian" then netmsg=netmsg.."PRUSSIAN_UNIT_STATS:" end
+    if currentTeam=="French" then netmsg=netmsg.."FRENCH_UNIT_STATS:" end
+
+    for i=1,#units,1 do--iPos,iHp
+        str=units[i].Name..":"..tostring(units[i].Position[1])..","..tostring(units[i].Position[2])..","
+        str=str..tostring(units[i].Health)..";"
+        netmsg=netmsg..str
+    end
+
+    netmsg=netmsg.."END_MESSAGE"
+
+    return netmsg
+end
+
+function Network.DecodeMessage(message)
+    local data = {
+        team = nil,
+        updates = {},
+        moves = {},
+        units = {}
+    }
+
+    -- Identify team
+    if message:find("PRUSSIAN_UNIT_UPADATES:") then
+        data.team = "Prussian"
+    elseif message:find("FRENCH_UNIT_UPADATES:") then
+        data.team = "French"
+    end
+
+    -- Extract sections
+    local updates_section = message:match("UNIT_UPADATES:(.-)UNIT_MOVES:")
+    local moves_section = message:match("UNIT_MOVES:(.-)UNIT_STATS:")
+    local stats_section = message:match("UNIT_STATS:(.-)END_MESSAGE")
+
+    -- Decode updates
+    for entry in updates_section:gmatch("([^;]+);") do
+        if entry:sub(1, 5) == "Dead:" then
+            table.insert(data.updates, entry)
+        elseif entry:sub(1, 8) == "NewUnit:" then
+            local fields = {}
+            for field in entry:sub(9):gmatch("([^,]+)") do
+                table.insert(fields, field)
+            end
+            table.insert(data.updates, {
+                Name = fields[1],
+                Type = fields[2],
+                Team = fields[3],
+                Img = fields[4],
+                Position = { tonumber(fields[5]), tonumber(fields[6]) },
+                Health = tonumber(fields[7]),
+                FireRate = tonumber(fields[8]),
+                Accuracy = tonumber(fields[9])
+            })
+        end
+    end
+
+    -- Decode moves
+    for move in moves_section:gmatch("Move%d+:Unit=([^;]+);") do
+        local parts = {}
+        for part in move:gmatch("([^,{}]+)") do
+            table.insert(parts, part)
+        end
+        local path = {}
+        for i = 4, #parts do
+            table.insert(path, tonumber(parts[i]))
+        end
+        table.insert(data.moves, {
+            Name = parts[1],
+            Type = parts[2],
+            Index = tonumber(parts[3]),
+            Path = path
+        })
+    end
+
+    -- Decode unit stats
+    for unit in stats_section:gmatch("([^;]+);") do
+        local name, x, y, hp = unit:match("([^:]+):([^,]+),([^,]+),([^,]+)")
+        table.insert(data.units, {
+            Name = name,
+            Position = { tonumber(x), tonumber(y) },
+            Health = tonumber(hp)
+        })
+    end
+
+    return data
+end
+
+function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
+    local team = enemyTeam
+    local newMoves = allMoves
+
+    for i=1,#units,1 do
+        for i2=1,#team,1 do
+            if team[i2].Name==units[i].Name then
+                team[i2].Position=units[i].Position
+                team[i2].Health=units[i].Health
+                break
+            end
+        end
+    end
+
+    for i=1,#updates,1 do
+        if string.sub(updates[i],1,5)=="Dead:" then
+            for i=1,#team,1 do
+                if team[i].Name==string.sub(updates[i],6,#updates[i]) then
+                    team[i].IsDead=true
+                    team[i].Health=0
+                end
+            end 
+        elseif string.sub(updates[i],1,8)=="NewUnit:" then
+            local imgs
+            if updates[i].Img=="PrussianLineInfantry" then imgs=LoadSoldiers.PrussianLineInfantry end
+            if updates[i].Img=="PrussianLightInfantry" then imgs=LoadSoldiers.PrussianLightInfantry end
+            if updates[i].Img=="PrussianArtillery" then imgs=LoadSoldiers.PrussianArtillery end
+
+            if updates[i].Img=="FrenchLineInfantry" then imgs=LoadSoldiers.FrenchLineInfantry end
+            if updates[i].Img=="FrenchLightInfantry" then imgs=LoadSoldiers.FrenchLightInfantry end
+            if updates[i].Img=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end
+
+            local newUnit = Unit.New(
+                updates[i].Name,
+                updates[i].Type,
+                updates[i].Team,
+                imgs,
+                updates[i].Position,
+                updates[i].Health,
+                updates[i].FireRate,
+                updates[i].Accuracy
+            )
+
+            table.insert(team,newUnit)
+        end
+    end
+
+    for i=1,#moves,1 do
+        for i2=1,#newMoves,1 do
+            if moves[i].Name==newMoves[i2][1] then
+                table.remove(newMoves,i2)
+                local newTable = {moves[i].Name,moves[i].Type,moves[i].Index,moves[i].Path}
+                table.insert(newMoves,i2,newTable)
+                break
+            end
+        end
+    end
+
+
+    return {team,newMoves}
+end
+
+
 
 return Network

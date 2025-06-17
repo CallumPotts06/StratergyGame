@@ -28,6 +28,8 @@ enbaledPaintBrush = false
 currentEditRender = "Edit"
 finishedTiles = false
 
+local netMsg = ""
+
 Cards = {
     "LineInfantry",
     "LineInfantry",
@@ -55,6 +57,7 @@ wheelSelected = false
 moveSelected = false
 movingUnits = {}
 
+currentTeamUnitUpdates = {}
 currentTeam = "Prussian"
 enemyTeam = "French"
 unitsPlaced = 0
@@ -258,6 +261,20 @@ function love.update(dt)
                 connectionEstablished = false
             elseif events[1] == "received" then
                 print("Recieved: "..events[2])
+                local receivedMsg = events[2]
+                local decodedMsg = Network.DecodeMessage(receivedMsg)
+                local units = decodedMsg.units
+                local updates = decodedMsg.updates
+                local moves = decodedMsg.moves
+
+                if enemyTeam=="Prussian" then tempTeam = prussianUnits end
+                if enemyTeam=="French" then tempTeam = frenchUnits end
+
+                local update = Network.ApplyUpdate(units,updates,moves,tempTeam,movingUnits)
+                movingUnits = updates[2]
+
+                if enemyTeam=="Prussian" then prussianUnits = update[1] end
+                if enemyTeam=="French" then frenchUnits = update[1] end
             end
         end
     end
@@ -270,6 +287,18 @@ function love.update(dt)
     end
 
     --Clocks--
+    if twoSec >= 2 then
+        twoSec = twoSec - 2 
+        if Network.Hosting then
+            local currentUnits = {}
+            if currentTeam=="Prussian" then currentUnits=prussianUnits end
+            if currentTeam=="French" then currentUnits=frenchUnits end
+
+            local netmsg = Network.CreateMessage(currentUnits,currentTeamUnitUpdates,movingUnits,currentTeam)
+            Network.SendMessage(netmsg)
+        end
+    end
+
     if oneSec >= 1 then
         oneSec = oneSec - 1 
         if Network.Hosting then
@@ -280,6 +309,9 @@ function love.update(dt)
         while index<#prussianUnits do
             index=index+1
             if prussianUnits[index].IsDead then 
+                if currentTeam=="Prussian" then
+                    table.insert(currentTeamUnitUpdates,"Dead:"..prussianUnits[index].Name)
+                end
                 print("Removed: "..tostring(prussianUnits[index].Name))
                 table.remove(prussianUnits,index)
             end
@@ -288,6 +320,9 @@ function love.update(dt)
         while index<#frenchUnits do
             index=index+1
             if frenchUnits[index].IsDead then 
+                if currentTeam=="French" then
+                    table.insert(currentTeamUnitUpdates,"Dead:"..frenchUnits[index].Name)
+                end
                 print("Removed: "..tostring(frenchUnits[index].Name))
                 table.remove(frenchUnits,index)
             end
@@ -422,7 +457,14 @@ function love.update(dt)
                     elseif check=="IP Input Connect" then
                         uiObjects={}
                         closeInput()
-                        --Network.ConnectToHost(lastTextInput)
+                        Network.ConnectToHost(lastTextInput)
+
+                        --from practise play--
+                        clearInterface()
+                        inGame = true
+                        local loadedMap = MapEditor.LoadMap(nextMap)
+                        currentMap = loadedMap[1]
+                        currentMapDetails = loadedMap[2]
                         break
                     end
 
@@ -633,17 +675,16 @@ function love.update(dt)
                 unitsPlaced=unitsPlaced+1
                 newUnit = SpawnUnits.CreateUnit(currentTeam..Cards[unitsPlaced],currentTeam,{mx,my})
                 table.insert(prussianUnits,newUnit)
-                print(newUnit.Health)
-            elseif (currentTeam=="French")and(currentMapDetails[mgy][mgx]=="SPNB") then
+                table.insert(currentTeamUnitUpdates,{"Spawned:",newUnit})
+            elseif (currentTeam=="French")and(currentMapDetails[mgy][mgx]=="SPNB") then             
                 unitsPlaced=unitsPlaced+1
                 newUnit = SpawnUnits.CreateUnit(currentTeam..Cards[unitsPlaced],currentTeam,{mx,my})
                 table.insert(frenchUnits,newUnit)
-                print(newUnit.Health)
+                table.insert(currentTeamUnitUpdates,{"Spawned:",newUnit})
             end
             if unitsPlaced==#Cards then
                 plr1ReadyForBattle = true
             end
-            print("Prussian Units: "..tostring(#prussianUnits))
             
         end
 
