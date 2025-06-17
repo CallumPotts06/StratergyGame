@@ -76,9 +76,10 @@ function Network.CreateMessage(units,updates,moves,currentTeam)
         for i2=1,#moves[i][4],1 do for i3=1,#moves[i][4][i2] do
             str2=""
             if i3<#moves[i][4][i2] then
-                str2=str2..moves[i][4][i2][i3]..","
+                str2=str2..moves[i][4][i2][i3][1]..","
             else
-                str2=str2..moves[i][4][i2][i3]..";"
+                print(moves[i][4][i2][i3][1])
+                str2=str2..moves[i][4][i2][i3][1]..";"
             end
             str=str..str2
         end end
