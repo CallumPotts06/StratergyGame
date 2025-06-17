@@ -302,7 +302,6 @@ function love.update(dt)
     if oneSec >= 1 then
         oneSec = oneSec - 1 
         if Network.Hosting then
-            Network.SendMessage("Peer Check In")
         end
 
         local index = 0
