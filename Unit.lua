@@ -491,7 +491,7 @@ function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
             if soundsTable[i][2]=="Grass" then
                 sound = assets.MarchSounds[1][2]
                 local index = 1
-                while index<=6 do
+                while index<6 do
                     if not assets.MarchSounds[(4*index)+1][3] then
                         assets.MarchSounds[(4*index)+1][3] = true
                         sound = assets.MarchSounds[(4*index)+1][2]

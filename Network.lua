@@ -4,6 +4,7 @@ Network = {}
 Unit = require("Unit")
 enet = require("enet")
 LoadSoldiers = require("LoadSoldiers")
+SpawnUnits = require("SpawnUnits")
 local host
 local peer
 Network.Hosting = false
@@ -76,10 +77,11 @@ function Network.CreateMessage(units,updates,moves,currentTeam)
         for i2=1,#moves[i][4],1 do for i3=1,#moves[i][4][i2] do
             str2=""
             if i3<#moves[i][4][i2] then
-                str2=str2..moves[i][4][i2][i3][1]..","
+                print("move msg: "..tostring(moves[i][4][i2][i3]))
+                str2=str2..tostring(moves[i][4][i2][i3])..","
             else
-                print(moves[i][4][i2][i3][1])
-                str2=str2..moves[i][4][i2][i3][1]..";"
+                print("move msg: "..tostring(moves[i][4][i2][i3]))
+                str2=str2..tostring(moves[i][4][i2][i3])..";"
             end
             str=str..str2
         end end
@@ -206,16 +208,7 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
             if updates[i].Team..updates[i].Type=="FrenchLightInfantry" then imgs=LoadSoldiers.FrenchLightInfantry end
             if updates[i].Team..updates[i].Type=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end
 
-            local newUnit = Unit.New(
-                updates[i].Name,
-                updates[i].Type,
-                updates[i].Team,
-                imgs,
-                updates[i].Position,
-                updates[i].Health,
-                updates[i].FireRate,
-                updates[i].Accuracy
-            )
+            newUnit= SpawnUnits.CreateUnit(updates[i].Type,updates[i].Team,updates[i].Position)
 
             table.insert(team,newUnit)
         end
