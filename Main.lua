@@ -228,6 +228,7 @@ oneSec = 0
 halfSec = 0
 quarterSec = 0
 eighthSec = 0
+netTick = 0
 local initUpdate = true
 fourSecondTimer = false
 
@@ -240,6 +241,7 @@ function love.update(dt)
     halfSec = halfSec + dt
     quarterSec = quarterSec + dt
     eighthSec = eighthSec + dt
+    netTick=netTick+dt
 
 
 
@@ -296,8 +298,8 @@ function love.update(dt)
     end
 
     --Clocks--
-    if twoSec >= 2 then
-        twoSec = twoSec - 2 
+    if netTick >= 0.2 then
+        netTick = netTick - 0.2 
         if Network.Hosting then
             local currentUnits = {}
             if currentTeam=="Prussian" then currentUnits=prussianUnits end
