@@ -298,8 +298,8 @@ function love.update(dt)
     end
 
     --Clocks--
-    if netTick >= 0.2 then
-        netTick = netTick - 0.2 
+    if netTick >= 1 then
+        netTick = netTick - 1
         if Network.Hosting then
             local currentUnits = {}
             if currentTeam=="Prussian" then currentUnits=prussianUnits end
