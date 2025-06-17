@@ -197,13 +197,13 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
             end 
         else
             local imgs
-            if updates[i].Img=="PrussianLineInfantry" then imgs=LoadSoldiers.PrussianLineInfantry end
-            if updates[i].Img=="PrussianLightInfantry" then imgs=LoadSoldiers.PrussianLightInfantry end
-            if updates[i].Img=="PrussianArtillery" then imgs=LoadSoldiers.PrussianArtillery end
+            if updates[i].Team..updates[i].Type=="PrussianLineInfantry" then imgs=LoadSoldiers.PrussianLineInfantry end
+            if updates[i].Team..updates[i].Type=="PrussianLightInfantry" then imgs=LoadSoldiers.PrussianLightInfantry end
+            if updates[i].Team..updates[i].Type=="PrussianArtillery" then imgs=LoadSoldiers.PrussianArtillery end
 
-            if updates[i].Img=="FrenchLineInfantry" then imgs=LoadSoldiers.FrenchLineInfantry end
-            if updates[i].Img=="FrenchLightInfantry" then imgs=LoadSoldiers.FrenchLightInfantry end
-            if updates[i].Img=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end
+            if updates[i].Team..updates[i].Type=="FrenchLineInfantry" then imgs=LoadSoldiers.FrenchLineInfantry end
+            if updates[i].Team..updates[i].Type=="FrenchLightInfantry" then imgs=LoadSoldiers.FrenchLightInfantry end
+            if updates[i].Team..updates[i].Type=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end
 
             local newUnit = Unit.New(
                 updates[i].Name,
