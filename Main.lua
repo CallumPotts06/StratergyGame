@@ -271,10 +271,11 @@ function love.update(dt)
                 if enemyTeam=="French" then tempTeam = frenchUnits end
 
                 local update = Network.ApplyUpdate(units,updates,moves,tempTeam,movingUnits)
-                movingUnits = updates[2]
-
-                if enemyTeam=="Prussian" then prussianUnits = update[1] end
-                if enemyTeam=="French" then frenchUnits = update[1] end
+                if not (updates[2]==nil) then movingUnits = updates[2] end
+                if not (updates[1]==nil) then
+                    if enemyTeam=="Prussian" then prussianUnits = update[1] end
+                    if enemyTeam=="French" then frenchUnits = update[1] end
+                end
             end
         end
     end
