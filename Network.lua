@@ -4,7 +4,7 @@ Network = {}
 Unit = require("Unit")
 enet = require("enet")
 LoadSoldiers = require("LoadSoldiers")
-SpawnUnits = require("SpawnUnits")
+SpawnUnit = require("SpawnUnits")
 local host
 local peer
 Network.Hosting = false
@@ -208,7 +208,7 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
             if updates[i].Team..updates[i].Type=="FrenchLightInfantry" then imgs=LoadSoldiers.FrenchLightInfantry end
             if updates[i].Team..updates[i].Type=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end
 
-            newUnit= SpawnUnits.CreateUnit(updates[i].Type,updates[i].Team,updates[i].Position)
+            SpawnUnit.CreateUnit(updates[i].Type,updates[i].Team,updates[i].Position,)
 
             table.insert(team,newUnit)
         end
