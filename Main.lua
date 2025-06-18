@@ -617,6 +617,7 @@ function love.update(dt)
         if inGame and (not clickedUI) then
             local newTable = {}
             if currentTeam=="Prussian" then newTable = prussianUnits end
+            if currentTeam=="French" then newTable = frenchUnits end
 
             if (not wheelSelected)or(not moveSelected) then
                 for i=1,#newTable,1 do--SELECT UNIT--
