@@ -342,20 +342,20 @@ function love.update(dt)
         for i=1,#prussianUnits,1 do
             if (prussianUnits[i].Stance=="Idle")or(prussianUnits[i].Stance=="Aiming") then
                 if not prussianUnits[i].CurrentTarget then
-                    local newWheel = prussianUnits[i]:CheckForTargets(frenchUnits)
+                    local newWheel = prussianUnits[i]:CheckForTargets(frenchUnits,currentTeam)
                     if not (not newWheel) then table.insert(movingUnits,newWheel) end
                 else
-                    prussianUnits[i]:CheckForTargets(frenchUnits)
+                    prussianUnits[i]:CheckForTargets(frenchUnits,currentTeam)
                 end
             end
         end
         for i=1,#frenchUnits,1 do
             if (frenchUnits[i].Stance=="Idle")or(frenchUnits[i].Stance=="Aiming") then
                 if not frenchUnits[i].CurrentTarget then
-                    local newWheel = frenchUnits[i]:CheckForTargets(prussianUnits)
+                    local newWheel = frenchUnits[i]:CheckForTargets(prussianUnits,currentTeam)
                     if not (not newWheel) then table.insert(movingUnits,newWheel) end
                 else
-                    frenchUnits[i]:CheckForTargets(prussianUnits)
+                    frenchUnits[i]:CheckForTargets(prussianUnits,currentTeam)
                 end
             end
         end
@@ -412,7 +412,7 @@ function love.update(dt)
         for i=1,#prussianUnits,1 do
             if not (not prussianUnits[i].CurrentTarget) then
                 if math.random(1,prussianUnits[i].FireRate)==1 then
-                    local fx = prussianUnits[i]:Fire(camPos,gameResolution)
+                    local fx = prussianUnits[i]:Fire(camPos,gameResolution,currentTeam)
                     table.insert(visualEffects,fx[1])
                     table.insert(visualEffects,fx[3])
                     if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
@@ -423,7 +423,7 @@ function love.update(dt)
         for i=1,#frenchUnits,1 do
             if not (not frenchUnits[i].CurrentTarget) then
                 if math.random(1,frenchUnits[i].FireRate)==1 then
-                    local fx = frenchUnits[i]:Fire(camPos,gameResolution)
+                    local fx = frenchUnits[i]:Fire(camPos,gameResolution,currentTeam)
                     table.insert(visualEffects,fx[1])
                     table.insert(visualEffects,fx[3])
                     if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end

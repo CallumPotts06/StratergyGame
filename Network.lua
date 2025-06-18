@@ -72,23 +72,6 @@ function Network.CreateMessage(units,updates,moves,currentTeam)
     if currentTeam=="Prussian" then netmsg=netmsg.."PRUSSIAN_UNIT_MOVES:" end
     if currentTeam=="French" then netmsg=netmsg.."FRENCH_UNIT_MOVES:" end
 
-    --[[for i=1,#moves,1 do
-        str="Move"..tostring(i)..":Unit="..moves[i][1].Name..","..moves[i][2]..","..tostring(moves[i][3])..",{"
-        for i2=1,#moves[i][4],1 do for i3=1,#moves[i][4][i2] do
-            str2=""
-            if i3<#moves[i][4][i2] then
-                print("move msg: "..tostring(moves[i][4][i2][i3]))
-                str2=str2..tostring(moves[i][4][i2][i3])..","
-            else
-                print("move msg: "..tostring(moves[i][4][i2][i3]))
-                str2=str2..tostring(moves[i][4][i2][i3])..";"
-            end
-            str=str..str2
-        end end
-        str=str.."};"
-        netmsg=netmsg..str
-    end]]
-
     if currentTeam=="Prussian" then netmsg=netmsg.."PRUSSIAN_UNIT_STATS:" end
     if currentTeam=="French" then netmsg=netmsg.."FRENCH_UNIT_STATS:" end
 

@@ -368,7 +368,7 @@ function unit:CheckClick(mousePos,camPos,zoom)
     return {clicked,self.Selected,self}
 end
 
-function unit:CheckForTargets(enemyUnits)
+function unit:CheckForTargets(enemyUnits,plrTeam)
     local closestDistance=999999999
     local closestEnemy=999999999
     for i=1,#enemyUnits,1 do
@@ -381,7 +381,7 @@ function unit:CheckForTargets(enemyUnits)
         local mag = math.sqrt((dx*dx)+(dy*dy))
         if (mag<closestDistance)and(mag<self.AimRange) then closestEnemy = i closestDistance=mag end
     end
-    if not (closestEnemy==999999999) then
+    if (not (closestEnemy==999999999))and(self.Team==plrTeam) then
         self.CurrentTarget = enemyUnits[closestEnemy]
         return unitControl.CalculateWheel(self,"Aiming")
     else
@@ -390,7 +390,7 @@ function unit:CheckForTargets(enemyUnits)
     end
 end
 
-function unit:Fire(camPos,gameResolution)
+function unit:Fire(camPos,gameResolution,plrTeam)
     local smoke
     local sound
     local dead
@@ -460,8 +460,10 @@ function unit:Fire(camPos,gameResolution)
         end
 
         local hit = math.random(1,math.floor(self.Accuracy/2))
-        if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
-        if self.CurrentTarget.Health<=5 then self.CurrentTarget.IsDead = true end
+        if plrTeam==self.CurrentTarget.Team then
+            if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
+            if self.CurrentTarget.Health<=5 then self.CurrentTarget.IsDead = true end
+        end
     end
 
     return {smoke,dead,hitFX}
