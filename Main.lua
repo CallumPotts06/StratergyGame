@@ -307,6 +307,7 @@ function love.update(dt)
 
             local netmsg = Network.CreateMessage(currentUnits,currentTeamUnitUpdates,movingUnits,currentTeam)
             Network.SendMessage(netmsg)
+            currentTeamUnitUpdates={}
         end
     end
 

@@ -504,7 +504,7 @@ function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
             elseif soundsTable[i][2]=="Forest" then
                 sound = assets.MarchSounds[2][2]
                 local index = 1
-                while index<=6 do
+                while index<6 do
                     if not assets.MarchSounds[(4*index)+2][3] then
                         assets.MarchSounds[(4*index)+2][3] = true
                         sound = assets.MarchSounds[(4*index)+2][2]
@@ -515,7 +515,7 @@ function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
             elseif soundsTable[i][2]=="Road" then
                 sound = assets.MarchSounds[3][2]
                 local index = 1
-                while index<=6 do
+                while index<6 do
                     if not assets.MarchSounds[(4*index)+3][3] then
                         assets.MarchSounds[(4*index)+3][3] = true
                         sound = assets.MarchSounds[(4*index)+3][2]
@@ -526,7 +526,7 @@ function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
             elseif soundsTable[i][2]=="Stream" then
                 sound = assets.MarchSounds[4][2]
                 local index = 1
-                while index<=6 do
+                while index<6 do
                     if not assets.MarchSounds[(4*index)+4][3] then
                         assets.MarchSounds[(4*index)+4][3] = true
                         sound = assets.MarchSounds[(4*index)+4][2]
