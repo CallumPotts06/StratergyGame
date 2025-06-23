@@ -58,12 +58,12 @@ moveSelected = false
 movingUnits = {}
 
 currentTeamUnitUpdates = {}
-currentTeam = "Prussian"
-enemyTeam = "French"
+currentTeam = "French"
+enemyTeam = "Prussian"
 unitsPlaced = 0
 plr1ReadyForBattle = false
 
-gameResolution = {2048,1156}
+gameResolution = {1200,600}
 mousePos = {0,0}
 
 --// OTHER VARIABLES //--
@@ -477,6 +477,10 @@ function love.update(dt)
                         local loadedMap = MapEditor.LoadMap(nextMap)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
+
+                        currentTeam="Prussian"
+                        enemyTeam="French"
+                        gameResolution = {1920,1280}
                         break
                     end
 
