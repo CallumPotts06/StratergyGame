@@ -471,6 +471,7 @@ function love.update(dt)
                         Network.ConnectToHost(lastTextInput)
 
                         --from practise play--
+                        gameResolution = {1920,1080}
                         love.window.setMode(gameResolution[1],gameResolution[2])
                         clearInterface()
                         inGame = true
@@ -480,7 +481,6 @@ function love.update(dt)
 
                         currentTeam="Prussian"
                         enemyTeam="French"
-                        gameResolution = {1920,1280}
                         break
                     end
 
