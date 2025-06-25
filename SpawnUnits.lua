@@ -7,7 +7,7 @@ imgs = require("LoadSoldiers")
 local prussianUnits = 0
 local frenchUnits =0
 
-local stats = {
+spawnUnits.stats = {
     --Type,Team,Imgs,Hp,FireRate,Accuracy--
     {"PrussianLineInfantry",{"LineInfantry","Prussian",imgs.PrussianLineInfantry,100,6,12}},
     {"PrussianLightInfantry",{"LightInfantry","Prussian",imgs.PrussianLightInfantry,100,6,9}},
@@ -20,15 +20,14 @@ local stats = {
 
 function spawnUnits.CreateUnit(unitType,team,pos)
     local newUnit
-    for i=1,#stats,1 do
-        if stats[i][1]==unitType then--iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
+    for i=1,#spawnUnits.stats,1 do
+        if spawnUnits.stats[i][1]==unitType then--iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
             if team=="Prussian" then
                 prussianUnits=prussianUnits+1
-                newUnit=unit.New(unitType..tostring(prussianUnits),stats[i][2][1],stats[i][2][2],stats[i][2][3],pos,stats[i][2][4],stats[i][2][5],stats[i][2][6])
-                print(newUnit.Health)
+                newUnit=unit.New(unitType..tostring(prussianUnits),spawnUnits.stats[i][2][1],spawnUnits.stats[i][2][2],spawnUnits.stats[i][2][3],pos,spawnUnits.stats[i][2][4],spawnUnits.stats[i][2][5],spawnUnits.stats[i][2][6])
             elseif team=="French" then
                 frenchUnits=frenchUnits+1
-                newUnit = unit.New(unitType..tostring(frenchUnits),stats[i][2][1],stats[i][2][2],stats[i][2][3],pos,stats[i][2][4],stats[i][2][5],stats[i][2][6])
+                newUnit = unit.New(unitType..tostring(frenchUnits),spawnUnits.stats[i][2][1],spawnUnits.stats[i][2][2],spawnUnits.stats[i][2][3],pos,spawnUnits.stats[i][2][4],spawnUnits.stats[i][2][5],spawnUnits.stats[i][2][6])
             end
         end
     end

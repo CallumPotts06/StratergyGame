@@ -201,7 +201,7 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
             if updates[i].Team..updates[i].Type=="FrenchLightInfantry" then imgs=LoadSoldiers.FrenchLightInfantry end
             if updates[i].Team..updates[i].Type=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end]]
 
-            local newUnit = SpawnUnit.CreateUnit(updates[i].Type,updates[i].Team,updates[i].Position)
+            local newUnit = SpawnUnit.CreateUnit(updates[i].Type,updates[i].Team,{updates[i].Position[1],updates[i].Position[2]})
 
             --[[local newUnit = Unit.New(
                 updates[i].Name,
