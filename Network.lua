@@ -60,9 +60,6 @@ function Network.CreateMessage(units,updates,moves,currentTeam)
         if type(updates[i])=="string" then
             netmsg=netmsg..updates[i]..";"
         else
-            print("HEALTH - SEND: "..tostring(updates[i][2].Health))
-            print("FIRERATE - SEND: "..tostring(updates[i][2].FireRate))
-            print("ACCURACY - SEND: "..tostring(updates[i][2].Accuracy))
 
             --iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
             str="NewUnit:"..updates[i][2].Name..","..updates[i][2].Type..","..updates[i][2].Team..","
@@ -119,9 +116,6 @@ function Network.DecodeMessage(message)
             for field in entry:sub(9):gmatch("([^,]+)") do
                 table.insert(fields, field)
             end
-            print("HEALTH: "..tostring(fields[5]))
-            print("FIRERATE: "..tostring(fields[6]))
-            print("ACCURACY: "..tostring(fields[7]))
             table.insert(data.updates, {
                 Name = fields[1],
                 Type = fields[2],
