@@ -381,7 +381,7 @@ function unit:CheckForTargets(enemyUnits,plrTeam)
         local mag = math.sqrt((dx*dx)+(dy*dy))
         if (mag<closestDistance)and(mag<self.AimRange) then closestEnemy = i closestDistance=mag end
     end
-    if (not (closestEnemy==999999999))and(self.Team==plrTeam) then
+    if not (closestEnemy==999999999) then
         self.CurrentTarget = enemyUnits[closestEnemy]
         return unitControl.CalculateWheel(self,"Aiming")
     else
