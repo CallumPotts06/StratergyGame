@@ -22,6 +22,8 @@ currentMapDetails = {}
 visualEffects = {}
 uiObjects = {}
 
+enviroment = "European"
+
 inGame = false
 inMapEdit = false
 enbaledPaintBrush = false
@@ -228,6 +230,7 @@ halfSec = 0
 quarterSec = 0
 eighthSec = 0
 netTick = 0
+ambienceTick = 320
 local initUpdate = true
 fourSecondTimer = false
 
@@ -241,6 +244,7 @@ function love.update(dt)
     quarterSec = quarterSec + dt
     eighthSec = eighthSec + dt
     netTick=netTick+dt
+    if plr1ReadyForBattle then ambienceTick=ambienceTick+dt end
 
 
 
@@ -297,6 +301,15 @@ function love.update(dt)
     end
 
     --Clocks--
+    if ambienceTick >= 325 then
+        ambienceTick=ambienceTick-325
+        if enviroment=="European" then
+            assets.OtherSounds[1][2]:play()
+        else
+            assets.OtherSounds[2][2]:play()
+        end
+    end
+
     if netTick >= 1 then
         netTick = netTick - 1
         if Network.Hosting then
@@ -704,6 +717,15 @@ function love.update(dt)
             end
             if unitsPlaced==#Cards then
                 plr1ReadyForBattle = true
+                for y=1,#currentMapDetails,1 do
+                    for x=1,#currentMapDetails[1],1 do
+                        if currentMapDetails[y][x]=="SPNA" then
+                            currentMapDetails[y][x]=""
+                        elseif currentMapDetails[y][x]=="SPNB" then
+                            currentMapDetails[y][x]=""
+                        end
+                    end
+                end
             end
             
         end

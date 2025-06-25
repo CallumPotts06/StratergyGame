@@ -269,6 +269,11 @@ Assets.MarchSounds = {
     {"Stream6",love.audio.newSource("Sounds/March/Stream1.mp3","static"),false},
 }
 
+Assets.OtherSounds = {
+    {"EuropeanAmbience",love.audio.newSource("Sounds/Ambience/EuropeanAmbience.mp3","stream")},
+    {"AmericanAmbience",love.audio.newSource("Sounds/Ambience/AmericanAmbience.mp3","stream")},
+}
+
 Assets.UnitCards = {
     {"PrussianLineInfantry",love.graphics.newImage("Images/PrussianTroops/LineInfantry/FlagLarge.png")},
     {"PrussianLightInfantry",love.graphics.newImage("Images/PrussianTroops/LightInfantry/FlagLarge.png")},
