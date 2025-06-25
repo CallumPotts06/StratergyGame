@@ -547,7 +547,7 @@ function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
 
         sound:setPosition(-dx, 0, -dy)
         love.audio.setPosition(0,0,0)
-        love.audio.setVolume(1)
+        sound:setVolume(0.2)
         love.audio.play(sound)
     end
 end
