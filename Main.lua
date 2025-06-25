@@ -407,22 +407,26 @@ function love.update(dt)
 
         for i=1,#prussianUnits,1 do
             if not (not prussianUnits[i].CurrentTarget) then
-                if math.random(1,prussianUnits[i].FireRate)==1 then
-                    local fx = prussianUnits[i]:Fire(camPos,gameResolution,currentTeam)
-                    table.insert(visualEffects,fx[1])
-                    table.insert(visualEffects,fx[3])
-                    if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                if type(prussianUnits[i].FireRate)=="number" then
+                    if math.random(1,prussianUnits[i].FireRate)==1 then
+                        local fx = prussianUnits[i]:Fire(camPos,gameResolution,currentTeam)
+                        table.insert(visualEffects,fx[1])
+                        table.insert(visualEffects,fx[3])
+                        if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                    end
                 end
             end
         end
 
         for i=1,#frenchUnits,1 do
             if not (not frenchUnits[i].CurrentTarget) then
-                if math.random(1,frenchUnits[i].FireRate)==1 then
-                    local fx = frenchUnits[i]:Fire(camPos,gameResolution,currentTeam)
-                    table.insert(visualEffects,fx[1])
-                    table.insert(visualEffects,fx[3])
-                    if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                if type(frenchUnits[i].FireRate)=="number" then
+                    if math.random(1,frenchUnits[i].FireRate)==1 then
+                        local fx = frenchUnits[i]:Fire(camPos,gameResolution,currentTeam)
+                        table.insert(visualEffects,fx[1])
+                        table.insert(visualEffects,fx[3])
+                        if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                    end
                 end
             end
         end
