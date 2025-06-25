@@ -119,18 +119,18 @@ function Network.DecodeMessage(message)
             for field in entry:sub(9):gmatch("([^,]+)") do
                 table.insert(fields, field)
             end
-            print("HEALTH: "..tostring(fields[7]))
-            print("FIRERATE: "..tostring(fields[8]))
-            print("ACCURACY: "..tostring(fields[9]))
+            print("HEALTH: "..tostring(fields[5]))
+            print("FIRERATE: "..tostring(fields[6]))
+            print("ACCURACY: "..tostring(fields[7]))
             table.insert(data.updates, {
                 Name = fields[1],
                 Type = fields[2],
                 Team = fields[3],
                 Img = fields[4],
                 Position = { tonumber(fields[5]), tonumber(fields[6]) },
-                Health = tonumber(fields[7]),
-                FireRate = tonumber(fields[8]),
-                Accuracy = tonumber(fields[9]),
+                Health = tonumber(fields[5]),
+                FireRate = tonumber(fields[6]),
+                Accuracy = tonumber(fields[7]),
             })
         end
     end
