@@ -60,6 +60,10 @@ function Network.CreateMessage(units,updates,moves,currentTeam)
         if type(updates[i])=="string" then
             netmsg=netmsg..updates[i]..";"
         else
+            print("HEALTH - SEND: "..tostring(updates[i][2].Health))
+            print("FIRERATE - SEND: "..tostring(updates[i][2].FireRate))
+            print("ACCURACY - SEND: "..tostring(updates[i][2].Accuracy))
+
             --iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy
             str="NewUnit:"..updates[i][2].Name..","..updates[i][2].Type..","..updates[i][2].Team..","
             srt=str..updates[i][2].Team..updates[i][2].Type..","..tostring(updates[i][2].Position[1])..","
@@ -115,17 +119,18 @@ function Network.DecodeMessage(message)
             for field in entry:sub(9):gmatch("([^,]+)") do
                 table.insert(fields, field)
             end
-            print("HEALTH: "..tostring(fields[7]))
-            print("FIRERATE: "..tostring(fields[8]))
+            print("HEALTH: "..tostring(fields[6]))
+            print("FIRERATE: "..tostring(fields[7]))
+            print("ACCURACY: "..tostring(fields[8]))
             table.insert(data.updates, {
                 Name = fields[1],
                 Type = fields[2],
                 Team = fields[3],
                 Img = fields[4],
                 Position = { tonumber(fields[5]), tonumber(fields[6]) },
-                Health = tonumber(fields[7]),
-                FireRate = tonumber(fields[8]),
-                Accuracy = tonumber(fields[9]),
+                Health = tonumber(fields[6]),
+                FireRate = tonumber(fields[7]),
+                Accuracy = tonumber(fields[8]),
             })
         end
     end
@@ -192,18 +197,17 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
                 end
             end
         else
-            --[[local imgs
+            local imgs
             if updates[i].Team..updates[i].Type=="PrussianLineInfantry" then imgs=LoadSoldiers.PrussianLineInfantry end
             if updates[i].Team..updates[i].Type=="PrussianLightInfantry" then imgs=LoadSoldiers.PrussianLightInfantry end
             if updates[i].Team..updates[i].Type=="PrussianArtillery" then imgs=LoadSoldiers.PrussianArtillery end
 
             if updates[i].Team..updates[i].Type=="FrenchLineInfantry" then imgs=LoadSoldiers.FrenchLineInfantry end
             if updates[i].Team..updates[i].Type=="FrenchLightInfantry" then imgs=LoadSoldiers.FrenchLightInfantry end
-            if updates[i].Team..updates[i].Type=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end]]
+            if updates[i].Team..updates[i].Type=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end
 
-            local newUnit = SpawnUnit.CreateUnit(updates[i].Type,updates[i].Team,{updates[i].Position[1],updates[i].Position[2]})
-
-            --[[local newUnit = Unit.New(
+    
+            local newUnit = Unit.New(
                 updates[i].Name,
                 updates[i].Type,
                 updates[i].Team,
@@ -212,7 +216,7 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
                 updates[i].Health,
                 updates[i].FireRate,
                 updates[i].Accuracy
-            )]]
+            )
 
             table.insert(team,newUnit)
         end
