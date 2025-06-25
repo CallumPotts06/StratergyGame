@@ -115,6 +115,8 @@ function Network.DecodeMessage(message)
             for field in entry:sub(9):gmatch("([^,]+)") do
                 table.insert(fields, field)
             end
+            print("HEALTH: "..tostring(fields[7]))
+            print("FIRERATE: "..tostring(fields[8]))
             table.insert(data.updates, {
                 Name = fields[1],
                 Type = fields[2],
@@ -123,7 +125,7 @@ function Network.DecodeMessage(message)
                 Position = { tonumber(fields[5]), tonumber(fields[6]) },
                 Health = tonumber(fields[7]),
                 FireRate = tonumber(fields[8]),
-                Accuracy = tonumber(fields[9])
+                Accuracy = tonumber(fields[9]),
             })
         end
     end
@@ -190,25 +192,27 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
                 end
             end
         else
-            local imgs
+            --[[local imgs
             if updates[i].Team..updates[i].Type=="PrussianLineInfantry" then imgs=LoadSoldiers.PrussianLineInfantry end
             if updates[i].Team..updates[i].Type=="PrussianLightInfantry" then imgs=LoadSoldiers.PrussianLightInfantry end
             if updates[i].Team..updates[i].Type=="PrussianArtillery" then imgs=LoadSoldiers.PrussianArtillery end
 
             if updates[i].Team..updates[i].Type=="FrenchLineInfantry" then imgs=LoadSoldiers.FrenchLineInfantry end
             if updates[i].Team..updates[i].Type=="FrenchLightInfantry" then imgs=LoadSoldiers.FrenchLightInfantry end
-            if updates[i].Team..updates[i].Type=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end
+            if updates[i].Team..updates[i].Type=="FrenchArtillery" then imgs=LoadSoldiers.FrenchArtillery end]]
 
-            local newUnit = Unit.New(
+            local newUnit = SpawnUnit.CreateUnit(updates[i].Type,updates[i].Team,updates[i].Position)
+
+            --[[local newUnit = Unit.New(
                 updates[i].Name,
                 updates[i].Type,
                 updates[i].Team,
                 imgs,
                 updates[i].Position,
-                100,
+                updates[i].Health,
                 updates[i].FireRate,
                 updates[i].Accuracy
-            )
+            )]]
 
             table.insert(team,newUnit)
         end

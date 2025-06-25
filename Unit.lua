@@ -460,6 +460,7 @@ function unit:Fire(camPos,gameResolution,plrTeam)
         end
 
         local hit = math.random(1,math.floor(self.Accuracy/2))
+        print(plrTeam..", "..self.CurrentTarget.Team)
         if plrTeam==self.CurrentTarget.Team then
             print("DEALT DAMAGE TO UNIT")
             if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end

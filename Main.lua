@@ -421,7 +421,9 @@ function love.update(dt)
         for i=1,#frenchUnits,1 do
             if not (not frenchUnits[i].CurrentTarget) then
                 if type(frenchUnits[i].FireRate)=="number" then
+                    print("TRUE   3")
                     if math.random(1,frenchUnits[i].FireRate)==1 then
+                        print("TRUE    4")
                         local fx = frenchUnits[i]:Fire(camPos,gameResolution,currentTeam)
                         table.insert(visualEffects,fx[1])
                         table.insert(visualEffects,fx[3])
