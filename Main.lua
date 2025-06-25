@@ -32,12 +32,7 @@ local netMsg = ""
 
 Cards = {
     "LineInfantry",
-    "LineInfantry",
-    "LineInfantry",
-    "LineInfantry",
     "LightInfantry",
-    "Artillery",
-    "Artillery",
 }
 
 
@@ -45,7 +40,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "ForestBattle1.lvl"
+nextMap = "TestBattle.lvl"
 
 prussianUnits={}
 britishUnits={}
