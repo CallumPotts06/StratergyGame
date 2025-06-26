@@ -430,7 +430,7 @@ function love.update(dt)
             if not (not prussianUnits[i].CurrentTarget) then
                 if type(prussianUnits[i].FireRate)=="number" then
                     if math.random(1,prussianUnits[i].FireRate)==1 then
-                        local fx = prussianUnits[i]:Fire(camPos,gameResolution,currentTeam)
+                        local fx = prussianUnits[i]:Fire(camPos,gameResolution,currentTeam,zoom,currentMap)
                         table.insert(visualEffects,fx[1])
                         table.insert(visualEffects,fx[3])
                         if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
@@ -452,7 +452,7 @@ function love.update(dt)
             if not (not frenchUnits[i].CurrentTarget) then
                 if type(frenchUnits[i].FireRate)=="number" then
                     if math.random(1,frenchUnits[i].FireRate)==1 then
-                        local fx = frenchUnits[i]:Fire(camPos,gameResolution,currentTeam)
+                        local fx = frenchUnits[i]:Fire(camPos,gameResolution,currentTeam,zoom,currentMap)
                         table.insert(visualEffects,fx[1])
                         table.insert(visualEffects,fx[3])
                         if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
