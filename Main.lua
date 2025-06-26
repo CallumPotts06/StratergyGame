@@ -434,6 +434,15 @@ function love.update(dt)
                         table.insert(visualEffects,fx[1])
                         table.insert(visualEffects,fx[3])
                         if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                        if not type(fx[4]==nil) then
+                            for i=1,#movingUnits,1 do
+                                if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget.Name then
+                                    table.remove(movingUnits,i)
+                                    break
+                                end
+                            end
+                            table.insert(movingUnits,newMarch)
+                        end
                     end
                 end
             end
@@ -447,6 +456,15 @@ function love.update(dt)
                         table.insert(visualEffects,fx[1])
                         table.insert(visualEffects,fx[3])
                         if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                        if not type(fx[4]==nil) then
+                            for i=1,#movingUnits,1 do
+                                if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
+                                    table.remove(movingUnits,i)
+                                    break
+                                end
+                            end
+                            table.insert(movingUnits,newMarch)
+                        end
                     end
                 end
             end
