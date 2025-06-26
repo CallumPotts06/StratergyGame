@@ -46,7 +46,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "ForestBattle1.lvl"
+nextMap = "TwinTowns.lvl"
 
 prussianUnits={}
 britishUnits={}
@@ -64,7 +64,7 @@ enemyTeam = "Prussian"
 unitsPlaced = 0
 plr1ReadyForBattle = false
 
-gameResolution = {1200,600}
+gameResolution = {2048,1156}
 mousePos = {0,0}
 
 --// OTHER VARIABLES //--
