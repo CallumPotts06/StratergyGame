@@ -64,6 +64,7 @@ unitsPlaced = 0
 plr1ReadyForBattle = false
 
 gameResolution = {1200,700}
+fullscreenBool = true
 mousePos = {0,0}
 
 --// OTHER VARIABLES //--
@@ -263,6 +264,7 @@ function love.update(dt)
 
                 --from practise play--
                 love.window.setMode(gameResolution[1],gameResolution[2])
+                success = love.window.setFullscreen(fullscreenBool)
                 clearInterface()
                 inGame = true
                 local loadedMap = MapEditor.LoadMap(nextMap)
@@ -478,6 +480,7 @@ function love.update(dt)
                     local check = uiObjects[i]:CheckClick(mousePos)
 
                     if check=="Open Map Editor" then
+                        success = love.window.setFullscreen(fullscreenBool)
                         clearInterface()
                         openMenu(MapEditor)
                         inMapEdit = true
@@ -502,8 +505,7 @@ function love.update(dt)
                         Network.ConnectToHost(lastTextInput)
 
                         --from practise play--
-                        gameResolution = {1920,1080}
-                        love.window.setMode(gameResolution[1],gameResolution[2])
+                        success = love.window.setFullscreen(fullscreenBool)
                         clearInterface()
                         inGame = true
                         local loadedMap = MapEditor.LoadMap(nextMap)
