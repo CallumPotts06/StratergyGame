@@ -204,25 +204,30 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
 
         local tileX = math.ceil((gainedX)/200)
         local tileY = math.ceil((gainedY)/200)
-        local currentTile = mapTiles[tileY][tileX]
-
-        local speedList = {}
-        if unit.Formation=="BattleLine" then speedList=BattleLineSpeeds end
-        if unit.Formation=="MarchingColumn" then speedList=MarchingColumnSpeeds end
-        if unit.Formation=="SkirmishLine" then speedList=SkirmishLineSpeeds end
-        for i=1,#speedList,1 do
-            if speedList[i][1]==string.sub(currentTile,1,3) then
-                newSpeedX=xSpeed*speedList[i][2]
-                newSpeedY=ySpeed*speedList[i][2]
-            end
+        local currentTile = false
+        if (tileY>0)and(tileY<#mapTiles)and(tileX>0)and(tileX<#mapTiles[1]) then
+            currentTile = mapTiles[tileY][tileX]
         end
 
-        gainedX=gainedX+(newSpeedX)
-        gainedY=gainedY+(newSpeedY)
-        local x = gainedX
-        local y = gainedY
+        if not (not currentTile) then
+            local speedList = {}
+            if unit.Formation=="BattleLine" then speedList=BattleLineSpeeds end
+            if unit.Formation=="MarchingColumn" then speedList=MarchingColumnSpeeds end
+            if unit.Formation=="SkirmishLine" then speedList=SkirmishLineSpeeds end
+            for i=1,#speedList,1 do
+                if speedList[i][1]==string.sub(currentTile,1,3) then
+                    newSpeedX=xSpeed*speedList[i][2]
+                    newSpeedY=ySpeed*speedList[i][2]
+                end
+            end
 
-        table.insert(movePos,{x,y,currentTile})
+            gainedX=gainedX+(newSpeedX)
+            gainedY=gainedY+(newSpeedY)
+            local x = gainedX
+            local y = gainedY
+
+            table.insert(movePos,{x,y,currentTile})
+        end
     end end
 
     for i=1,#movePos,1 do
