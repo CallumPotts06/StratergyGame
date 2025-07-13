@@ -38,11 +38,6 @@ Cards = {
     "LineInfantry",
     "LightInfantry",
     "Artillery",
-    "LineInfantry",
-    "LineInfantry",
-    "LineInfantry",
-    "LightInfantry",
-    "Artillery",
 }
 
 
