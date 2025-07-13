@@ -277,7 +277,6 @@ function love.update(dt)
                 print("A Peer Has Disconnected")
                 connectionEstablished = false
             elseif events[1] == "received" then
-                print("Recieved: "..events[2])
                 local receivedMsg = events[2]
                 local decodedMsg = Network.DecodeMessage(receivedMsg)
                 local units = decodedMsg.units
@@ -299,7 +298,6 @@ function love.update(dt)
 
     --Timers--
     if (fourSecondTimer) and (fourSec >= 4) then
-        print("Four Second Timer Elapsed!")
         fourSecondTimer = false
         fourSec = 0
     end
@@ -693,7 +691,6 @@ function love.update(dt)
                     if selectedUnit.Formation=="MarchingColumn" then
                         local mgx = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
                         local mgy = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
-                        print(tostring(mgx)..","..tostring(mgy))
                         local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom,currentMap)
                         if not (not newMarch) then
                             for i=1,#movingUnits,1 do

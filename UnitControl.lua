@@ -401,14 +401,6 @@ function unitControl.Dijkstras(endPos1,endPos2,mapTiles,unit,mousePos,camPos,zoo
                     end end
                 end
             end 
-            print(#fullTable)
-            print(#fullTable[4])
-            for i=1,#fullTable,1 do
-                print(fullTable[i])
-            end
-            for i=1,#fullTable[4],1 do
-                print(fullTable[4][i])
-            end
 
             return fullTable
         end
@@ -460,7 +452,6 @@ function unitControl.Dijkstras(endPos1,endPos2,mapTiles,unit,mousePos,camPos,zoo
         end
     end
 
-    print("No Solution")
     return {} -- Return empty path if no solution found
 end
 

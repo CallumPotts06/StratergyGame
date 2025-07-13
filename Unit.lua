@@ -526,8 +526,6 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
                 local dx = (((camPos[1]-(gameResolution[1]/2))-x)/1500)+1
                 local dy = (((camPos[2]-(gameResolution[2]/2))-y)/1500)+1
                 local mag = math.sqrt((dx*dx)+(dy*dy))
-                --print("Volume: "..tostring(1/mag))
-
                 assets.FireSounds[i][2]:setPosition(-dx, 0, -dy)
                 love.audio.setPosition(0,0,0)
                 love.audio.setVolume(1)
