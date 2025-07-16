@@ -45,7 +45,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "TestBattle2.lvl"
+nextMap = "TwinTowns.lvl"
 
 prussianUnits={}
 britishUnits={}

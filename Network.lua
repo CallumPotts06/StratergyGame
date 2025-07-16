@@ -184,10 +184,10 @@ function Network.ApplyUpdate(units,updates,moves,enemyTeam,allMoves)
 
     for i=1,#updates,1 do
         if type(updates[i])=="string" then
-            for i=1,#team,1 do
-                if team[i].Name==string.sub(updates[i],6,#updates[i]) then
-                    team[i].IsDead=true
-                    team[i].Health=0
+            for i2=1,#team,1 do
+                if team[i2].Name==string.sub(updates[i],6,#updates[i]) then
+                    team[i2].IsDead=true
+                    team[i2].Health=0
                 end
             end
         else
