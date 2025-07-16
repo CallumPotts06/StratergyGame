@@ -45,7 +45,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "TwinTowns.lvl"
+nextMap = "TestBattle2.lvl"
 
 prussianUnits={}
 britishUnits={}
@@ -426,17 +426,19 @@ function love.update(dt)
                 if type(prussianUnits[i].FireRate)=="number" then
                     if math.random(1,prussianUnits[i].FireRate)==1 then
                         local fx = prussianUnits[i]:Fire(camPos,gameResolution,currentTeam,zoom,currentMap)
-                        table.insert(visualEffects,fx[1])
-                        table.insert(visualEffects,fx[3])
-                        if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
-                        if not type(fx[4]==nil) then
-                            for i=1,#movingUnits,1 do
-                                if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget.Name then
-                                    table.remove(movingUnits,i)
-                                    break
+                        if not (not fx[1]) then
+                            table.insert(visualEffects,fx[1])
+                            table.insert(visualEffects,fx[3])
+                            if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                            if not type(fx[4]==nil) then
+                                for i=1,#movingUnits,1 do
+                                    if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget.Name then
+                                        table.remove(movingUnits,i)
+                                        break
+                                    end
                                 end
+                                table.insert(movingUnits,newMarch)
                             end
-                            table.insert(movingUnits,newMarch)
                         end
                     end
                 end
@@ -448,17 +450,19 @@ function love.update(dt)
                 if type(frenchUnits[i].FireRate)=="number" then
                     if math.random(1,frenchUnits[i].FireRate)==1 then
                         local fx = frenchUnits[i]:Fire(camPos,gameResolution,currentTeam,zoom,currentMap)
-                        table.insert(visualEffects,fx[1])
-                        table.insert(visualEffects,fx[3])
-                        if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
-                        if not type(fx[4]==nil) then
-                            for i=1,#movingUnits,1 do
-                                if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
-                                    table.remove(movingUnits,i)
-                                    break
+                        if not (not fx[1]) then
+                            table.insert(visualEffects,fx[1])
+                            table.insert(visualEffects,fx[3])
+                            if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                            if not type(fx[4]==nil) then
+                                for i=1,#movingUnits,1 do
+                                    if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
+                                        table.remove(movingUnits,i)
+                                        break
+                                    end
                                 end
+                                table.insert(movingUnits,newMarch)
                             end
-                            table.insert(movingUnits,newMarch)
                         end
                     end
                 end
@@ -617,11 +621,21 @@ function love.update(dt)
                     end
 
                     if check=="Practice Play" then
+                        success = love.window.setFullscreen(fullscreenBool)
                         clearInterface()
                         inGame = true
                         local loadedMap = MapEditor.LoadMap(nextMap)
                         currentMap = loadedMap[1]
                         currentMapDetails = loadedMap[2]
+
+                        currentTeam = "Prussian"
+                        enemyTeam = "French"
+
+                        for i=1,#Cards,1 do
+                            newUnit = SpawnUnits.CreateUnit("French"..Cards[i],"French",{1000+(400*i),3500})
+                            table.insert(frenchUnits,newUnit)
+                        end 
+
                         break
                     end
 

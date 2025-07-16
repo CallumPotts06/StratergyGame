@@ -467,89 +467,94 @@ end
 
 
 function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
-    local smoke
-    local sound
-    local dead
-    local hitFX
-    local retreat
+    if self.Formation=="BattleLine" then
+        local smoke
+        local sound
+        local dead
+        local hitFX
+        local retreat
 
-    if not (not self.CurrentTarget) then
-        local multiplier = 25
-        local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
+        if not (not self.CurrentTarget) then
+            local multiplier = 25
+            local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
 
-        if (self.Type=="LineInfantry")or(self.Type=="LightInfantry") then
-            sound = "MusketShot"..tostring(math.random(1,18))
-            multiplier=25
-            squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
-        elseif self.Type=="Artillery" then
-            sound = "CannonShot"..tostring(math.random(1,6))
-            multiplier=100
-            squadCount = self.MaxSquads*(self.Health/self.MaxHealth)/3
-        end
-
-        local bound1 = -5
-        local bound2 = 5
-        local rad = self.Orientation  
-        if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
-        if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
-        if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
-        if(rad>=3.927)or(rad<=5.498)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
-        local h = math.random(bound1,bound2)*multiplier*zoom
-        local x = ((self.Position[1]))+(h*math.cos(self.Orientation))
-        local y = ((self.Position[2]))+(h*math.sin(self.Orientation))
-        smoke = {"Smoke",{x,y},1}
-
-        local enemy = self.CurrentTarget
-        local bound1 = -8
-        local bound2 = 8
-        local rad = enemy.Orientation
-        local squadCount = enemy.MaxSquads*(enemy.Health/enemy.MaxHealth)
-        if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
-        if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
-        if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
-        if(rad>=3.927)or(rad<=5.498)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
-        local h = math.random(bound1,bound2)*23*zoom
-        local x = ((enemy.Position[1]))+(h*math.cos(enemy.Orientation))
-        local y = ((enemy.Position[2]))+(h*math.sin(enemy.Orientation))
-        if (self.Type=="LineInfantry")or(self.Type=="LightInfantry") then
-            hitFX = {"BulletHit"..tostring(math.random(1,3)),{x+math.random(-15,15),y+math.random(-15,15)},1}
-        elseif self.Type=="Artillery" then
-            hitFX = {"CannonHit"..tostring(math.random(1,3)),{x+math.random(-15,15),y+math.random(-15,15)},1}
-        end
-
-        if (enemy.Type=="LineInfantry")or(enemy.Type=="LightInfantry") then
-            dead = {"Dead"..enemy.Team..enemy.Type,{x+math.random(-8,8),y+math.random(-8,8)},1}
-        end
-
-        for i=1,#assets.FireSounds,1 do
-            if assets.FireSounds[i][1]==sound then
-                local dx = (((camPos[1]-(gameResolution[1]/2))-x)/1500)+1
-                local dy = (((camPos[2]-(gameResolution[2]/2))-y)/1500)+1
-                local mag = math.sqrt((dx*dx)+(dy*dy))
-                assets.FireSounds[i][2]:setPosition(-dx, 0, -dy)
-                love.audio.setPosition(0,0,0)
-                love.audio.setVolume(1)
-                love.audio.play(assets.FireSounds[i][2])
-                break
+            if (self.Type=="LineInfantry")or(self.Type=="LightInfantry") then
+                sound = "MusketShot"..tostring(math.random(1,18))
+                multiplier=25
+                squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
+            elseif self.Type=="Artillery" then
+                sound = "CannonShot"..tostring(math.random(1,6))
+                multiplier=100
+                squadCount = self.MaxSquads*(self.Health/self.MaxHealth)/3
             end
-        end
 
-        local dx = enemy.Position[1]-self.Position[1]
-        local dy = enemy.Position[1]-self.Position[1]
-        local shotRange = 1000--math.sqrt((dx*dx)+(dy*dy))
-        local hit = math.random(1,math.floor((self.Accuracy*(shotRange/1000))/2))
-        if plrTeam==self.CurrentTarget.Team then
-            if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
-            if self.CurrentTarget.Health<=5 then self.CurrentTarget.IsDead = true
-            elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/4) then
-                if math.random(1,15)==1 then
-                    local retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
+            local bound1 = -5
+            local bound2 = 5
+            local rad = self.Orientation  
+            if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
+            if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
+            if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
+            if(rad>=3.927)or(rad<=5.498)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
+            local h = math.random(bound1,bound2)*multiplier*zoom
+            local x = ((self.Position[1]))+(h*math.cos(self.Orientation))
+            local y = ((self.Position[2]))+(h*math.sin(self.Orientation))
+            smoke = {"Smoke",{x,y},1}
+
+            local enemy = self.CurrentTarget
+            local bound1 = -8
+            local bound2 = 8
+            local rad = enemy.Orientation
+            local squadCount = enemy.MaxSquads*(enemy.Health/enemy.MaxHealth)
+            if((rad>=0)and(rad<=0.785))or(rad>=5.498)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
+            if(rad>=0.785)and(rad<=2.356)then bound1=math.ceil(1-(squadCount/2)) bound2=math.floor(squadCount/2) end
+            if(rad>=2.356)and(rad<=3.927)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
+            if(rad>=3.927)or(rad<=5.498)then bound1=math.floor(squadCount/2) bound2=math.ceil(1-(squadCount/2)) end
+            local h = math.random(bound1,bound2)*23*zoom
+            local x = ((enemy.Position[1]))+(h*math.cos(enemy.Orientation))
+            local y = ((enemy.Position[2]))+(h*math.sin(enemy.Orientation))
+            if (self.Type=="LineInfantry")or(self.Type=="LightInfantry") then
+                hitFX = {"BulletHit"..tostring(math.random(1,3)),{x+math.random(-15,15),y+math.random(-15,15)},1}
+            elseif self.Type=="Artillery" then
+                hitFX = {"CannonHit"..tostring(math.random(1,3)),{x+math.random(-15,15),y+math.random(-15,15)},1}
+            end
+
+            if (enemy.Type=="LineInfantry")or(enemy.Type=="LightInfantry") then
+                dead = {"Dead"..enemy.Team..enemy.Type,{x+math.random(-8,8),y+math.random(-8,8)},1}
+            end
+
+            for i=1,#assets.FireSounds,1 do
+                if assets.FireSounds[i][1]==sound then
+                    local dx = (((camPos[1]-(gameResolution[1]/2))-x)/1500)+1
+                    local dy = (((camPos[2]-(gameResolution[2]/2))-y)/1500)+1
+                    local mag = math.sqrt((dx*dx)+(dy*dy))
+                    assets.FireSounds[i][2]:setPosition(-dx, 0, -dy)
+                    love.audio.setPosition(0,0,0)
+                    love.audio.setVolume(1)
+                    love.audio.play(assets.FireSounds[i][2])
+                    break
+                end
+            end
+
+            local dx = enemy.Position[1]-self.Position[1]
+            local dy = enemy.Position[1]-self.Position[1]
+            local shotRange = 1000--math.sqrt((dx*dx)+(dy*dy))
+            local hit = math.random(1,math.floor((self.Accuracy*(shotRange/1000))/2))
+            if plrTeam==self.CurrentTarget.Team then
+                if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
+                if self.CurrentTarget.Health<=5 then self.CurrentTarget.IsDead = true
+                elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/4) then
+                    if math.random(1,15)==1 then
+                        --print("Retreat")
+                        --local retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
+                    end
                 end
             end
         end
-    end
 
-    return {smoke,dead,hitFX,retreat}
+        return {smoke,dead,hitFX,retreat}
+    else
+        return {false,false,false,false}
+    end
 end
 
 function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
