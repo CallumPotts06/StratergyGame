@@ -66,7 +66,7 @@ currentTeamUnitUpdates = {}
 currentTeam = "French"
 enemyTeam = "Prussian"
 unitsPlaced = 0
-plr1ReadyForBattle = false
+plr1ReadyForBattle = true
 
 gameResolution = {1200,700}
 fullscreenBool = false
