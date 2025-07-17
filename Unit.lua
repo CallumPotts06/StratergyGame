@@ -460,12 +460,8 @@ function unit:Retreat(camPos,zoom,mapTiles)
     local theta = (2*math.pi)-self.Orientation
     local endX = ((750*math.sin(theta))-camPos[1])*zoom
     local endY = ((750*math.cos(theta))-camPos[2])*zoom
-    print("Calc: end pos")
-    print(tostring(endX)..","..tostring(endY))
 
     local move = unitControl.CalculateMove(self,{endX,endY},camPos,zoom,mapTiles)
-
-    print("recieved move to")
     return move
 end 
 
@@ -549,7 +545,7 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
                 elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/4) then
                     if math.random(1,1)==1 then--if math.random(1,15)==1 then
                         print("Retreat")
-                        local retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
+                        retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
                     end
                 end
             end
