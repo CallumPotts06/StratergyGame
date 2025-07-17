@@ -437,10 +437,12 @@ function love.update(dt)
                             if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
                             if not (not fx[4]) then
                                 for i=1,#movingUnits,1 do
-                                    if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget.Name then
-                                        print("Remove Existing Moves")
-                                        table.remove(movingUnits,i)
-                                        break
+                                    if not type(prussianUnits[i].CurrentTarget=="boolean") then
+                                        if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget.Name then
+                                            print("Remove Existing Moves")
+                                            table.remove(movingUnits,i)
+                                            break
+                                        end
                                     end
                                 end
                                 print("Add retreat to moves")
@@ -463,10 +465,12 @@ function love.update(dt)
                             if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
                             if not (not fx[4]) then
                                 for i=1,#movingUnits,1 do
-                                    if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
-                                        print("Remove Existing Moves")
-                                        table.remove(movingUnits,i)
-                                        break
+                                    if not type(frenchUnits[i].CurrentTarget=="boolean") then
+                                        if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
+                                            print("Remove Existing Moves")
+                                            table.remove(movingUnits,i)
+                                            break
+                                        end
                                     end
                                 end
                                 print("Add retreat to moves")
