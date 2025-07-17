@@ -462,10 +462,12 @@ function love.update(dt)
                             if not type(fx[4]==nil) then
                                 for i=1,#movingUnits,1 do
                                     if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
+                                        print("Remove Existing Moves")
                                         table.remove(movingUnits,i)
                                         break
                                     end
                                 end
+                                print("Add retreat to moves")
                                 table.insert(movingUnits,fx[4])
                             end
                         end
