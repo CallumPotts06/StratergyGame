@@ -31,6 +31,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     newUnit.Selected = false
     newUnit.CurrentTarget = false
     newUnit.IsDead = false
+    newUnit.Retreating = false
 
     if (iType=="LineInfantry")or(iType=="LightInfantry") then
         newUnit.AimRange = 1750
@@ -38,7 +39,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
         newUnit.Formation = "MarchingColumn"
     elseif iType=="Artillery" then
         newUnit.AimRange = 4000
-        newUnit.Damage = 3
+        newUnit.Damage = 2
         newUnit.Formation = "BattleLine"
     end
 
@@ -450,19 +451,21 @@ function unit:CheckForTargets(enemyUnits,plrTeam)
 end
 
 function unit:Retreat(camPos,zoom,mapTiles)
+    if not self.Retreating then
+        self.Retreating = true
+        self.CurrentTarget = false
+        self.Moving = true
 
-    self.CurrentTarget = false
-    self.Moving = true
+        self.Orientation=self.Orientation+math.pi--about face--
+        if self.Orientation>=(2*math.pi) then self.Orientation=self.Orientation-(2*math.pi) end
 
-    self.Orientation=self.Orientation+math.pi--about face--
-    if self.Orientation>=(2*math.pi) then self.Orientation=self.Orientation-(2*math.pi) end
+        local theta = (2*math.pi)-self.Orientation
+        local endX = ((750*math.sin(theta))-camPos[1])*zoom
+        local endY = ((750*math.cos(theta))-camPos[2])*zoom
 
-    local theta = (2*math.pi)-self.Orientation
-    local endX = ((750*math.sin(theta))-camPos[1])*zoom
-    local endY = ((750*math.cos(theta))-camPos[2])*zoom
-
-    local move = unitControl.CalculateMove(self,{endX,endY},camPos,zoom,mapTiles)
-    return move
+        local move = unitControl.CalculateMove(self,{endX,endY},camPos,zoom,mapTiles)
+        return move
+    end
 end 
 
 
@@ -543,7 +546,7 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
                 if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
                 if self.CurrentTarget.Health<=5 then self.CurrentTarget.IsDead = true
                 elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/2) then
-                    if math.random(1,12)==1 then
+                    if math.random(1,6)==1 then
                         print("Retreat")
                         retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
                     end

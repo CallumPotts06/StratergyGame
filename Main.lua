@@ -723,6 +723,7 @@ function love.update(dt)
                                     break
                                 end
                             end
+                            selectedUnit.Retreating = false
                             table.insert(movingUnits,newMarch)
                         end
                     else
@@ -734,6 +735,7 @@ function love.update(dt)
                                     break
                                 end
                             end
+                            selectedUnit.Retreating = false
                             table.insert(movingUnits,newMarch)
                         end
                     end
