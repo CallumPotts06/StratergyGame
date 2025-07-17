@@ -460,8 +460,12 @@ function unit:Retreat(camPos,zoom,mapTiles)
     local theta = (2*math.pi)-self.Orientation
     local endX = ((750*math.sin(theta))-camPos[1])*zoom
     local endY = ((750*math.cos(theta))-camPos[2])*zoom
+    print("Calc: end pos")
+    print(tostring(endX)..","..tostring(endY))
 
     local move = unitControl.CalculateMove(self,{endX,endY},camPos,zoom,mapTiles)
+
+    print("recieved move to")
     return move
 end 
 
