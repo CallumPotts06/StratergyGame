@@ -435,13 +435,15 @@ function love.update(dt)
                             table.insert(visualEffects,fx[1])
                             table.insert(visualEffects,fx[3])
                             if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
-                            if not type(fx[4]==nil) then
+                            if not (not fx[4]) then
                                 for i=1,#movingUnits,1 do
                                     if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget.Name then
+                                        print("Remove Existing Moves")
                                         table.remove(movingUnits,i)
                                         break
                                     end
                                 end
+                                print("Add retreat to moves")
                                 table.insert(movingUnits,fx[4])
                             end
                         end
@@ -459,7 +461,7 @@ function love.update(dt)
                             table.insert(visualEffects,fx[1])
                             table.insert(visualEffects,fx[3])
                             if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
-                            if not type(fx[4]==nil) then
+                            if not (not fx[4]) then
                                 for i=1,#movingUnits,1 do
                                     if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
                                         print("Remove Existing Moves")
