@@ -38,7 +38,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
         newUnit.Formation = "MarchingColumn"
     elseif iType=="Artillery" then
         newUnit.AimRange = 4000
-        newUnit.Damage = 6
+        newUnit.Damage = 3
         newUnit.Formation = "BattleLine"
     end
 
@@ -472,7 +472,7 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
         local sound
         local dead
         local hitFX
-        local retreat
+        local retreat = false
 
         if not (not self.CurrentTarget) then
             local multiplier = 25
@@ -537,15 +537,15 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
 
             local dx = enemy.Position[1]-self.Position[1]
             local dy = enemy.Position[1]-self.Position[1]
-            local shotRange = 1000--math.sqrt((dx*dx)+(dy*dy))
+            local shotRange = math.sqrt((dx*dx)+(dy*dy))
             local hit = math.random(1,math.floor((self.Accuracy*(shotRange/1000))/2))
             if plrTeam==self.CurrentTarget.Team then
                 if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
                 if self.CurrentTarget.Health<=5 then self.CurrentTarget.IsDead = true
                 elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/4) then
-                    if math.random(1,15)==1 then
-                        --print("Retreat")
-                        --local retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
+                    if math.random(1,1)==1 then--if math.random(1,15)==1 then
+                        print("Retreat")
+                        local retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
                     end
                 end
             end

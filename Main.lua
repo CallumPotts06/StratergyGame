@@ -69,7 +69,7 @@ unitsPlaced = 0
 plr1ReadyForBattle = false
 
 gameResolution = {1200,700}
-fullscreenBool = true
+fullscreenBool = false
 mousePos = {0,0}
 
 --// OTHER VARIABLES //--
@@ -445,6 +445,15 @@ function love.update(dt)
                                 table.insert(movingUnits,newMarch)
                             end
                         end
+                        if not(not fx[4]) then
+                            for i=1,#movingUnits,1 do
+                                if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget..Name then
+                                    table.remove(movingUnits,i)
+                                    break
+                                end
+                            end
+                            table.insert(movingUnits,fx[4])
+                        end
                     end
                 end
             end
@@ -468,6 +477,15 @@ function love.update(dt)
                                 end
                                 table.insert(movingUnits,newMarch)
                             end
+                        end
+                        if not(not fx[4]) then
+                            for i=1,#movingUnits,1 do
+                                if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget..Name then
+                                    table.remove(movingUnits,i)
+                                    break
+                                end
+                            end
+                            table.insert(movingUnits,fx[4])
                         end
                     end
                 end
