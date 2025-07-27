@@ -34,15 +34,11 @@ local netMsg = ""
 
 Cards = {
     "LineInfantry",
-    "LineInfantry",
-    "LineInfantry",
     "LightInfantry",
     "Artillery",
-    "LineInfantry",
-    "LineInfantry",
-    "LineInfantry",
-    "LightInfantry",
     "Artillery",
+    "Artillery",
+    "Artillery"
 }
 
 
@@ -435,7 +431,7 @@ function love.update(dt)
                             table.insert(visualEffects,fx[1])
                             table.insert(visualEffects,fx[3])
                             if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
-                            if not (not fx[4]) then
+                            if not (type(fx[4])=="boolean") then
                                 for i=1,#movingUnits,1 do
                                     if not type(prussianUnits[i].CurrentTarget=="boolean") then
                                         if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget.Name then
@@ -463,8 +459,9 @@ function love.update(dt)
                             table.insert(visualEffects,fx[1])
                             table.insert(visualEffects,fx[3])
                             if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
-                            if not (not fx[4]) then
+                            if not (type(fx[4])=="boolean") then
                                 for i=1,#movingUnits,1 do
+                                    print("Looping thru moveunits")
                                     if not type(frenchUnits[i].CurrentTarget=="boolean") then
                                         if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
                                             print("Remove Existing Moves")
