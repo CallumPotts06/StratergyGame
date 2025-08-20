@@ -5,7 +5,7 @@ unit.__index = unit
 unitControl = require("../UnitControl")
 assets = require("../LoadAssets")
 
-function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
+function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy,iRange)
     local newUnit = {}
 
     newUnit.Name = iName
@@ -22,8 +22,8 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     newUnit.MaxHealth = iHp
     newUnit.Health = iHp
     newUnit.MaxSquads = 16
-    newUnit.AimRange = 2000
-    newUnit.Damage = 2000
+    newUnit.AimRange = iRange
+    newUnit.Damage = 1
     newUnit.FireRate = iFireRate
     newUnit.Accuracy = iAccuracy
 
@@ -34,12 +34,10 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy)
     newUnit.Retreating = false
 
     if (iType=="LineInfantry")or(iType=="LightInfantry") then
-        newUnit.AimRange = 1750
         newUnit.Damage = 0.9
-        newUnit.Formation = "MarchingColumn"
+        newUnit.Formation = "BattleLine"
     elseif iType=="Artillery" then
-        newUnit.AimRange = 4000
-        newUnit.Damage = 1.4
+        newUnit.Damage = 1.6
         newUnit.Formation = "BattleLine"
     end
 

@@ -34,11 +34,10 @@ local netMsg = ""
 
 Cards = {
     "LineInfantry",
+    "LineInfantry",
+    "LineInfantry",
     "LightInfantry",
     "Artillery",
-    "Artillery",
-    "Artillery",
-    "Artillery"
 }
 
 
@@ -420,8 +419,6 @@ function love.update(dt)
 
     if eighthSec >= 0.125 then
         eighthSec = eighthSec - 0.125
-
-
         for i=1,#prussianUnits,1 do
             if not (not prussianUnits[i].CurrentTarget) then
                 if type(prussianUnits[i].FireRate)=="number" then
@@ -432,11 +429,11 @@ function love.update(dt)
                             table.insert(visualEffects,fx[3])
                             if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
                             if not (type(fx[4])=="boolean") then
-                                for i=1,#movingUnits,1 do
+                                for i2=1,#movingUnits,1 do
                                     if not type(prussianUnits[i].CurrentTarget=="boolean") then
-                                        if movingUnits[i][1].Name==prussianUnits[i].CurrentTarget.Name then
+                                        if movingUnits[i2][1].Name==prussianUnits[i].CurrentTarget.Name then
                                             print("Remove Existing Moves")
-                                            table.remove(movingUnits,i)
+                                            table.remove(movingUnits,i2)
                                             break
                                         end
                                     end
@@ -460,12 +457,12 @@ function love.update(dt)
                             table.insert(visualEffects,fx[3])
                             if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
                             if not (type(fx[4])=="boolean") then
-                                for i=1,#movingUnits,1 do
+                                for i2=1,#movingUnits,1 do
                                     print("Looping thru moveunits")
                                     if not type(frenchUnits[i].CurrentTarget=="boolean") then
-                                        if movingUnits[i][1].Name==frenchUnits[i].CurrentTarget.Name then
+                                        if movingUnits[i2][1].Name==frenchUnits[i].CurrentTarget.Name then
                                             print("Remove Existing Moves")
-                                            table.remove(movingUnits,i)
+                                            table.remove(movingUnits,i2)
                                             break
                                         end
                                     end
@@ -641,8 +638,9 @@ function love.update(dt)
                         currentTeam = "Prussian"
                         enemyTeam = "French"
 
+                        --AUTO SPAWN--
                         for i=1,#Cards,1 do
-                            newUnit = SpawnUnits.CreateUnit("French"..Cards[i],"French",{1000+(400*i),3500})
+                            newUnit = SpawnUnits.CreateUnit("French"..Cards[i],"French",{4400,1400+(400*i)})
                             table.insert(frenchUnits,newUnit)
                         end 
 

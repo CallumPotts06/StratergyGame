@@ -177,6 +177,10 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
 
         local tileX = math.ceil((gainedX)/200)
         local tileY = math.ceil((gainedY)/200)
+        if tileX<1 then tileX=1 end
+        if tileX>#mapTiles[1] then tileX=#mapTiles[1] end
+        if tileY<1 then tileY=1 end
+        if tileY>#mapTiles then tileY=#mapTiles end
         local currentTile = mapTiles[tileY][tileX]
 
         local speedList = {}
