@@ -438,7 +438,10 @@ function unit:CheckForTargets(enemyUnits,plrTeam)
         local dy = math.abs(y2-y1)
         local mag = math.sqrt((dx*dx)+(dy*dy))
         --if not (self.AimRange==nil) then
-        if (mag<closestDistance)and(mag<self.AimRange) then closestEnemy = i closestDistance=mag end
+        if (mag<closestDistance)and(mag<self.AimRange) then 
+            closestEnemy = i 
+            closestDistance=mag 
+        end
         --end
     end
     if not (closestEnemy==999999999) then
