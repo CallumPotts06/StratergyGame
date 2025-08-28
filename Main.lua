@@ -417,28 +417,26 @@ function love.update(dt)
     end
 
     function fireUnit(unit)
-        if not (not unit.CurrentTarget) then
-            if type(unit.FireRate)=="number" then
-                if math.random(1,unit.FireRate)==1 then
-                    local fx = unit:Fire(camPos,gameResolution,currentTeam,zoom,currentMap)
-                    if not (not fx[1]) then
-                        table.insert(visualEffects,fx[1])
-                        table.insert(visualEffects,fx[3])
-                        if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
-                        if not (type(fx[4])=="boolean") then
-                            for i2=1,#movingUnits,1 do
-                                print("Looping thru moveunits")
-                                if not type(unit.CurrentTarget=="boolean") then
-                                    if movingUnits[i2][1].Name==unit.CurrentTarget.Name then
-                                        print("Remove Existing Moves")
-                                        table.remove(movingUnits,i2)
-                                        break
-                                    end
+        if type(unit.FireRate)=="number" then
+            if math.random(1,unit.FireRate)==1 then
+                local fx = unit:Fire(camPos,gameResolution,currentTeam,zoom,currentMap)
+                if not (not fx[1]) then
+                    table.insert(visualEffects,fx[1])
+                    table.insert(visualEffects,fx[3])
+                    if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
+                    if not (type(fx[4])=="boolean") then
+                        for i2=1,#movingUnits,1 do
+                            print("Looping thru moveunits")
+                            if not type(unit.CurrentTarget=="boolean") then
+                                if movingUnits[i2][1].Name==unit.CurrentTarget.Name then
+                                    print("Remove Existing Moves")
+                                    table.remove(movingUnits,i2)
+                                    break
                                 end
                             end
-                            print("Add retreat to moves")
-                            table.insert(movingUnits,fx[4])
                         end
+                        print("Add retreat to moves")
+                        table.insert(movingUnits,fx[4])
                     end
                 end
             end
