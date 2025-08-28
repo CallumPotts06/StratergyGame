@@ -543,7 +543,8 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
             local shotRange = math.sqrt((dx*dx)+(dy*dy))
             local hit = math.random(1,math.floor((self.Accuracy*(shotRange/1000))/2))
             if plrTeam==self.CurrentTarget.Team then
-                if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
+                print("attempt to hit")
+                if hit==1 then print("hit") self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
                 if self.CurrentTarget.Health<=15 then self.CurrentTarget.IsDead = true
                 elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/1.4) then
                     if math.random(1,8)==1 then
