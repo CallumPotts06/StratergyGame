@@ -156,7 +156,7 @@ function Network.DecodeMessage(message)
         Orientation = tonumber(theta),
         Health = tonumber(hp),
         Formation = formation,
-        OpenOrder = order
+        OpenOrder = order,
         CurrentTarget = currentTarget
         })
     end
