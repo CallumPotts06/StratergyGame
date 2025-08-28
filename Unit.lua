@@ -545,8 +545,8 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
             if plrTeam==self.CurrentTarget.Team then
                 if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
                 if self.CurrentTarget.Health<=15 then self.CurrentTarget.IsDead = true
-                elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/1.75) then
-                    if math.random(1,6)==1 then
+                elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/1.4) then
+                    if math.random(1,8)==1 then
                         print("Retreat")
                         retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
                     end
