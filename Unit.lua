@@ -478,6 +478,8 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
         local retreat = false
 
         if not (not self.CurrentTarget) then
+            print(self.Team)
+
             local multiplier = 25
             local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)
 
@@ -542,7 +544,8 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
             local dy = enemy.Position[1]-self.Position[1]
             local shotRange = math.sqrt((dx*dx)+(dy*dy))
             local hit = math.random(1,math.floor((self.Accuracy*(shotRange/1000))/2))
-            if true then--plrTeam==self.CurrentTarget.Team then
+            print(self.Team)
+            if plrTeam==self.CurrentTarget.Team then
                 if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
                 if self.CurrentTarget.Health<=15 then self.CurrentTarget.IsDead = true
                 elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/1.4) then

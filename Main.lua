@@ -286,8 +286,39 @@ function love.update(dt)
                 local update = Network.ApplyUpdate(units,updates,moves,tempTeam,movingUnits)
                 if not (updates[2]==nil) then movingUnits = updates[2] end
                 if not (updates[1]==nil) then
-                    if enemyTeam=="Prussian" then prussianUnits = update[1] end
-                    if enemyTeam=="French" then frenchUnits = update[1] end
+                    if enemyTeam=="Prussian" then 
+                        prussianUnits = update[1] 
+                        for i =1,#prussianUnits,1 do 
+                            local found = false
+                            local units=nil
+                            if plrTeam=="Prussian" then units=prussianUnits
+                            elseif plrTeam=="French" then units=frenchUnits end
+
+                            if not (units==nil) then
+                                for i2=1,#units,1 do 
+                                    if prussianUnits[i].CurrentTarget.Name==units[i2].Name then found=units[i2] break end
+                                end
+                            end
+                            prussianUnits[i].CurrentTarget = found
+                        end
+                    end
+
+                    if enemyTeam=="French" then 
+                        frenchUnits = update[1] 
+                        for i =1,#frenchUnits,1 do 
+                            local found = false
+                            local units=nil
+                            if plrTeam=="Prussian" then units=prussianUnits
+                            elseif plrTeam=="French" then units=frenchUnits end
+                            
+                            if not (units==nil) then
+                                for i2=1,#units,1 do 
+                                    if frenchUnits[i].CurrentTarget.Name==units[i2].Name then found=units[i2] break end
+                                end
+                            end
+                            frenchUnits[i].CurrentTarget = found
+                        end
+                    end
                 end
             end
         end
@@ -349,7 +380,6 @@ function love.update(dt)
                 table.remove(frenchUnits,index)
             end
         end
-
 
         for i=1,#prussianUnits,1 do
             if (prussianUnits[i].Stance=="Idle")or(prussianUnits[i].Stance=="Aiming") then
