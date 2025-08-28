@@ -77,8 +77,14 @@ function Network.CreateMessage(units,updates,moves,currentTeam)
     if currentTeam=="French" then netmsg=netmsg.."FRENCH_UNIT_STATS:" end
 
     for i=1,#units,1 do--iPos,iHp
+        
         str=units[i].Name..":"..tostring(units[i].Position[1])..","..tostring(units[i].Position[2])..","
-        str=str..tostring(units[i].Orientation)..","..tostring(units[i].Health)..","..units[i].Formation..","..units[i].OpenOrder..tostring(units[i].CurrentTarget.Name)..";"
+        str=str..tostring(units[i].Orientation)..","..tostring(units[i].Health)..","..units[i].Formation..","..units[i].OpenOrder
+        if type(units[i].CurrentTarget)=="Boolean" then
+            str=str..tostring(units[i].CurrentTarget)..";"
+        else
+            str=str..tostring(units[i].CurrentTarget.Name)..";"
+        end
         netmsg=netmsg..str
     end
 
