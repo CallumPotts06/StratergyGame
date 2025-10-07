@@ -17,6 +17,8 @@ Interface = require("Interface")
 Unit = require("Unit")
 
 --// GAME VARIABLES //--
+singleplayer = true
+
 currentMap = {}
 currentMapDetails = {}
 visualEffects = {}
@@ -53,6 +55,7 @@ frenchUnits={}
 enemyUnits = {}
 
 selectedUnit = false
+chargeSelected = false
 wheelSelected = false
 moveSelected = false
 movingUnits = {}
@@ -207,6 +210,12 @@ function love.keypressed(key)
                 local info = unitControl.ChangeFormationOptions()
                 for i=1,#info,1 do table.insert(uiObjects,info[i]) end
             end
+            if key=="r" then --BAYONET CHARGE--
+                clearControls()
+                local info = interface.New("controlinfo",{0,0,0,0},"BAYONET CHARGE",{0,0,0,1},1,{0,0,0,0},{15,15},{300,300},"")
+                table.insert(uiObjects,info)
+                chargeSelected = true
+            end
             if key=="x" then --DESELECT--
                 clearControls()
                 selectedUnit.Selected = false
@@ -254,6 +263,7 @@ function love.update(dt)
     end
 
     if Network.Hosting then
+        singleplayer = false
         local events = Network.InboundEvents()
         if events then
             if events[1] == "connected" then
@@ -347,6 +357,9 @@ function love.update(dt)
             if currentTeam=="Prussian" then currentUnits=prussianUnits end
             if currentTeam=="French" then currentUnits=frenchUnits end
 
+            if enemyTeam=="Prussian" then enemyUnits=prussianUnits end
+            if enemyTeam=="French" then enemyUnits=frenchUnits end
+
             local netmsg = Network.CreateMessage(currentUnits,currentTeamUnitUpdates,movingUnits,currentTeam)
             Network.SendMessage(netmsg)
             currentTeamUnitUpdates={}
@@ -413,7 +426,7 @@ function love.update(dt)
         for i=1,#movingUnits,1 do
             local index = movingUnits[i][3]
             if movingUnits[i][4][index][1]=="Move" then--MOVE UNITS--
-                movingUnits[i][1]:PlayMarchingSounds(camPos,gameResolution,currentMap)
+                movingUnits[i][1]:PlayMarchingSounds(camPos,gameResolution,currentMap,false)
                 movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
                 movingUnits[i][1].Position=movingUnits[i][4][index][2]
                 movingUnits[i][3]=movingUnits[i][3]+1
@@ -441,6 +454,28 @@ function love.update(dt)
                     else movingUnits[i][1].Stance="Idle" end
                     table.remove(movingUnits,i) 
                     break 
+                end
+            end
+        end
+
+        for i=1,#movingUnits,1 do
+            local index = movingUnits[i][3]
+            if movingUnits[i][4][index][1]=="Charge" then--CHARGE UNITS--
+                movingUnits[i][1]:PlayMarchingSounds(camPos,gameResolution,currentMap,false)
+                movingUnits[i][1]:PlayMarchingSounds(camPos,gameResolution,currentMap,true)
+                movingUnits[i][1].Stance = "Marching"..tostring(marchStep)
+                movingUnits[i][1].Position=movingUnits[i][4][index][2]
+                movingUnits[i][3]=movingUnits[i][3]+1
+
+                if movingUnits[i][3]>#movingUnits[i][4] then --END OF CHARGE--
+                    movingUnits[i][1]:CheckForTargets(enemyUnits,plrTeam)
+                    if not (not movingUnits[i][1].CurrentTarget) then
+                        unitControl.CalculateChargeResult(movingUnits[i][1],movingUnits[i][1].CurrentTarget,camPos,zoom,currentMap)
+                        if not (not movingUnits[i][1].CurrentTarget) then movingUnits[i][1].Stance="Aiming"
+                        else movingUnits[i][1].Stance="Idle" end
+                        table.remove(movingUnits,i) 
+                        break 
+                    end
                 end
             end
         end
@@ -686,6 +721,9 @@ function love.update(dt)
             if currentTeam=="Prussian" then newTable = prussianUnits end
             if currentTeam=="French" then newTable = frenchUnits end
 
+            if enemyTeam=="Prussian" then enemyUnits = prussianUnits end
+            if enemyTeam=="French" then enemyUnits = frenchUnits end
+
             if (not wheelSelected)or(not moveSelected) then
                 for i=1,#newTable,1 do--SELECT UNIT--
                     local selected = newTable[i]:CheckClick(mousePos,camPos,zoom)
@@ -711,6 +749,34 @@ function love.update(dt)
                             end
                         end
                         table.insert(movingUnits,newWheel)
+                    end
+                end
+
+                if chargeSelected then--CHARGE UNIT--
+                    if selectedUnit.Formation=="BattleLine" then
+                        local mgx = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
+                        local mgy = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
+
+                        enemyselected = false
+                        for i=1,#enemyUnits,1 do--SELECT UNIT--
+                            enemyselected = enemyUnits[i]:CheckEnemyClick(mousePos,camPos,zoom)
+                            if enemyselected then break end
+                        end
+                        
+                        print("Enemy Selected: "..tostring(enemyselected))
+                        if enemyselected then
+                            local newCharge = unitControl.CalculateCharge(selectedUnit,mousePos,camPos,zoom,currentMap)
+                            if not (not newCharge) then
+                                for i=1,#movingUnits,1 do
+                                    if movingUnits[i][1].Name==selectedUnit.Name then
+                                        table.remove(movingUnits,i)
+                                        break
+                                    end
+                                end
+                                selectedUnit.Retreating = false
+                                table.insert(movingUnits,newCharge)
+                            end
+                        end
                     end
                 end
 

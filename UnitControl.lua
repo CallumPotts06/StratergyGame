@@ -464,4 +464,149 @@ function unitControl.Dijkstras(endPos1,endPos2,mapTiles,unit,mousePos,camPos,zoo
     return {} -- Return empty path if no solution found
 end
 
+
+function unitControl.CalculateCharge(unit,mousePos,camPos,zoom,mapTiles)
+    local unitSpeeds = {
+        {"LineInfantry",1.25},
+        {"LightInfantry",1.1},
+        {"Artillery",0.01},
+    }
+    local BattleLineSpeeds = {
+        {"GRS",1.4},
+        {"FRD",0.4},
+        {"FST",0.4},
+        {"BRD",1.2},
+        {"ROD",1.5},
+        {"STR",0.3},
+        {"SWP",0.3},
+        {"TRP",1.3},
+        {"URB",0.2},
+        {"CRN",0.6},
+        {"WHE",0.6},
+    }
+    local newTable = unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
+
+    local unitX=unit.Position[1]
+    local unitY=unit.Position[2]
+
+    local x1 = (unitX)
+    local y1 = (unitY)
+    local x2 = ((mousePos[1]/zoom)+(camPos[1]))
+    local y2 = ((mousePos[2]/zoom)+(camPos[2]))
+    
+
+    local dx = (x2-x1)
+    local dy = -(y2-y1)
+
+    local hyp = math.sqrt((dx*dx)+(dy*dy))
+    local adj = dx
+    local opp = dy
+
+    --ASTC RULE--
+    if (dx>=0)and(dy>=0) then theta = math.asin(opp/hyp) end
+    if (dx<=0)and(dy>=0) then theta = math.asin(opp/hyp) end
+    if (dx<=0)and(dy<=0) then theta = math.atan(opp/adj) end
+    if (dx>=0)and(dy<=0) then theta = math.acos(adj/hyp) end
+
+    theta = math.atan(opp/adj)
+    local movementSpeed = 15
+    for i=1,#unitSpeeds,1 do if unitSpeeds[i][1]==unit.Type then movementSpeed=movementSpeed*unitSpeeds[i][2] end end
+    local xSpeed = math.cos(theta)*movementSpeed--CAH : ADJ = COS(TH) x HYP--
+    local ySpeed = math.sin(theta)*movementSpeed--SOH : OPP = SIN(TH) x HYP--
+
+    if unitX<x2 then xSpeed=math.abs(xSpeed) else xSpeed=-math.abs(xSpeed) end
+    if unitY<y2 then ySpeed=math.abs(ySpeed) else ySpeed=-math.abs(ySpeed) end
+
+    local movePos = {}
+
+    local i=0
+    local gainedX = unitX
+    local gainedY = unitY
+    if unitX<x2 then while gainedX<x2 do
+        i=i+1
+        local newSpeedX = xSpeed
+        local newSpeedY = ySpeed
+
+        local tileX = math.ceil((gainedX)/200)
+        local tileY = math.ceil((gainedY)/200)
+        if tileX<1 then tileX=1 end
+        if tileX>#mapTiles[1] then tileX=#mapTiles[1] end
+        if tileY<1 then tileY=1 end
+        if tileY>#mapTiles then tileY=#mapTiles end
+        local currentTile = mapTiles[tileY][tileX]
+
+        local speedList = {}
+        if unit.Formation=="BattleLine" then speedList=BattleLineSpeeds end
+        if unit.Formation=="MarchingColumn" then speedList=MarchingColumnSpeeds end
+        if unit.Formation=="SkirmishLine" then speedList=SkirmishLineSpeeds end
+        for i=1,#speedList,1 do
+            if speedList[i][1]==string.sub(currentTile,1,3) then
+                newSpeedX=xSpeed*speedList[i][2]
+                newSpeedY=ySpeed*speedList[i][2]
+            end
+        end
+
+        gainedX=gainedX+(newSpeedX)
+        gainedY=gainedY+(newSpeedY)
+        local x = gainedX
+        local y = gainedY
+       
+
+        table.insert(movePos,{x,y,currentTile})
+    end else while x2<gainedX do
+        i=i+1
+        local newSpeedX = xSpeed
+        local newSpeedY = ySpeed
+
+        local tileX = math.ceil((gainedX)/200)
+        local tileY = math.ceil((gainedY)/200)
+        local currentTile = false
+        if (tileY>0)and(tileY<#mapTiles)and(tileX>0)and(tileX<#mapTiles[1]) then
+            currentTile = mapTiles[tileY][tileX]
+        end
+
+        if not (not currentTile) then
+            local speedList = {}
+            if unit.Formation=="BattleLine" then speedList=BattleLineSpeeds end
+            if unit.Formation=="MarchingColumn" then speedList=MarchingColumnSpeeds end
+            if unit.Formation=="SkirmishLine" then speedList=SkirmishLineSpeeds end
+            for i=1,#speedList,1 do
+                if speedList[i][1]==string.sub(currentTile,1,3) then
+                    newSpeedX=xSpeed*speedList[i][2]
+                    newSpeedY=ySpeed*speedList[i][2]
+                end
+            end
+
+            gainedX=gainedX+(newSpeedX)
+            gainedY=gainedY+(newSpeedY)
+            local x = gainedX
+            local y = gainedY
+
+            table.insert(movePos,{x,y,currentTile})
+        end
+    end end
+
+    for i=1,#movePos-15,1 do--i=1,#movePos,1
+        table.insert(newTable[4],{"Charge",movePos[i]})
+    end
+
+    return newTable
+end
+
+function unitControl.CalculateChargeResult(unit,enemyUnit,camPos,zoom,mapTiles)
+    if unit.Health > enemyUnit.Health then
+        if enemyUnit.Health < enemyUnit.MaxHealth/2 then
+            enemyUnit:Retreat(camPos,zoom,mapTiles)
+            return true
+        else
+            unit:Retreat(camPos,zoom,mapTiles)
+            return false
+        end
+
+    else
+        unit:Retreat(camPos,zoom,mapTiles)
+        return false
+    end
+end
+
 return unitControl

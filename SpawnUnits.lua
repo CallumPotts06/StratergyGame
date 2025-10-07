@@ -9,13 +9,13 @@ local frenchUnits =0
 
 spawnUnits.stats = {
     --Type,Team,Imgs,Hp,FireRate,Accuracy,Range--
-    {"PrussianLineInfantry",{"LineInfantry","Prussian",imgs.PrussianLineInfantry,100,6,7,1600}},
-    {"PrussianLightInfantry",{"LightInfantry","Prussian",imgs.PrussianLightInfantry,100,6,3,2500}},
-    {"PrussianArtillery",{"Artillery","Prussian",imgs.PrussianArtillery,50,16,3,4200}},
+    {"PrussianLineInfantry",{"LineInfantry","Prussian",imgs.PrussianLineInfantry,150,6,7,1600}},
+    {"PrussianLightInfantry",{"LightInfantry","Prussian",imgs.PrussianLightInfantry,125,6,3,2500}},
+    {"PrussianArtillery",{"Artillery","Prussian",imgs.PrussianArtillery,50,16,5,4200}},
 
-    {"FrenchLineInfantry",{"LineInfantry","French",imgs.FrenchLineInfantry,100,14,6,2000}},
-    {"FrenchLightInfantry",{"LightInfantry","French",imgs.FrenchLightInfantry,100,14,3,2750}},
-    {"FrenchArtillery",{"Artillery","French",imgs.FrenchArtillery,50,16,3,4200}},
+    {"FrenchLineInfantry",{"LineInfantry","French",imgs.FrenchLineInfantry,150,14,6,2000}},
+    {"FrenchLightInfantry",{"LightInfantry","French",imgs.FrenchLightInfantry,125,14,3,2750}},
+    {"FrenchArtillery",{"Artillery","French",imgs.FrenchArtillery,50,16,5,4200}},
 }
 
 function spawnUnits.CreateUnit(unitType,team,pos)

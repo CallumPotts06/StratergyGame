@@ -259,7 +259,7 @@ function unit:DrawUnit(zoom,camPos)
                 flagImg=self.Images[i][2]
             end
         end
-        local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)/2.5
+        local squadCount = self.MaxSquads*(self.Health/self.MaxHealth)/3.5
 
         if self.Formation == "BattleLine" then
             local FlagPos = math.floor(squadCount/2)
@@ -426,6 +426,22 @@ function unit:CheckClick(mousePos,camPos,zoom)
     return {clicked,self.Selected,self}
 end
 
+function unit:CheckEnemyClick(mousePos,camPos,zoom)
+    local xmin = (((self.Position[1])-camPos[1])-(100))*zoom
+    local ymin = (((self.Position[2])-camPos[2])-(100))*zoom
+    local xmax = (((self.Position[1])-camPos[1])+(100))*zoom
+    local ymax = (((self.Position[2])-camPos[2])+(100))*zoom
+
+    clicked = false
+    if (mousePos[1]>=xmin) and (mousePos[1]<=xmax) then
+        if (mousePos[2]>=ymin) and (mousePos[2]<=ymax) then
+            clicked = true
+        end
+    end
+    print("Check Enemy: "..tostring(enemyselected))
+    return clicked
+end
+
 function unit:CheckForTargets(enemyUnits,plrTeam)
     local closestDistance=999999999
     local closestEnemy=999999999
@@ -545,11 +561,11 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
             local shotRange = math.sqrt((dx*dx)+(dy*dy))
             local hit = math.random(1,math.floor((self.Accuracy*(shotRange/1000))/2))
             print(self.Team)
-            if plrTeam==self.CurrentTarget.Team then
+            if (plrTeam==self.CurrentTarget.Team)or(singleplayer) then
                 if hit==1 then self.CurrentTarget.Health=self.CurrentTarget.Health-self.Damage else dead="" end
                 if self.CurrentTarget.Health<=15 then self.CurrentTarget.IsDead = true
-                elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/1.4) then
-                    if math.random(1,8)==1 then
+                elseif self.CurrentTarget.Health<=(self.CurrentTarget.MaxHealth/1.8) then
+                    if math.random(1,14)==1 then
                         print("Retreat")
                         retreat = self.CurrentTarget:Retreat(camPos,zoom,mapTiles)
                     end
@@ -563,7 +579,7 @@ function unit:Fire(camPos,gameResolution,plrTeam,zoom,mapTiles)
     end
 end
 
-function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
+function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles,charge)
     local tileX = math.ceil((self.Position[1])/200)
     local tileY = math.ceil((self.Position[2])/200)
     local currentTile = mapTiles[tileY][tileX]
@@ -632,13 +648,17 @@ function unit:PlayMarchingSounds(camPos,gameResolution,mapTiles)
         end
     end
 
+    if charge then
+        sound = assets.FireSounds[1][2]
+    end
+
     if not (not sound) then
         local dx = (((camPos[1]-(gameResolution[1]/2))-self.Position[1])/1500)+1
         local dy = (((camPos[2]-(gameResolution[2]/2))-self.Position[2])/1500)+1
 
         sound:setPosition(-dx, 0, -dy)
         love.audio.setPosition(0,0,0)
-        sound:setVolume(0.2)
+        sound:setVolume(0.4)
         love.audio.play(sound)
     end
 end

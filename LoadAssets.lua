@@ -207,6 +207,8 @@ Assets.Effects = {
 }
 
 Assets.FireSounds = {
+    {"RegularCharge",love.audio.newSource("Sounds/Fire/Charge.mp3","static")},
+    
     {"MusketShot1",love.audio.newSource("Sounds/Fire/MusketFire1.mp3","static")},
     {"MusketShot2",love.audio.newSource("Sounds/Fire/MusketFire2.mp3","static")},
     {"MusketShot3",love.audio.newSource("Sounds/Fire/MusketFire3.mp3","static")},
