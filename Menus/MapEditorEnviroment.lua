@@ -9,8 +9,8 @@ MapEditor.currentMapDetails = {}
 MapEditor.CurrentBrush = "ROD"
 
 function MapEditor.OpenMenu()
-    width = 60
-    height = 45
+    width = 100
+    height = 100
     MapEditor.CurrentMap = {}
     MapEditor.currentMapDetails = {}
 

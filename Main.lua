@@ -34,7 +34,10 @@ finishedTiles = false
 
 local netMsg = ""
 
-Cards = {
+Cards = { 
+    "LineInfantry",
+    "LineInfantry",
+    "LineInfantry",
     "LineInfantry",
     "LineInfantry",
     "LineInfantry",
@@ -47,7 +50,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "TestBattle2.lvl"
+nextMap = "TwinTowns.lvl"
 
 prussianUnits={}
 britishUnits={}
@@ -185,7 +188,7 @@ function love.keypressed(key)
             end
         end
         if key=="down" then
-            if zoom>0.3 then
+            if zoom>0.05 then
                 zoom=zoom/1.5
             end
         end
