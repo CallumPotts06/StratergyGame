@@ -132,6 +132,7 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         {"WHE",0.8},
     }
 
+    print("calc move "..unit.Name)
     local newTable = unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
 
     local unitX=unit.Position[1]

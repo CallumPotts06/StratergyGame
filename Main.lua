@@ -57,7 +57,7 @@ camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "ForestBattle1.lvl"
+nextMap = "AlsaceLorraine.lvl"
 
 prussianUnits={}
 britishUnits={}
@@ -501,16 +501,13 @@ function love.update(dt)
                     if not (fx[2]=="") then table.insert(visualEffects,fx[2]) end
                     if not (type(fx[4])=="boolean") then
                         for i2=1,#movingUnits,1 do
-                            print("Looping thru moveunits")
                             if not type(unit.CurrentTarget=="boolean") then
                                 if movingUnits[i2][1].Name==unit.CurrentTarget.Name then
-                                    print("Remove Existing Moves")
                                     table.remove(movingUnits,i2)
                                     break
                                 end
                             end
                         end
-                        print("Add retreat to moves")
                         table.insert(movingUnits,fx[4])
                     end
                 end
@@ -677,7 +674,7 @@ function love.update(dt)
                         clearInterface()
                         inGame = false
                         inMapEdit = false
-                        MapEditor.CompileMap("ForestBattle1")
+                        MapEditor.CompileMap("newmap")
                     end
 
                     if check=="Practice Play" then
@@ -691,12 +688,59 @@ function love.update(dt)
                         currentTeam = "Prussian"
                         enemyTeam = "French"
 
-                        --AUTO SPAWN--
+                        local frenchSpawn = "SPNB"
+                        local prussianSpawn = "SPNA"
+
+                        --AUTO SPAWN--   
+                        function findSpawnPoints(Brigades,units,spawn)
+                            local moved = false
+                            local i = 0
+                            local startY=1
+                            local startX=1
+                            while i<#Brigades do
+                                i=i+1
+                                moved = false
+                                for y=startY,#currentMapDetails,1 do
+                                    print("StartY="..tostring(startY))
+                                    for x=startX,#currentMapDetails[1],1 do
+                                        if currentMapDetails[y][x]==spawn then
+                                            Brigades[i]:UpdateOrderOfLine(units)
+                                            Brigades[i]:Teleport({(x-1)*200,(y-1)*200})
+                                            local moves = Brigades[i]:ChangeFormation("MarchingColumn",currentMap)
+                                            for i=1,#moves,1 do
+                                                table.insert(movingUnits,moves[i])
+                                            end
+                                            startX = x+2
+                                            startY = y+2
+                                            moved = true
+                                        end
+                                        if moved then break end
+                                    end
+                                    if moved then break end
+                                end
+                            end
+                        end
+
                         local frenchArmy = Army.New(Cards,"French")
                         frenchUnits = frenchArmy.Units
+                        findSpawnPoints(frenchArmy.Brigades,frenchArmy.Units,frenchSpawn)
+
                             
                         local prussianArmy = Army.New(Cards,"Prussian")
                         prussianUnits = prussianArmy.Units
+                        findSpawnPoints(prussianArmy.Brigades,prussianArmy.Units,prussianSpawn)
+                        prussianArmy:PrintOrderOfBattle()
+
+                        plr1ReadyForBattle = true
+                        for y=1,#currentMapDetails,1 do
+                            for x=1,#currentMapDetails[1],1 do
+                                if currentMapDetails[y][x]=="SPNA" then
+                                    currentMapDetails[y][x]=""
+                                elseif currentMapDetails[y][x]=="SPNB" then
+                                    currentMapDetails[y][x]=""
+                                end
+                            end
+                        end
 
 
                         break
@@ -735,9 +779,6 @@ function love.update(dt)
 
             if enemyTeam=="Prussian" then enemyUnits = prussianUnits end
             if enemyTeam=="French" then enemyUnits = frenchUnits end
-
-            print(#prussianUnits)
-            print(#frenchUnits)
 
             if (not wheelSelected)or(not moveSelected) then
                 for i=1,#newTable,1 do--SELECT UNIT--
@@ -888,9 +929,9 @@ function love.update(dt)
             end
         end
         if love.keyboard.isDown("lshift") then
-            camSpeed=5
+            camSpeed=9
         else
-            camSpeed=1
+            camSpeed=1.5
         end
     end
 end

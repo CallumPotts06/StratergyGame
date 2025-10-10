@@ -2,7 +2,7 @@
 Brigade = {}
 Brigade.__index = Brigade
 
-unitControl = require("../UnitControl")
+unitControl = require("UnitControl")
 
 function Brigade.New(regiments,iname)--// CONSTRUCTOR //--
     local newBrigade = {}
@@ -18,7 +18,7 @@ function Brigade.New(regiments,iname)--// CONSTRUCTOR //--
 
     newBrigade.OrderOfLine = {}
 
-    newBrigade.CentrePos = {0,0}
+    newBrigade.Position = {0,0}
     newBrigade.Orientation = 0
 
     if not (regiments[1]==nil) then newBrigade.Regiment1 = regiments[1] end--// Assign Regiments into Position //--
@@ -34,10 +34,10 @@ function Brigade:UpdateOrderOfLine(units)
     if not (units == nil) then
         self.OrderOfLine = {}
         for i=1,#units,1 do
-            if not (self.Regiment1==nil) then if self.Regiment1.Name==units[i].Name then self.Regiment1=units[i] end end
-            if not (self.Regiment2==nil) then if self.Regiment2.Name==units[i].Name then self.Regiment2=units[i] end end
-            if not (self.Regiment3==nil) then if self.Regiment3.Name==units[i].Name then self.Regiment3=units[i] end end
-            if not (self.Regiment4==nil) then if self.Regiment4.Name==units[i].Name then self.Regiment4=units[i] end end
+            if not (self.Regiment1==nil) then if self.Regiment1.Name==units[i].Name then self.Regiment1=units[i]table.insert(self.OrderOfLine,units[i])end end
+            if not (self.Regiment2==nil) then if self.Regiment2.Name==units[i].Name then self.Regiment2=units[i]table.insert(self.OrderOfLine,units[i])end end
+            if not (self.Regiment3==nil) then if self.Regiment3.Name==units[i].Name then self.Regiment3=units[i]table.insert(self.OrderOfLine,units[i])end end
+            if not (self.Regiment4==nil) then if self.Regiment4.Name==units[i].Name then self.Regiment4=units[i]table.insert(self.OrderOfLine,units[i])end end
         end
     end
     return self.OrderOfLine
@@ -58,17 +58,32 @@ function Brigade:ChangeFormation(formup,mapTiles)
     local centreRegiment = math.floor(#self.OrderOfLine/2)
     local moves = {}
 
-    if formup=="BattleLine" then
+    if formup=="MarchingColumn" then
+        local x=1
+        local y=1
         for i=1,#self.OrderOfLine,1 do
---!!!----!!!----!!!----!!!----!!!----!!!----!!!----!!!----!!!--
-            table.insert(moves,unitControl:CalculateMove(self.OrderOfLine[i],pos,{0,0},1,mapTiles))
+            if i%2==0 then x=0 else x=1 end
+            if (i==3)or(i==4) then y=1 else y=0 end
+            local unit = self.OrderOfLine[i]
+            local move = unitControl.CalculateMove(unit,{self.Position[1]+(90*x),self.Position[2]+(185*y)},{0,0},1,mapTiles)
+            if not (not move) then
+                table.insert(moves,move)
+            end
+            self.OrderOfLine[i].Formation="MarchingColumn"
         end
     end
+
+    return moves
 end
 
 function Brigade:Teleport(newPos)
+    self.Position=newPos
     for i=1,#self.OrderOfLine,1 do
-        self.OrderOfLine[i].Position=newPos
+        if self.Formation=="MarchingColumn" then
+            if i%2==0 then x=0 else x=1 end
+            if (i==3)or(i==4) then y=1 else y=0 end
+            self.OrderOfLine[i].Position={newPos[1]+(90*x),newPos[2]+(185*y)}
+        end
     end
 end
 
