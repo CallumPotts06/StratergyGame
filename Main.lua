@@ -15,6 +15,7 @@ MapEditor = require("Menus/MapEditorEnviroment")
 --// SET UP CLASSES //--
 Interface = require("Interface")
 Unit = require("Unit")
+Army = require("Army")
 
 --// GAME VARIABLES //--
 singleplayer = true
@@ -37,20 +38,26 @@ local netMsg = ""
 Cards = { 
     "LineInfantry",
     "LineInfantry",
-    "LineInfantry",
-    "LineInfantry",
+    "LightInfantry",
+    "LightInfantry",
     "LineInfantry",
     "LineInfantry",
     "LightInfantry",
+    "LightInfantry",
+    "LineInfantry",
+    "LineInfantry",
+    "LineInfantry",
+    "LineInfantry",
+    "Artillery",
+    "Artillery",
     "Artillery",
 }
-
 
 camPos = {0,0}
 zoom = 1
 camSpeed = 1
 
-nextMap = "TwinTowns.lvl"
+nextMap = "ForestBattle1.lvl"
 
 prussianUnits={}
 britishUnits={}
@@ -685,10 +692,12 @@ function love.update(dt)
                         enemyTeam = "French"
 
                         --AUTO SPAWN--
-                        for i=1,#Cards,1 do
-                            newUnit = SpawnUnits.CreateUnit("French"..Cards[i],"French",{4400,1400+(400*i)})
-                            table.insert(frenchUnits,newUnit)
-                        end 
+                        local frenchArmy = Army.New(Cards,"French")
+                        frenchUnits = frenchArmy.Units
+                            
+                        local prussianArmy = Army.New(Cards,"Prussian")
+                        prussianUnits = prussianArmy.Units
+
 
                         break
                     end
@@ -727,16 +736,21 @@ function love.update(dt)
             if enemyTeam=="Prussian" then enemyUnits = prussianUnits end
             if enemyTeam=="French" then enemyUnits = frenchUnits end
 
+            print(#prussianUnits)
+            print(#frenchUnits)
+
             if (not wheelSelected)or(not moveSelected) then
                 for i=1,#newTable,1 do--SELECT UNIT--
-                    local selected = newTable[i]:CheckClick(mousePos,camPos,zoom)
-                    if selected[1] then
-                        for i2=1,#newTable,1 do
-                            newTable[i2].Selected = false
+                    if not (newTable[i]==nil) then
+                        local selected = newTable[i]:CheckClick(mousePos,camPos,zoom)
+                        if selected[1] then
+                            for i2=1,#newTable,1 do
+                                newTable[i2].Selected = false
+                            end
+                            selectedUnit = selected[3]
+                            selected[3].Selected = selected[2]
+                            break
                         end
-                        selectedUnit = selected[3]
-                        selected[3].Selected = selected[2]
-                        break
                     end
                 end
             end

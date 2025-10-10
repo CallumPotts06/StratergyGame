@@ -46,7 +46,7 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy,iRange)
 end
 
 function unit:DrawUnit(zoom,camPos)
-    if unit.IsDead then return end
+    if self.IsDead then return end
 
     if (self.Type=="LineInfantry") or (self.Type=="LightInfantry")  then
         if (self.Formation=="MarchingColumn")and(self.OpenOrder=="_Squad")then self.OpenOrder="_MarchingSquad" end
