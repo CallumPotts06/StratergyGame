@@ -83,7 +83,7 @@ function unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
     return newTable
 end
 
-function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
+function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles,brigadeBool)
     local unitSpeeds = {
         {"LineInfantry",1},
         {"LightInfantry",1.2},
@@ -132,7 +132,6 @@ function unitControl.CalculateMove(unit,mousePos,camPos,zoom,mapTiles)
         {"WHE",0.8},
     }
 
-    print("calc move "..unit.Name)
     local newTable = unitControl.CalculateWheel(unit,mousePos,camPos,zoom)
 
     local unitX=unit.Position[1]

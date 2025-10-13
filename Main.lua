@@ -69,6 +69,8 @@ chargeSelected = false
 wheelSelected = false
 moveSelected = false
 movingUnits = {}
+selectingBrigade = false
+currentUnitType = "Regiment"
 
 currentTeamUnitUpdates = {}
 currentTeam = "French"
@@ -706,7 +708,7 @@ function love.update(dt)
                                         if currentMapDetails[y][x]==spawn then
                                             Brigades[i]:UpdateOrderOfLine(units)
                                             Brigades[i]:Teleport({(x-1)*200,(y-1)*200})
-                                            local moves = Brigades[i]:ChangeFormation("MarchingColumn",currentMap)
+                                            local moves = Brigades[i]:ChangeFormation("MarchingColumn",currentMap,Brigades[i].Position,Brigades[i].Position,"Wheel")
                                             for i=1,#moves,1 do
                                                 table.insert(movingUnits,moves[i])
                                             end
@@ -788,9 +790,16 @@ function love.update(dt)
                             for i2=1,#newTable,1 do
                                 newTable[i2].Selected = false
                             end
-                            selectedUnit = selected[3]
-                            selected[3].Selected = selected[2]
-                            break
+                            if selectingBrigade then
+                                selectedUnit = selected[3].ParentBrigade
+                                currentUnitType = "Brigade"
+                                break
+                            else
+                                selectedUnit = selected[3]
+                                selected[3].Selected = selected[2]
+                                currentUnitType = "Regiment"
+                                break
+                            end
                         end
                     end
                 end
@@ -798,15 +807,25 @@ function love.update(dt)
 
             if not (not selectedUnit) then--UNIT CONTROLS--
                 if wheelSelected then--WHEEL UNIT--
-                    local newWheel = unitControl.CalculateWheel(selectedUnit,mousePos,camPos,zoom)
-                    if not (not newWheel) then
-                        for i=1,#movingUnits,1 do
-                            if movingUnits[i][1].Name==selectedUnit.Name then
-                                table.remove(movingUnits,i)
-                                break
+                    if currentUnitType=="Regiment" then
+                        local newWheel = unitControl.CalculateWheel(selectedUnit,mousePos,camPos,zoom)
+                        if not (not newWheel) then
+                            for i=1,#movingUnits,1 do
+                                if movingUnits[i][1].Name==selectedUnit.Name then
+                                    table.remove(movingUnits,i)
+                                    break
+                                end
                             end
+                            table.insert(movingUnits,newWheel)
                         end
-                        table.insert(movingUnits,newWheel)
+                    else
+                        local currentUnits = {}
+                        if currentTeam == "Prussian" then currentUnits = prussianUnits end
+                        if currentTeam == "French" then currentUnits = frenchUnits end
+                        newmoves = selectedUnit:ChangeFormation(selectedUnit.Formation,currentMap,selectedUnit.Position,mousePos,"Wheel",currentUnits)
+                        for i=1,#newmoves,1 do
+                            table.insert(movingUnits,newmoves[i])
+                        end
                     end
                 end
 
@@ -840,18 +859,28 @@ function love.update(dt)
 
                 if moveSelected then--MOVE UNIT--
                     if selectedUnit.Formation=="MarchingColumn" then
-                        local mgx = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
-                        local mgy = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
-                        local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom,currentMap)
-                        if not (not newMarch) then
-                            for i=1,#movingUnits,1 do
-                                if movingUnits[i][1].Name==selectedUnit.Name then
-                                    table.remove(movingUnits,i)
-                                    break
+                        if currentUnitType=="Regiment" then
+                            local mgx = math.ceil((((mousePos[1])/zoom)+camPos[1])/200)
+                            local mgy = math.ceil((((mousePos[2])/zoom)+camPos[2])/200)
+                            local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom,currentMap)
+                            if not (not newMarch) then
+                                for i=1,#movingUnits,1 do
+                                    if movingUnits[i][1].Name==selectedUnit.Name then
+                                        table.remove(movingUnits,i)
+                                        break
+                                    end
                                 end
+                                selectedUnit.Retreating = false
+                                table.insert(movingUnits,newMarch)
                             end
-                            selectedUnit.Retreating = false
-                            table.insert(movingUnits,newMarch)
+                        else
+                            local currentUnits = {}
+                            if currentTeam == "Prussian" then currentUnits = prussianUnits end
+                            if currentTeam == "French" then currentUnits = frenchUnits end
+                            newmoves = selectedUnit:ChangeFormation(selectedUnit.Formation,currentMap,selectedUnit.Position,mousePos,"March",currentUnits)
+                            for i=1,#newmoves,1 do
+                                table.insert(movingUnits,newmoves[i])
+                            end
                         end
                     else
                         local newMarch = unitControl.CalculateMove(selectedUnit,mousePos,camPos,zoom,currentMap)
@@ -932,6 +961,12 @@ function love.update(dt)
             camSpeed=9
         else
             camSpeed=1.5
+        end
+
+        if love.keyboard.isDown("lctrl") then
+            selectingBrigade = true
+        else
+            selectingBrigade = false
         end
     end
 end

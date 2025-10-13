@@ -33,6 +33,8 @@ function unit.New(iName,iType,iTeam,iImgs,iPos,iHp,iFireRate,iAccuracy,iRange)
     newUnit.IsDead = false
     newUnit.Retreating = false
 
+    newUnit.ParentBrigade = nil
+
     if (iType=="LineInfantry")or(iType=="LightInfantry") then
         newUnit.Damage = 0.9
         newUnit.Formation = "BattleLine"
